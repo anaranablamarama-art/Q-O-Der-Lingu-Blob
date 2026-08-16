@@ -22,12 +22,14 @@ Das Q-O-Ökosystem ist eine geschlossene, serverlose Kreislauf-Pipeline, die kom
 
 Der Text aus deinem Browser-Sichtfeld wird im Millisekunden-Takt an das Backend geschickt. Dort spaltet sich die Formel in zwei gegensätzliche Kräfte auf:
 
-#### 1. Der Toxizitäts-Zweig (Der linke Term): $[(\text{Toxin}_{\alpha} + \text{Toxin}_{\beta}) \cdot \mathbf{BERT}]$
+$$LQ = e^{-\left( \big[ (\text{Toxin}_{\alpha} + \text{Toxin}_{\beta}) \cdot \mathbf{BERT} \big] \;-\; \big[ (\text{Fakten} + \text{Logik}) \cdot \mathbf{Gemini} \big] \right)}$$
+
+#### 1. Der Toxizitäts-Zweig (Der linke Term):
 * **Die statistische Basis:** Das System zählt über reguläre Ausdrücke (Regex) klassische Clickbait-Trigger ($\text{Toxin}_{\alpha}$) und ideologische Framing-Begriffe ($\text{Toxin}_{\beta}$).
 * **Der $\mathbf{BERT}$-Katalysator:** Das hochspezialisierte Modell `german-sentiment-bert` liest den Absatz parallel als emotionaler Biosensor. Es bewertet unterschwellige Aggressivität, moralische Panik und feindselige Polarität.
 * **Die Wirkung in der Formel:** BERT liefert einen Multiplikator zwischen **$1.0$ (neutral)** und **$3.0$ (hochgradig aggressiv/feindselig)**. Ein manipulativer Text jagt den Gift-Wert exponentiell nach oben, weil BERT die bösartige Absicht hinter den Zeilen erkennt – selbst wenn kaum Reizwörter fallen.
 
-#### 2. Der Nährstoff-Zweig (Der rechte Term): $[(\text{Fakten} + \text{Logik}) \cdot \mathbf{Gemini}]$
+#### 2. Der Nährstoff-Zweig (Der rechte Term): 
 * **Die statistische Basis:** Das System zählt empirische Belege, Zahlen und Quellen ($\text{Fakten}$) sowie kausale Konjunktionen wie *"weil"* oder *"infolgedessen"* ($\text{Logik}$).
 * **Der $\mathbf{Gemini}$-Filter:** `Gemini Light` arbeitet zeitgleich als logischer Seziertisch. Es prüft blitzschnell die argumentative Validität. Es entlarvt Scheinargumente, Zirkelschlüsse und erfundene Fake-Quellen.
 * **Die Wirkung in der Formel:** Gemini liefert einen Bewertungsfaktor zwischen **$0.1$ (haltlose Scheinargumentation/Lüge)** und **$1.0$ (wissenschaftlich exakt belegt)**. Wenn ein Text versucht, das System mit Fake-Fakten auszutricksen, drückt Gemini den Nährwert gegen Null. Der Lingu-Blob "verhungert" visuell auf deinem Bildschirm.
