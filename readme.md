@@ -34,11 +34,6 @@ $$LQ = e^{-\left( \big[ (\text{Toxin}_{\alpha} + \text{Toxin}_{\beta}) \cdot \ma
 * **Der $\mathbf{Gemini}$-Filter:** `Gemini Light` arbeitet zeitgleich als logischer Seziertisch. Es prüft blitzschnell die argumentative Validität. Es entlarvt Scheinargumente, Zirkelschlüsse und erfundene Fake-Quellen.
 * **Die Wirkung in der Formel:** Gemini liefert einen Bewertungsfaktor zwischen **$0.1$ (haltlose Scheinargumentation/Lüge)** und **$1.0$ (wissenschaftlich exakt belegt)**. Wenn ein Text versucht, das System mit Fake-Fakten auszutricksen, drückt Gemini den Nährwert gegen Null. Der Lingu-Blob "verhungert" visuell auf deinem Bildschirm.
 
-### Stufe 2: Der logische Seziertisch — `Gemini Light LLM`
-Nachdem BERT die Emotionen isoliert hat, seziert Gemini Light die **strukturelle Wahrheit** und die argumentative Validität.
-* **Die Aufgabe:** Nur weil ein Text oft das Wort *"Studie"* oder *"weil"* enthält, heißt das nicht, dass er wahr ist. Gemini Light überfliegt die Behauptungen wie ein rigoroser Wissenschaftler. Es entlarvt Scheinargumente, unbelegte Behauptungen, Zirkelschlüsse und das Erfinden von Fake-Quellen.
-* **Der Impact auf die Physik:** Gemini liefert den Validierungs-Faktor ($S_{\text{Gemini}}$) von `0.1` (haltlose Scheinargumente) bis `1.0` (wissenschaftlich exakt bewiesen). Erkennt Gemini, dass die angeblichen Fakten nur heiße Luft sind, drückt es die Nährstoff-Dichte $N_{\text{nut}}$ gnadenlos gegen Null. Der Lingu-Blob verhungert visuell auf deinem Bildschirm.
-
 ---
 
 ## 🎨 3. Die Anatomie & Morphologie des Lingu-Blobs
