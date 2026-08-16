@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Q-O LINGU-BLOB DESIGN-DNA & HOVER-WRAPPING (CONTENT.CSS)
+   ========================================================================== */
+
+/* Der übergeordnete gemeinsame Container (Verhindert das Hover-Zucken) */
+#q-o-symbiont-wrapper {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Der elastische Zellkörper-Container */
+#q-o-blob-container {
+  width: 80px;
+  height: 80px;
+  cursor: grab;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#q-o-blob-container:active { cursor: grabbing; }
+
+/* --- DIE DREI BIOLOGISCHEN RESONANZ-ZUSTÄNDE --- */
+.q-o-hud-stable {
+  --cell-color: #00f2fe;
+  --cell-glow: rgba(0, 242, 254, 0.5);
+  --cell-bg: rgba(0, 242, 254, 0.15);
+  --cell-border: rgba(255, 255, 255, 0.4);
+}
+.q-o-hud-deformed {
+  --cell-color: #ff9900;
+  --cell-glow: rgba(255, 153, 0, 0.6);
+  --cell-bg: rgba(255, 153, 0, 0.2);
+  --cell-border: rgba(255, 200, 150, 0.5);
+}
+.q-o-hud-toxic {
+  --cell-color: #e11d48;
+  --cell-glow: rgba(225, 29, 72, 0.6);
+  --cell-bg: rgba(120, 10, 35, 0.35);
+  --cell-border: rgba(255, 120, 140, 0.4);
+}
+/* Kryostase (Metabolismus aus) */
+.q-o-hud-kryo {
+  --cell-color: #475569;
+  --cell-glow: rgba(71, 85, 105, 0.1);
+  --cell-bg: rgba(30, 41, 59, 0.4);
+  --cell-border: rgba(255, 255, 255, 0.1);
+}
+/* Visuelles Gewebe-Vakuum (Extrahiert) */
+.q-o-hud-extracted {
+  --cell-color: rgba(255,255,255,0.1);
+  --cell-glow: rgba(255,255,255,0);
+  --cell-bg: rgba(255,255,255,0.02);
+  --cell-border: rgba(255,255,255,0.08);
+  transform: scale(0.5) !important;
+  opacity: 0.2;
+  transition: all 1.5s ease-in-out !important;
+}
+
+/* Gläserne Membran-Physik */
+.large-membrane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--cell-bg);
+  border: 1.5px solid var(--cell-border);
+  box-shadow: inset 0 0 15px var(--cell-glow), 0 0 20px var(--cell-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 1.2s ease-in-out;
+  animation: q-o-wobble 8s ease-in-out infinite alternate;
+}
+
+/* Spezifische Animationen basierend auf Zustand */
+.q-o-hud-deformed .large-membrane { animation-duration: 3.5s; }
+.q-o-hud-toxic .large-membrane { 
+  border-radius: 40% 60% 70% 30% / 40% 40% 60% 60% !important;
+  animation: q-o-toxic-pulse 5s ease-in-out infinite alternate;
+}
+.q-o-hud-kryo .large-membrane { animation: none !important; }
+
+/* Innere SVG Nervenbahnen */
+.large-cytoplasm-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px var(--cell-color));
+}
+.large-neural-path {
+  fill: none;
+  stroke: var(--cell-color);
+  stroke-width: 2;
+  opacity: 0.6;
+}
+.large-neural-path.secondary { stroke-width: 1; opacity: 0.3; stroke-dasharray: 3 4; }
+.large-neural-node { fill: var(--cell-color); opacity: 0.8; }
+
+/* Zellkern (Nucleus) */
+.large-nucleus-wrapper {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.large-crescent {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--cell-color);
+  border-right-color: transparent;
+}
+.large-nucleus-body {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--cell-color) 70%);
+}
+
+/* --- DAS STERILE HOVER-HUD --- */
+#q-o-control-hud {
+  position: absolute;
+  bottom: 110px; /* Sitzt felsenfest über dem Blob */
+  background: rgba(12, 19, 34, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  padding: 10px;
+padding-bottom: 20px;
+margin-bottom: -15px;
+  border-radius: 6px;
+  width: 160px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(0, 242, 254, 0.05);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  font-family: ui-monospace, monospace;
+}
+#q-o-control-hud.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto; /* Klickbar machen, wenn sichtbar */
+}
+.hud-title { font-size: 9px; color: #475569; margin-bottom: 8px; letter-spacing: 0.05em; text-align: center; }
+.hud-option { font-size: 11px; padding: 6px; color: #cbd5e1; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.hud-option:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+/* KEYFRAMES FÜR BIOLOGISCHE WELLEN */
+@keyframes q-o-wobble {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  100% { border-radius: 40% 60% 70% 30% / 50% 60% 40% 50%; }
+}
+@keyframes q-o-toxic-pulse {
+  0% { transform: scale(1); box-shadow: inset 0 0 15px var(--cell-glow), 0 0 20px var(--cell-glow); }
+  100% { transform: scale(0.96); box-shadow: inset 0 0 25px var(--cell-glow), 0 0 5px var(--cell-glow); }
+}

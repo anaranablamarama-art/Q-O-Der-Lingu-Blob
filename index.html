@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Q-O // Cyber-Medizinisches Analyselabor</title>
+    <!-- Reines CSS Stylesheet für Basis-Styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+    <style>
+      /* ==========================================================================
+         Q-O CYBER-MEDIZINISCHE TIEFSEE-ZELL-ÄSTHETIK & BIO-PHYSIK
+         ========================================================================== */
+      :root {
+        --color-void: #070a13;
+        --color-deepslate: #0f172a;
+        --color-labpanel: #0c1322;
+        --cell-color: #00f2fe;
+        --cell-glow: rgba(0, 242, 254, 0.55);
+        --cell-bg: rgba(0, 242, 254, 0.12);
+        --cell-border: rgba(0, 242, 254, 0.4);
+        --wobble-anim: q-o-membrane-wobble-stable 10s ease-in-out infinite alternate;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--color-void);
+        color: #f1f5f9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .font-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      /* Scrollbars */
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.6);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 242, 254, 0.4);
+      }
+
+      /* 1. Zustand: STABIL (LQ >= 1.0 - Klares Cyan, weiche harmonische Wellen) */
+      .q-o-hud-stable {
+        --cell-color: #00f2fe;
+        --cell-glow: rgba(0, 242, 254, 0.6);
+        --cell-bg: rgba(0, 242, 254, 0.14);
+        --cell-border: rgba(0, 242, 254, 0.45);
+        --wobble-anim: q-o-membrane-wobble-stable 10s ease-in-out infinite alternate;
+      }
+
+      /* 2. Zustand: DEFORMIERT (LQ 0.5 - 0.99 - Unruhiges Bio-Orange, Asymmetrie) */
+      .q-o-hud-deformed {
+        --cell-color: #ff9900;
+        --cell-glow: rgba(255, 153, 0, 0.65);
+        --cell-bg: rgba(255, 153, 0, 0.2);
+        --cell-border: rgba(255, 180, 100, 0.5);
+        --wobble-anim: q-o-membrane-wobble-deformed 4.5s ease-in-out infinite alternate;
+      }
+
+      /* 3. Zustand: TOXISCH (LQ < 0.5 - Tiefrot/Violett, Starre, dumpfer Puls) */
+      .q-o-hud-toxic {
+        --cell-color: #e11d48;
+        --cell-glow: rgba(225, 29, 72, 0.6);
+        --cell-bg: rgba(180, 10, 50, 0.28);
+        --cell-border: rgba(255, 100, 125, 0.45);
+        --wobble-anim: q-o-membrane-wobble-toxic 8s ease-in-out infinite alternate;
+      }
+
+      /* GROSSE ZELLE IM SEZIERTISCH (250px x 250px) */
+      .large-membrane {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background: var(--cell-bg);
+        border: 2px solid var(--cell-border);
+        box-shadow: inset 0 0 40px var(--cell-glow), 0 0 35px var(--cell-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        animation: var(--wobble-anim);
+      }
+
+      /* Licht-Reflex auf der oberen Membran */
+      .large-membrane::before {
+        content: "";
+        position: absolute;
+        top: 8%;
+        left: 14%;
+        width: 45%;
+        height: 25%;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 75%);
+        border-radius: 50%;
+        transform: rotate(-25deg);
+        pointer-events: none;
+        opacity: 0.75;
+      }
+
+      /* Zytoplasma SVG Nervenbahnen */
+      .large-cytoplasm-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        filter: drop-shadow(0 0 8px var(--cell-color));
+        transition: filter 1.2s ease;
+      }
+
+      .large-neural-path {
+        fill: none;
+        stroke: var(--cell-color);
+        stroke-width: 2;
+        stroke-linecap: round;
+        opacity: 0.75;
+        transition: stroke 1.2s ease, opacity 1.2s ease;
+        animation: q-o-neural-pulse 4s ease-in-out infinite alternate;
+      }
+
+      .large-neural-path.secondary {
+        stroke-width: 1.4;
+        opacity: 0.45;
+        stroke-dasharray: 4 6;
+      }
+
+      .large-neural-node {
+        fill: var(--cell-color);
+        opacity: 0.85;
+        transition: fill 1.2s ease;
+      }
+
+      /* Sichel-Zellkern im absoluten Zentrum */
+      .large-nucleus-wrapper {
+        position: absolute;
+        width: 76px;
+        height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        animation: q-o-nucleus-float 6s ease-in-out infinite alternate;
+      }
+
+      .large-crescent {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 3.5px solid var(--cell-color);
+        border-right-color: transparent;
+        border-bottom-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 20px var(--cell-color), inset 0 0 10px var(--cell-color);
+        transform: rotate(35deg);
+        animation: q-o-crescent-spin 18s linear infinite;
+        transition: border-color 1.2s ease, box-shadow 1.2s ease;
+      }
+
+      .large-nucleus-body {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #ffffff, var(--cell-color) 60%, rgba(0, 0, 0, 0.6) 100%);
+        box-shadow: 0 0 20px var(--cell-color);
+        transition: background 1.2s ease, box-shadow 1.2s ease;
+      }
+
+      .large-nucleolus {
+        position: absolute;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow: 0 0 12px #ffffff, 0 0 22px var(--cell-color);
+        animation: q-o-nucleolus-energy 2.5s ease-in-out infinite alternate;
+      }
+
+      /* ==========================================================================
+         DIE 3 INTERAKTIVEN GEWEBEHERDE (HOTSPOTS)
+         ========================================================================== */
+      /* Herd 1: Synthetischer Herd (Geometrisch blau-grün) */
+      .herd-synthetic {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: rgba(0, 242, 254, 0.25);
+        border: 1.5px solid #00f2fe;
+        box-shadow: 0 0 14px #00f2fe, inset 0 0 6px #00f2fe;
+        transform: rotate(45deg);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        z-index: 20;
+      }
+      .herd-synthetic:hover {
+        transform: rotate(45deg) scale(1.35);
+        box-shadow: 0 0 24px #00f2fe, inset 0 0 10px #ffffff;
+      }
+      .herd-synthetic::after {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        background: #00f2fe;
+        box-shadow: 0 0 6px #ffffff;
+      }
+
+      /* Herd 2: Diffuser Entzündungsherd (Bernsteinfarbene Nebel-Cluster) */
+      .herd-diffuse {
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 153, 0, 0.65) 0%, rgba(255, 153, 0, 0.15) 60%, transparent 85%);
+        border: 1px dashed rgba(255, 200, 100, 0.5);
+        filter: blur(0.5px);
+        cursor: pointer;
+        animation: q-o-herd-smolder 3s ease-in-out infinite alternate;
+        transition: transform 0.2s ease, filter 0.2s ease;
+        z-index: 20;
+      }
+      .herd-diffuse:hover {
+        transform: scale(1.3);
+        filter: blur(0px) drop-shadow(0 0 14px #ff9900);
+      }
+
+      /* Herd 3: Nekrotischer Herd (Tiefviolett, zackig, orbitalFrenzy) */
+      .herd-necrotic {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        background: radial-gradient(circle, #f43f5e 0%, #a855f7 65%, #3b0764 100%);
+        border: 1.5px solid #f43f5e;
+        box-shadow: 0 0 16px #a855f7, 0 0 24px rgba(244, 63, 94, 0.6);
+        cursor: pointer;
+        animation: q-o-orbital-frenzy 1.2s ease-in-out infinite;
+        transition: transform 0.2s ease;
+        z-index: 20;
+      }
+      .herd-necrotic:hover {
+        transform: scale(1.4) rotate(15deg);
+        box-shadow: 0 0 30px #f43f5e, 0 0 45px #a855f7;
+      }
+
+      /* Kryo-Halterung Blitz-Effekt */
+      .cryo-flash-anim {
+        animation: q-o-cryo-flash 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      /* ==========================================================================
+         KEYFRAMES
+         ========================================================================== */
+      @keyframes q-o-membrane-wobble-stable {
+        0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg) scale(1); }
+        33% { border-radius: 50% 60% 70% 40% / 40% 60% 30% 60%; transform: rotate(3deg) scale(1.02, 0.98); }
+        66% { border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%; transform: rotate(-2deg) scale(0.98, 1.02); }
+        100% { border-radius: 40% 60% 60% 40% / 60% 50% 40% 60%; transform: rotate(1deg) scale(1.01, 1.01); }
+      }
+
+      @keyframes q-o-membrane-wobble-deformed {
+        0% { border-radius: 40% 60% 35% 65% / 65% 35% 60% 40%; transform: rotate(0deg); }
+        50% { border-radius: 75% 25% 70% 30% / 30% 70% 25% 75%; transform: rotate(4deg) scale(1.03, 0.97); }
+        100% { border-radius: 25% 75% 40% 60% / 55% 45% 75% 25%; transform: rotate(-3deg) scale(0.97, 1.03); }
+      }
+
+      @keyframes q-o-membrane-wobble-toxic {
+        0% { border-radius: 68% 32% 64% 36% / 38% 70% 30% 62%; transform: rotate(0deg) scale(0.98); }
+        50% { border-radius: 70% 30% 60% 40% / 42% 65% 35% 58%; transform: rotate(1deg) scale(1.02); }
+        100% { border-radius: 66% 34% 62% 38% / 40% 68% 32% 60%; transform: rotate(-0.5deg) scale(0.98); }
+      }
+
+      @keyframes q-o-neural-pulse {
+        0% { opacity: 0.45; }
+        100% { opacity: 0.85; }
+      }
+
+      @keyframes q-o-nucleus-float {
+        0% { transform: translate(-3px, -3px); }
+        50% { transform: translate(4px, 2px); }
+        100% { transform: translate(-2px, 4px); }
+      }
+
+      @keyframes q-o-crescent-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes q-o-nucleolus-energy {
+        0% { transform: scale(0.85); box-shadow: 0 0 10px #ffffff, 0 0 18px var(--cell-color); }
+        100% { transform: scale(1.2); box-shadow: 0 0 16px #ffffff, 0 0 28px var(--cell-color); }
+      }
+
+      @keyframes q-o-orbital-frenzy {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(-2px, 2px) rotate(4deg); }
+        50% { transform: translate(2px, -1.5px) rotate(-3deg); }
+        75% { transform: translate(-1.5px, -2px) rotate(2deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+      }
+
+      @keyframes q-o-herd-smolder {
+        0% { opacity: 0.5; transform: scale(0.95); }
+        100% { opacity: 0.9; transform: scale(1.1); }
+      }
+
+      @keyframes q-o-cryo-flash {
+        0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+        35% { box-shadow: 0 0 70px 25px rgba(0, 242, 254, 0.85), inset 0 0 45px 15px #ffffff; border-color: #ffffff; }
+        100% { box-shadow: 0 0 25px 4px rgba(0, 242, 254, 0.25); border-color: rgba(0, 242, 254, 0.4); }
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen overflow-hidden flex flex-col select-none" style="background-color: var(--color-void);">
+
+    <!-- SYSTEM HEADER -->
+    <header class="h-14 border-b border-gray-800 flex items-center justify-between px-6 z-50 flex-shrink-0" style="background-color: rgba(15, 23, 42, 0.95);">
+      <div class="flex items-center space-x-3">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center shadow-lg" style="background: radial-gradient(circle at 35% 35%, #ffffff, #00f2fe 60%, #034863 100%); box-shadow: 0 0 14px rgba(0, 242, 254, 0.6);">
+          <div class="w-2 h-2 rounded-full bg-white animate-ping"></div>
+        </div>
+        <div>
+          <span class="text-sm font-bold tracking-widest uppercase text-white font-mono">Q-O // SEZIER-LABOR</span>
+          <span class="text-xs text-gray-400 border-l border-gray-700 ml-3 pl-3 font-mono">Metabolische Zell-Forensik</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-5 text-xs font-mono">
+        <div class="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-gray-700" style="background-color: rgba(255, 255, 255, 0.04);">
+          <div id="db-indicator" class="w-2 h-2 rounded-full bg-cyan-400" style="box-shadow: 0 0 8px #00f2fe;"></div>
+          <span id="db-status-label" class="text-gray-300">Vault: Bereit</span>
+        </div>
+        <div class="text-gray-400">Aktive Probe: <span id="header-sample-label" class="text-cyan-400 font-semibold">Keine Probe</span></div>
+      </div>
+    </header>
+
+    <!-- 3-SPALTEN-WORKSPACE -->
+    <main class="flex-1 flex w-full overflow-hidden" style="height: calc(100vh - 3.5rem);">
+      
+      <!-- ==========================================================================
+           ZONE 1 (LINKS): DIE VERTIKALE GEWEBEBANK (22% Breite)
+           ========================================================================== -->
+      <section class="flex flex-col h-full overflow-hidden border-r border-gray-800 relative flex-shrink-0" style="width: 22%; background-color: var(--color-labpanel);">
+        <div class="p-4 border-b border-gray-800 flex items-center justify-between" style="background-color: rgba(255, 255, 255, 0.02);">
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-200">Gewebebank</span>
+          </div>
+          <span id="capsule-count-badge" class="text-xs font-mono px-2 py-0.5 rounded-full text-gray-300" style="background-color: rgba(255, 255, 255, 0.08);">3 Proben</span>
+        </div>
+
+        <!-- Scrollbarer Sediment-Strang mit durchgehender Nervenbahn-Linie -->
+        <div class="flex-1 overflow-y-auto p-4 relative" id="bank-scroll-container">
+          <!-- Durchgehende feine vertikale CSS-Nervenbahn / Zeitachse -->
+          <div class="absolute left-7 top-0 bottom-0 w-0.5 opacity-40 pointer-events-none" style="background: linear-gradient(to bottom, #f43f5e, #ff9900, #00f2fe); box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);"></div>
+
+          <!-- Kapsel-Sediment-Liste -->
+          <div class="flex flex-col space-y-4 relative z-10 pl-5" id="capsule-list-wrapper">
+            
+            <!-- STATISCHE TEST-KAPSEL 1: ROT (TOXISCH, Score: 0.35) -->
+            <div
+              id="capsule-bio-toxic"
+              draggable="true"
+              data-biopsy-id="bio_test_toxic"
+              data-lq="0.35"
+              data-stox="3.40"
+              data-nnut="0.75"
+              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
+              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(244, 63, 94, 0.4); box-shadow: 0 0 12px rgba(244, 63, 94, 0.15);"
+            >
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs text-gray-300">bio_test_toxic</span>
+                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-red-400 border border-red-500" style="background-color: rgba(244, 63, 94, 0.15);">Toxisch</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-red-500 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #e11d48 70%, #4c0519 100%); box-shadow: 0 0 10px rgba(225, 29, 72, 0.6);"></div>
+                <div class="flex-1 font-mono text-xs">
+                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">0.35</span></div>
+                  <div class="text-gray-500 text-xs truncate">S_tox: 3.40 | N_nut: 0.75</div>
+                </div>
+              </div>
+              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
+                <span>11:42 Uhr</span>
+                <span class="text-red-400 font-semibold">Ziehen &rarr;</span>
+              </div>
+            </div>
+
+            <!-- STATISCHE TEST-KAPSEL 2: ORANGE (DEFORMIERT, Score: 0.75) -->
+            <div
+              id="capsule-bio-deformed"
+              draggable="true"
+              data-biopsy-id="bio_test_deformed"
+              data-lq="0.75"
+              data-stox="1.80"
+              data-nnut="1.50"
+              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
+              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(255, 153, 0, 0.4); box-shadow: 0 0 12px rgba(255, 153, 0, 0.15);"
+            >
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs text-gray-300">bio_test_deformed</span>
+                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-yellow-400 border border-yellow-500" style="background-color: rgba(255, 153, 0, 0.15);">Deformiert</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-yellow-500 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #ff9900 70%, #7c2d12 100%); box-shadow: 0 0 10px rgba(255, 153, 0, 0.6);"></div>
+                <div class="flex-1 font-mono text-xs">
+                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">0.75</span></div>
+                  <div class="text-gray-500 text-xs truncate">S_tox: 1.80 | N_nut: 1.50</div>
+                </div>
+              </div>
+              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
+                <span>10:15 Uhr</span>
+                <span class="text-yellow-400 font-semibold">Ziehen &rarr;</span>
+              </div>
+            </div>
+
+            <!-- STATISCHE TEST-KAPSEL 3: BLAU (STABIL / CYAN, Score: 1.20) -->
+            <div
+              id="capsule-bio-stable"
+              draggable="true"
+              data-biopsy-id="bio_test_stable"
+              data-lq="1.20"
+              data-stox="0.30"
+              data-nnut="2.80"
+              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
+              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(0, 242, 254, 0.4); box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);"
+            >
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs text-gray-300">bio_test_stable</span>
+                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-cyan-400 border border-cyan-400" style="background-color: rgba(0, 242, 254, 0.15);">Gesund</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-cyan-400 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #00f2fe 70%, #034863 100%); box-shadow: 0 0 10px rgba(0, 242, 254, 0.6);"></div>
+                <div class="flex-1 font-mono text-xs">
+                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">1.20</span></div>
+                  <div class="text-gray-500 text-xs truncate">S_tox: 0.30 | N_nut: 2.80</div>
+                </div>
+              </div>
+              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
+                <span>08:40 Uhr</span>
+                <span class="text-cyan-400 font-semibold">Ziehen &rarr;</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           ZONE 2 (MITTE): DER SEZIERTISCH / DIE DROP-ZONE (53% Breite)
+           ========================================================================== -->
+      <section id="seziertisch-zone" class="flex flex-col items-center justify-center relative border-r border-gray-800 overflow-hidden flex-shrink-0" style="width: 53%; background: radial-gradient(ellipse at center, #0e1a30 0%, #070a13 85%);">
+        
+        <!-- Labor-Gitter-Hintergrund -->
+        <div class="absolute inset-0 pointer-events-none opacity-20" style="background-image: linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+        <!-- Runde Kryo-Halterung (Glow-Ring & Drop-Target) -->
+        <div
+          id="cryo-holder"
+          class="relative flex items-center justify-center transition-all duration-300 rounded-full border-2 border-dashed"
+          style="width: 350px; height: 350px; border-color: rgba(0, 242, 254, 0.35); box-shadow: 0 0 25px rgba(0, 242, 254, 0.15); background-color: rgba(255, 255, 255, 0.01);"
+        >
+          <!-- Text-Platzhalter vor dem ersten Drop -->
+          <div id="drop-instruction" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center pointer-events-none transition-opacity duration-300">
+            <div class="w-12 h-12 rounded-full border border-cyan-400 flex items-center justify-center mb-3 animate-pulse" style="background-color: rgba(0, 242, 254, 0.1);">
+              <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            </div>
+            <p class="text-xs font-mono uppercase tracking-widest text-cyan-400 font-bold mb-1">Kryo-Seziertisch bereit</p>
+            <p class="text-xs text-gray-400 max-w-xs">Gewebeprobe aus der linken Bank hierher ziehen...</p>
+          </div>
+
+          <!-- GROSSE VERSION DES BLOBS (250px x 250px) -->
+          <div id="large-cell" class="relative flex items-center justify-center transition-all duration-700 opacity-0 transform scale-90 pointer-events-none" style="width: 250px; height: 250px;">
+            <div class="large-membrane">
+              
+              <!-- Zytoplasma SVG mit radialen Nervenbahnen -->
+              <svg class="large-cytoplasm-svg" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="reactor-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="var(--cell-color)" stop-opacity="0.5" />
+                    <stop offset="70%" stop-color="var(--cell-color)" stop-opacity="0.1" />
+                    <stop offset="100%" stop-color="var(--cell-color)" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="125" cy="125" r="105" fill="url(#reactor-glow)" />
+                <path class="large-neural-path" d="M 46 54 C 68 74, 84 100, 125 125" />
+                <path class="large-neural-path" d="M 200 50 C 172 78, 162 96, 125 125" />
+                <path class="large-neural-path" d="M 208 192 C 180 170, 154 154, 125 125" />
+                <path class="large-neural-path" d="M 54 200 C 76 176, 100 150, 125 125" />
+                <path class="large-neural-path secondary" d="M 125 30 C 120 60, 128 92, 125 125" />
+                <path class="large-neural-path secondary" d="M 222 125 C 192 120, 162 130, 125 125" />
+                <path class="large-neural-path secondary" d="M 125 222 C 130 192, 120 162, 125 125" />
+                <path class="large-neural-path secondary" d="M 28 125 C 62 130, 92 120, 125 125" />
+                <circle class="large-neural-node" cx="46" cy="54" r="4" />
+                <circle class="large-neural-node" cx="200" cy="50" r="4" />
+                <circle class="large-neural-node" cx="208" cy="192" r="4" />
+                <circle class="large-neural-node" cx="54" cy="200" r="4" />
+                <circle class="large-neural-node" cx="125" cy="30" r="3.5" />
+                <circle class="large-neural-node" cx="222" cy="125" r="3.5" />
+                <circle class="large-neural-node" cx="125" cy="222" r="3.5" />
+                <circle class="large-neural-node" cx="28" cy="125" r="3.5" />
+              </svg>
+
+              <!-- Großer Sichel-Zellkern im Zentrum -->
+              <div class="large-nucleus-wrapper">
+                <div class="large-crescent"></div>
+                <div class="large-nucleus-body"></div>
+                <div class="large-nucleolus"></div>
+              </div>
+
+              <!-- ==========================================================
+                   DIE 3 ANKLICKBAREN GEWEBEHERDE (HOTSPOTS)
+                   ========================================================== -->
+              <!-- Herd 1: Synthetischer Herd (Geometrisch blau-grün) -->
+              <div
+                id="herd-1-synthetic"
+                class="herd-synthetic"
+                style="top: 36px; left: 44px;"
+                title="Synthetischer Herd (Klicken zum Analysieren)"
+              ></div>
+
+              <!-- Herd 2: Diffuser Entzündungsherd (Bernsteinfarbene Nebel-Cluster) -->
+              <div
+                id="herd-2-diffuse"
+                class="herd-diffuse"
+                style="bottom: 28px; right: 38px;"
+                title="Diffuser Entzündungsherd (Klicken zum Analysieren)"
+              ></div>
+
+              <!-- Herd 3: Nekrotischer Herd (Tiefviolett, zackig, orbitalFrenzy) -->
+              <div
+                id="herd-3-necrotic"
+                class="herd-necrotic"
+                style="top: 38px; right: 42px;"
+                title="Nekrotischer Herd (Klicken zum Analysieren)"
+              ></div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetrie-Leiste am unteren Rand des Seziertischs -->
+        <div class="absolute bottom-5 left-6 right-6 p-3 px-5 rounded-xl border border-gray-800 flex items-center justify-between font-mono text-xs z-20 shadow-xl" style="background-color: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px);">
+          <div class="flex flex-col">
+            <span class="text-gray-500 uppercase text-xs">Gewebe-ID</span>
+            <span id="tele-sample-id" class="text-white font-bold">Keine Probe</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <span class="text-gray-500 uppercase text-xs">Metabolismus-Score (LQ)</span>
+            <span id="tele-lq-val" class="text-cyan-400 font-bold text-sm">--</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <span class="text-gray-500 uppercase text-xs">S_tox / N_nut</span>
+            <span id="tele-ratio-val" class="text-gray-300 font-bold">-- / --</span>
+          </div>
+          <div class="flex flex-col items-end">
+            <span class="text-gray-500 uppercase text-xs">Zellzustand</span>
+            <span id="tele-state-badge" class="font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-xs text-gray-400 border border-gray-700" style="background-color: rgba(255, 255, 255, 0.05);">Standby</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==========================================================================
+           ZONE 3 (RECHTS): DER WERKZEUGKASTEN / SEZIER-TOOLS (25% Breite)
+           ========================================================================== -->
+      <section
+        id="zone-tools-panel"
+        class="flex flex-col h-full overflow-hidden border-l border-gray-800 transition-all duration-500 flex-shrink-0 opacity-30 pointer-events-none"
+        style="width: 25%; background-color: var(--color-labpanel);"
+      >
+        <div class="p-4 border-b border-gray-800 flex items-center justify-between" style="background-color: rgba(255, 255, 255, 0.02);">
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path>
+            </svg>
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-200">Sezier-Werkzeuge</span>
+          </div>
+          <span id="tools-status-badge" class="text-xs font-mono px-2 py-0.5 rounded-full text-red-400 border border-red-500" style="background-color: rgba(244, 63, 94, 0.15);">Gesperrt</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 flex flex-col space-y-4 font-mono text-xs">
+          
+          <!-- 1. LINGUISTISCHER EXTRAKTOR & FORENSIK -->
+          <div class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg" style="background-color: rgba(15, 23, 42, 0.85);">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+              <span class="font-bold text-gray-200 text-xs uppercase tracking-wider">Linguistischer Extraktor</span>
+              <span id="herd-focus-label" class="text-xs text-cyan-400">Herd 3 aktiv</span>
+            </div>
+
+            <!-- Toxische Wörter-Liste -->
+            <div class="flex flex-col space-y-1.5">
+              <div class="text-gray-500 uppercase text-xs">Gefundene Gift-Cluster</div>
+              <div id="toxic-words-container" class="flex flex-wrap gap-1.5">
+                <span class="px-2 py-1 rounded text-red-400 border border-red-500 text-xs" style="background-color: rgba(244, 63, 94, 0.15);">Eskalation</span>
+                <span class="px-2 py-1 rounded text-red-400 border border-red-500 text-xs" style="background-color: rgba(244, 63, 94, 0.15);">Kollaps</span>
+                <span class="px-2 py-1 rounded text-red-400 border border-red-500 text-xs" style="background-color: rgba(244, 63, 94, 0.15);">Skandal</span>
+                <span class="px-2 py-1 rounded text-yellow-400 border border-yellow-500 text-xs" style="background-color: rgba(255, 153, 0, 0.15);">Torschlusspanik</span>
+              </div>
+            </div>
+
+            <!-- Rote Dummy-URLs -->
+            <div class="flex flex-col space-y-1.5 mt-1">
+              <div class="text-gray-500 uppercase text-xs">Quell-URLs</div>
+              <div id="toxic-urls-container" class="flex flex-col space-y-1">
+                <a href="#" class="p-2 rounded border border-red-500 text-red-400 text-xs truncate block hover:underline" style="background-color: rgba(0, 0, 0, 0.4);">
+                  🔗 www.reisserische-news.de/apokalypse
+                </a>
+                <a href="#" class="p-2 rounded border border-yellow-500 text-yellow-400 text-xs truncate block hover:underline" style="background-color: rgba(0, 0, 0, 0.4);">
+                  🔗 www.rage-feed.net/endless-alarm
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. METABOLISCHER QUERSCHNITT (SCHADSTOFF-DICHTE) -->
+          <div class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg" style="background-color: rgba(15, 23, 42, 0.85);">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+              <span class="font-bold text-gray-200 text-xs uppercase tracking-wider">Metabolischer Querschnitt</span>
+              <span class="text-xs text-gray-400">Spektrogramm</span>
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <!-- Kreisförmiges UI-Diagramm -->
+              <div class="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                  <path
+                    class="text-gray-800"
+                    stroke-width="3.5"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <path
+                    id="schadstoff-circle"
+                    class="text-red-500 transition-all duration-700"
+                    stroke-dasharray="72, 100"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center font-mono">
+                  <span id="schadstoff-val" class="text-xs font-bold text-white">72%</span>
+                  <span class="text-gray-500 uppercase" style="font-size: 8px;">Tox-Last</span>
+                </div>
+              </div>
+
+              <!-- Schadstoff-Werte -->
+              <div class="flex-1 flex flex-col space-y-1 text-xs">
+                <div class="flex justify-between"><span class="text-gray-400">Affekt-Spitzen:</span> <span id="val-affekt" class="text-red-400 font-bold">8.4 / 10</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">Syntakt. Enge:</span> <span id="val-syntakt" class="text-yellow-400 font-bold">6.1 / 10</span></div>
+                <div class="flex justify-between"><span class="text-gray-400">Nährwert-Quotient:</span> <span id="val-naehrwert" class="text-cyan-400 font-bold">1.2 / 10</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. LINGUISTISCHER SPÜL-AKTIVATOR (DETOX-BUTTON) -->
+          <div class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg mt-auto" style="background-color: rgba(15, 23, 42, 0.85);">
+            <div class="text-gray-500 uppercase text-xs">Homöostase-Protokoll</div>
+            <button
+              id="btn-linguistic-flush"
+              class="w-full py-3 px-4 rounded-xl border border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center space-x-2"
+              style="background: linear-gradient(to right, rgba(0, 242, 254, 0.2), rgba(0, 242, 254, 0.08)); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);"
+            >
+              <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Linguistische Spülung einleiten</span>
+            </button>
+            <div id="flush-feedback" class="text-xs text-center font-mono h-3 text-gray-500"></div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Externe JavaScript-Logik ohne Inline-Scripts (CSP-konform) -->
+    <script src="index.js"></script>
+  </body>
+</html>
