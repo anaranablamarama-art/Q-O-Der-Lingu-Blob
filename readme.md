@@ -20,12 +20,17 @@ Das Q-O-Ökosystem ist eine geschlossene, serverlose Kreislauf-Pipeline, die kom
 
 ## 🧠 2. Das Metabolische Gesetz & Die KI-Kaskade
 
-Herkömmliche Filter scheitern an moderner Desinformation, weil Fake News oft ein seriöses Gewand tragen. Sie nutzen scheinbar sachliche Wörter, verdrehen aber die Logik. Der Lingu-Blob bewertet nicht bloß einzelne Wörter, sondern seziert die **Informationsqualität** über zwei hintereinander geschaltete KI-Spezialisten (`main.py`):
+Der Text aus deinem Browser-Sichtfeld wird im Millisekunden-Takt an das Backend geschickt. Dort spaltet sich die Formel in zwei gegensätzliche Kräfte auf:
 
-### Stufe 1: Der emotionale Biosensor — `german-sentiment-bert`
-Bevor der Inhalt analysiert wird, fühlt ein lokales, hochspezialisiertes BERT-Modell den Puls des Textes.
-* **Die Aufgabe:** Es misst die **emotionale Polarität** des Absatzes. Es erkennt aggressive Grundstimmungen, unterschwellige Gehässigkeit, moralische Panik und subtiles Framing – selbst wenn *kein einziges* klassisches Schimpfwort fällt.
-* **Der Impact auf die Physik:** BERT liefert den Toxizitäts-Multiplikator ($P_{\text{BERT}}$) zwischen `1.0` (neutral) und `3.0` (aggressiv feindselig). Ein manipulativer Text jagt den Gift-Index $S_{\text{tox}}$ exponentiell in die Höhe, weil BERT die menschliche Absicht hinter den Zeilen entlarvt.
+#### 1. Der Toxizitäts-Zweig (Der linke Term): $[(\text{Toxin}_{\alpha} + \text{Toxin}_{\beta}) \cdot \mathbf{BERT}]$
+* **Die statistische Basis:** Das System zählt über reguläre Ausdrücke (Regex) klassische Clickbait-Trigger ($\text{Toxin}_{\alpha}$) und ideologische Framing-Begriffe ($\text{Toxin}_{\beta}$).
+* **Der $\mathbf{BERT}$-Katalysator:** Das hochspezialisierte Modell `german-sentiment-bert` liest den Absatz parallel als emotionaler Biosensor. Es bewertet unterschwellige Aggressivität, moralische Panik und feindselige Polarität.
+* **Die Wirkung in der Formel:** BERT liefert einen Multiplikator zwischen **$1.0$ (neutral)** und **$3.0$ (hochgradig aggressiv/feindselig)**. Ein manipulativer Text jagt den Gift-Wert exponentiell nach oben, weil BERT die bösartige Absicht hinter den Zeilen erkennt – selbst wenn kaum Reizwörter fallen.
+
+#### 2. Der Nährstoff-Zweig (Der rechte Term): $[(\text{Fakten} + \text{Logik}) \cdot \mathbf{Gemini}]$
+* **Die statistische Basis:** Das System zählt empirische Belege, Zahlen und Quellen ($\text{Fakten}$) sowie kausale Konjunktionen wie *"weil"* oder *"infolgedessen"* ($\text{Logik}$).
+* **Der $\mathbf{Gemini}$-Filter:** `Gemini Light` arbeitet zeitgleich als logischer Seziertisch. Es prüft blitzschnell die argumentative Validität. Es entlarvt Scheinargumente, Zirkelschlüsse und erfundene Fake-Quellen.
+* **Die Wirkung in der Formel:** Gemini liefert einen Bewertungsfaktor zwischen **$0.1$ (haltlose Scheinargumentation/Lüge)** und **$1.0$ (wissenschaftlich exakt belegt)**. Wenn ein Text versucht, das System mit Fake-Fakten auszutricksen, drückt Gemini den Nährwert gegen Null. Der Lingu-Blob "verhungert" visuell auf deinem Bildschirm.
 
 ### Stufe 2: Der logische Seziertisch — `Gemini Light LLM`
 Nachdem BERT die Emotionen isoliert hat, seziert Gemini Light die **strukturelle Wahrheit** und die argumentative Validität.
