@@ -6,7 +6,7 @@ Wenn du wissen willst, was das Internet mit deiner Wahrnehmung macht, frag einfa
 
 ---
 
-## 👁️ 1. Das System im Überblick (Aus Nutzersicht)
+## 👁️ 1. Das System im Überblick
 
 Das Q-O-Ökosystem ist eine geschlossene, serverlose Kreislauf-Pipeline, die komplett privat auf deinem eigenen Rechner läuft:
 
