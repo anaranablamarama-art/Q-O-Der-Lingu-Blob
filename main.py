@@ -18,7 +18,7 @@ import datetime
 import urllib.request
 import urllib.error
 from typing import Dict, Any, Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -30,7 +30,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "DEIN_KEY_HIER")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 # Modelle
-MODEL_ANALYZE = "llama-3.1-8b-instant"     # Ultraschneller Echtzeit-Semantik-Filter
+MODEL_ANALYZE = "llama-3.1-8b-instant"      # Ultraschneller Echtzeit-Semantik-Filter
 MODEL_FLUSH = "llama-3.3-70b-versatile"     # High-End Weltwissen & Forensik-Spuelung
 
 
@@ -40,7 +40,7 @@ MODEL_FLUSH = "llama-3.3-70b-versatile"     # High-End Weltwissen & Forensik-Spu
 app = FastAPI(
     title="Q-O Metabolic Brain API",
     description="Linguistischer Metabolisierungs- und Sezier-Server fuer Q-O via Groq",
-    version="3.0.0"
+    version="3.1.0"
 )
 
 # CORS fuer nahtlose Kommunikation mit Chrome Extension & Labor-Dashboard
@@ -57,17 +57,17 @@ app.add_middleware(
 # 2. PYDANTIC DATENMODELLE (ABSOLUTE SCHEMA-KOMPATIBILITAET MIT INDEX.JS / CONTENT.JS)
 # =============================================================================
 class AnalyzeRequest(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     text: str = Field(..., description="Zu analysierender Textabsatz des Viewports")
     url: str = Field(default="about:blank", description="Quell-URL der analysierten Website")
 
 class MorphologyState(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
     className: str = Field(..., alias="class")
     pulse_frequency: str
 
-    class Config:
-        populate_by_name = True
-
 class AnalyzeResponse(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     biopsy_id: str
     lq_score: float
     source_url: str
@@ -77,12 +77,14 @@ class AnalyzeResponse(BaseModel):
     details: Optional[Dict[str, Any]] = None
 
 class FlushRequest(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     toxic_text: Optional[str] = Field(default="", description="Zu neutralisierender Gesamttext")
     toxic_snippets: Optional[List[str]] = Field(default_factory=list, description="Array infizierter Beweissaetze")
     biopsy_id: Optional[str] = Field(default="", description="Biopsie-Kennung")
     source_url: Optional[str] = Field(default="", description="Quell-URL")
 
 class FlushResponse(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     original_text: str
     neutralized_text: str
     context_antidote: str
@@ -91,9 +93,15 @@ class FlushResponse(BaseModel):
 
 
 # =============================================================================
-# 3. FEDERLEICHTER NATIV-CLIENT FUER DIE GROQ CLOUD-API (OHNE SCHWERE DEPENDENCIES)
+# 3. FEDERLEICHTER NATIV-CLIENT FUER DIE GROQ CLOUD-API (MIT JSON-OBJECT ERZWINGUNG)
 # =============================================================================
-def call_groq_api(model: str, system_prompt: str, user_content: str, json_mode: bool = True) -> Optional[Dict[str, Any]]:
+def call_groq_api(
+    model: str,
+    system_prompt: str,
+    user_content: str,
+    temperature: float = 0.1,
+    json_mode: bool = True
+) -> Optional[Dict[str, Any]]:
     apiKey = GROQ_API_KEY.strip()
     if not apiKey or apiKey == "DEIN_KEY_HIER":
         return None
@@ -101,7 +109,7 @@ def call_groq_api(model: str, system_prompt: str, user_content: str, json_mode: 
     headers = {
         "Authorization": f"Bearer {apiKey}",
         "Content-Type": "application/json",
-        "User-Agent": "Q-O-Metabolic-Brain/3.0"
+        "User-Agent": "Q-O-Metabolic-Brain/3.1"
     }
 
     body: Dict[str, Any] = {
@@ -110,9 +118,10 @@ def call_groq_api(model: str, system_prompt: str, user_content: str, json_mode: 
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content}
         ],
-        "temperature": 0.1
+        "temperature": temperature
     }
 
+    # Erzwingt den nativen strukturieren JSON-Modus bei Groq / Llama
     if json_mode:
         body["response_format"] = {"type": "json_object"}
 
@@ -120,7 +129,7 @@ def call_groq_api(model: str, system_prompt: str, user_content: str, json_mode: 
     req = urllib.request.Request(GROQ_API_URL, data=data_bytes, headers=headers, method="POST")
 
     try:
-        with urllib.request.urlopen(req, timeout=8) as response:
+        with urllib.request.urlopen(req, timeout=12) as response:
             if response.status == 200:
                 resp_body = response.read().decode("utf-8")
                 parsed = json.loads(resp_body)
@@ -201,6 +210,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         model=MODEL_ANALYZE,
         system_prompt=system_prompt,
         user_content=text[:4000],
+        temperature=0.1,
         json_mode=True
     )
 
@@ -265,30 +275,42 @@ async def linguistic_flush(payload: FlushRequest):
 
     combined_input = "\n".join(raw_snippets).strip() if raw_snippets else "Sensationsmeldung mit alarmistischer Ueberladung."
 
+    # Trennscharfes Prompt-Design fuer Llama 3.3 (70B):
+    # Strikte Entkopplung beider Kanaele im erzwungenen JSON-Objekt-Modus
     system_prompt = (
-        "Du bist das linguistische Immunsystem und der Faktencheck-Forensiker von Q-O. "
-        "Du nutzt dein globales Weltwissen, um toxische, affektive und manipulative Aussagen "
-        "zu entgiften und auf Faktenintegritaet zu pruefen.\n"
-        "Antworte ZWINGEND als JSON mit zwei Feldern:\n"
-        "1. 'neutralized_text': Der Satz / die Textpassage, gereinigt in klinisch reine, sachliche Sprache ohne Alarmismus.\n"
-        "2. 'context_antidote': Ein hochverdichteter Forensik-Bericht (2-3 Saetze) mit dem realen Hintergrund- und Weltwissen zur Richtigstellung des gefundenen Toxins.\n"
-        "Schema:\n"
+        "Du bist das linguistische Immunsystem und der Faktencheck-Forensiker von Q-O.\n"
+        "Analysiere die uebergebenen Saetze (manipulative Phrasen, Clickbait, unfaire AGB-Klauseln, Desinformation, Dark Patterns).\n"
+        "Du MUSST ZWINGEND als valides JSON-Objekt mit exakt zwei strikt getrennten Feldern antworten:\n"
         "{\n"
-        '  "neutralized_text": "...",\n'
-        '  "context_antidote": "..."\n'
-        "}"
+        '  "neutralized_text": "String",\n'
+        '  "context_antidote": "String"\n'
+        "}\n\n"
+        "DIE KANALTRENNUNGS-REGELN:\n"
+        "1. 'neutralized_text' (Das Gegengift):\n"
+        "- Hier darf KEINE Erklaerung, kein Kontext, keine Belehrung und kein 'Hallo' stehen!\n"
+        "- Das ist die reine, stilistische Text-Glaettung.\n"
+        "- Formuliere die manipulativen Saetze oder unfairen AGB-Klauseln in ein klinisch reines, kurzes, absolut sachliches und unaufgeregtes Deutsch um.\n"
+        "- So neutral, distanziert und praezise wie ein Eintrag in einem Sachlexikon.\n\n"
+        "2. 'context_antidote' (Der Faktencheck):\n"
+        "- Das ist der forensische Bericht!\n"
+        "- Nutze dein globales Welt-, Fach- und Kontextwissen (z. B. Verbraucherschutz, rechtliche Rahmenbedingungen oder historische Fakten).\n"
+        "- Erklaere dem Nutzer die nackte Wahrheit hinter dem Satz.\n"
+        "- Enthuelle versteckte Fallen (Abo-Modelle, Datenweitergabe, psychologische Trigger) oder korrigiere die Desinformation praegnant (maximal 3 Saetze)."
     )
+
+    user_content = f"Infizierte Textpassagen zur Analyse und Entgiftung:\n{combined_input}"
 
     groq_flush_res = call_groq_api(
         model=MODEL_FLUSH,
         system_prompt=system_prompt,
-        user_content=f"Infizierte Textpassagen:\n{combined_input}",
+        user_content=user_content,
+        temperature=0.15,
         json_mode=True
     )
 
     if groq_flush_res and "neutralized_text" in groq_flush_res and "context_antidote" in groq_flush_res:
-        neutralized = groq_flush_res["neutralized_text"]
-        antidote = groq_flush_res["context_antidote"]
+        neutralized = str(groq_flush_res["neutralized_text"]).strip()
+        antidote = str(groq_flush_res["context_antidote"]).strip()
         return FlushResponse(
             original_text=combined_input,
             neutralized_text=neutralized,
@@ -298,10 +320,10 @@ async def linguistic_flush(payload: FlushRequest):
         )
 
     # Fallback-Gegengift falls API-Key unkonfiguriert oder Offline
-    fallback_neutralized = "Sachverhalt: Die Kernaussage wurde von emotionaler Ueberladung isoliert und sachlich gefasst."
+    fallback_neutralized = "Der Sachverhalt wurde von reisserischer Rhetorik befreit und sachlich neutral zusammengefasst."
     fallback_antidote = (
-        "Forensischer Faktencheck (Weltwissen): Identifizierte Reizmuster wiesen affektive Uebertreibungen auf. "
-        "Durch den Abgleich mit logischen Kausalitaetsketten wurde der Sachverhalt auf seine reale Faktenbasis zurueckgefuehrt."
+        "Forensischer Faktencheck (Weltwissen): Die Formulierung nutzt gezielte emotionale Trigger und verkuerzte Zusammenhaenge. "
+        "Verbraucherschutz- und Faktenpruefungsstellen weisen darauf hin, Behauptungen anhand primaerer Quellen zu validieren und auf versteckte Klauseln zu achten."
     )
 
     return FlushResponse(
@@ -324,11 +346,22 @@ async def health_check():
         "groq_api_configured": has_key,
         "model_analyze": MODEL_ANALYZE,
         "model_flush": MODEL_FLUSH,
-        "version": "3.0.0",
+        "version": "3.1.0",
         "time": time.time()
     }
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import sys
+
+    # PRÜFEN: Läuft der Code als eingefrorene .exe (via PyInstaller) oder im Entwickler-Terminal?
+    is_exe = getattr(sys, 'frozen', False)
+
+    if is_exe:
+        # Im .exe-Hintergrundmodus: Logging komplett killen, um den isatty-Absturz physisch zu verhindern
+        uvicorn.run(app, host="127.0.0.1", port=8000, log_config=None)
+    else:
+        # Im Entwickler-Terminal: Volles Logging AN, damit wir jeden Live-Funkspruch der Analyse sehen!
+        print("🪐 [Q-O Core] Entwickler-Modus aktiv. Zünde semantisches Groq-Radar...")
+        uvicorn.run(app, host="127.0.0.1", port=8000)
