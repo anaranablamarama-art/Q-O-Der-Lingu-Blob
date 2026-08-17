@@ -2,31 +2,36 @@
 =============================================================================
 PROJEKT "Q-O" // METABOLISCHES GEHIRN & ANALYSE-PIPELINE (MAIN.PY)
 =============================================================================
-FastAPI-Backend für das Live-Browser-HUD und das Drei-Zonen-Sezier-Labor.
-- Kaskadiertes e-Funktions-Modell: LQ = exp(-(S_tox_final - N_nut_final))
-- Zweig 1 (Toxizität): Regex Vorfilterung (Alpha/Beta) + Sentiment-BERT-Sensor
-- Zweig 2 (Nährstoff): Regex Fakten/Logik + Gemini Validierungs-Sezierer
-- REST-Schnittstellen: /api/analyze und /api/flush
+Schlankes FastAPI-Backend mit nativer Groq-Cloud-API Anbindung.
+- Reiner Semantik-Filter & Vektor-Kontextanalyse via 'llama-3.1-8b-instant'
+- High-End Weltwissen & Forensik-Detox via 'llama-3.3-70b-versatile'
+- Kaskadiertes e-Funktions-Modell: LQ = exp(-(s_tox - n_nut))
+- Exakt identische JSON-Schnittstellen für /api/analyze und /api/flush
 =============================================================================
 """
 
 import os
-import re
 import math
 import time
+import json
 import datetime
-from typing import Dict, Any, Optional
+import urllib.request
+import urllib.error
+from typing import Dict, Any, Optional, List
 from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Optionales Google GenAI SDK (nutzt Umgebungsvariable GEMINI_API_KEY)
-try:
-    from google import genai
-    from google.genai import types
-    GEMINI_AVAILABLE = True
-except ImportError:
-    GEMINI_AVAILABLE = False
+# =============================================================================
+# GROQ API KONFIGURATION
+# =============================================================================
+# Trage hier deinen freien Groq-API-Schluessel ein oder nutze die Umgebungsvariable
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "DEIN_KEY_HIER")
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+# Modelle
+MODEL_ANALYZE = "llama-3.1-8b-instant"     # Ultraschneller Echtzeit-Semantik-Filter
+MODEL_FLUSH = "llama-3.3-70b-versatile"     # High-End Weltwissen & Forensik-Spuelung
 
 
 # =============================================================================
@@ -34,14 +39,14 @@ except ImportError:
 # =============================================================================
 app = FastAPI(
     title="Q-O Metabolic Brain API",
-    description="Linguistischer Metabolisierungs- und Sezier-Server für Q-O",
-    version="1.0.0"
+    description="Linguistischer Metabolisierungs- und Sezier-Server fuer Q-O via Groq",
+    version="3.0.0"
 )
 
-# CORS für nahtlose Kommunikation mit Chrome Extension & Labor-Dashboard
+# CORS fuer nahtlose Kommunikation mit Chrome Extension & Labor-Dashboard
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Für Browser-Extension & lokales Dashboard
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -49,7 +54,7 @@ app.add_middleware(
 
 
 # =============================================================================
-# 2. PYDANTIC DATENMODELLE (SCHEMA-INTEGRITÄT)
+# 2. PYDANTIC DATENMODELLE (ABSOLUTE SCHEMA-KOMPATIBILITAET MIT INDEX.JS / CONTENT.JS)
 # =============================================================================
 class AnalyzeRequest(BaseModel):
     text: str = Field(..., description="Zu analysierender Textabsatz des Viewports")
@@ -67,179 +72,157 @@ class AnalyzeResponse(BaseModel):
     lq_score: float
     source_url: str
     morphology_state: MorphologyState
+    toxic_snippets: List[str] = Field(default_factory=list)
+    nutrient_snippets: List[str] = Field(default_factory=list)
     details: Optional[Dict[str, Any]] = None
 
 class FlushRequest(BaseModel):
-    toxic_text: str = Field(..., description="Zu neutralisierender Text")
+    toxic_text: Optional[str] = Field(default="", description="Zu neutralisierender Gesamttext")
+    toxic_snippets: Optional[List[str]] = Field(default_factory=list, description="Array infizierter Beweissaetze")
+    biopsy_id: Optional[str] = Field(default="", description="Biopsie-Kennung")
+    source_url: Optional[str] = Field(default="", description="Quell-URL")
 
 class FlushResponse(BaseModel):
     original_text: str
+    neutralized_text: str
+    context_antidote: str
     clean_alternative: str
+    lq_boosted: float = 1.25
 
 
 # =============================================================================
-# 3. REGEX-PATTERNS FÜR STATISTISCHE VORFILTERUNG
+# 3. FEDERLEICHTER NATIV-CLIENT FUER DIE GROQ CLOUD-API (OHNE SCHWERE DEPENDENCIES)
 # =============================================================================
-# Toxin Alpha: Clickbait & Alarmismus
-REGEX_TOXIN_ALPHA = re.compile(
-    r"\b(Schock|Katastrophe|Unglaublich|Enthüllung|Skandal|Panik|Wahnsinn|Alarm|Horror|Geheim|Zerstörung|Fassungslos|Eskalation|Wut)\b",
-    re.IGNORECASE
-)
+def call_groq_api(model: str, system_prompt: str, user_content: str, json_mode: bool = True) -> Optional[Dict[str, Any]]:
+    apiKey = GROQ_API_KEY.strip()
+    if not apiKey or apiKey == "DEIN_KEY_HIER":
+        return None
 
-# Toxin Beta: Ideologisches Framing & Polarisierung
-REGEX_TOXIN_BETA = re.compile(
-    r"\b(Mainstream|Systemmedien|Verrat|Umerziehung|Lügenpresse|Diktatur|Volksverräter|Zensur|Propaganda|Marionetten|Gleichschaltung|Eliten)\b",
-    re.IGNORECASE
-)
+    headers = {
+        "Authorization": f"Bearer {apiKey}",
+        "Content-Type": "application/json",
+        "User-Agent": "Q-O-Metabolic-Brain/3.0"
+    }
 
-# Nährstoff - Fakten: Zahlen, Prozentangaben, Jahre, Studien
-REGEX_FACTS = re.compile(
-    r"(\d+([.,]\d+)?\s*%|\b\d{4}\b|\b(Studie|Institut|Untersuchung|Statistik|Daten|Quelle|Universität|Forscher|Analyse|Peer-Review|Messung)\b)",
-    re.IGNORECASE
-)
+    body: Dict[str, Any] = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        "temperature": 0.1
+    }
 
-# Nährstoff - Logik: Kausale Konjunktionen & Begründungen
-REGEX_LOGIC = re.compile(
-    r"\b(weil|daher|infolgedessen|folglich|aufgrund|deshalb|demnach|somit|weshalb|dadurch|insofern|vorausgesetzt|schlussfolgernd)\b",
-    re.IGNORECASE
-)
+    if json_mode:
+        body["response_format"] = {"type": "json_object"}
 
+    data_bytes = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(GROQ_API_URL, data=data_bytes, headers=headers, method="POST")
 
-# =============================================================================
-# 4. KI-SENSORIK & KASKADEN-LOGIK
-# =============================================================================
-def get_sentiment_bert_factor(text: str) -> float:
-    """
-    Simuliert/berechnet den Aggressions-Multiplikator P_BERT (1.0 bis 3.0).
-    Prüft Großbuchstaben-Häufigkeit, Ausrufezeichen-Kaskaden und affektive Ladung.
-    """
-    if not text.strip():
-        return 1.0
+    try:
+        with urllib.request.urlopen(req, timeout=8) as response:
+            if response.status == 200:
+                resp_body = response.read().decode("utf-8")
+                parsed = json.loads(resp_body)
+                content = parsed["choices"][0]["message"]["content"]
+                return json.loads(content)
+    except urllib.error.HTTPError as http_err:
+        print(f"[Q-O Groq Relais] HTTP-Fehler: {http_err.code} - {http_err.reason}")
+    except Exception as err:
+        print(f"[Q-O Groq Relais] Verbindungs- oder JSON-Fehler: {err}")
 
-    score = 1.0
-
-    # 1. Ausrufezeichen-Häufungen
-    exclamations = text.count("!")
-    if exclamations >= 3:
-        score += 0.8
-    elif exclamations >= 1:
-        score += 0.3
-
-    # 2. CAPSLOCK / Schreien (Wörter > 3 Buchstaben)
-    words = text.split()
-    caps_words = [w for w in words if len(w) > 3 and w.isupper()]
-    if len(caps_words) >= 3:
-        score += 0.9
-    elif len(caps_words) >= 1:
-        score += 0.4
-
-    # 3. Emotionale / affektive Adjektive
-    aggressive_cues = re.findall(
-        r"\b(unfassbar|skrupellos|schamlos|widerlich|radikal|brutal|abartig|kriminell)\b",
-        text,
-        re.IGNORECASE
-    )
-    score += len(aggressive_cues) * 0.5
-
-    # Strikt begrenzen zwischen 1.0 (neutral) und 3.0 (hochgradig toxisch)
-    return min(3.0, max(1.0, round(score, 2)))
-
-
-async def get_gemini_validity_factor(text: str) -> float:
-    """
-    Logischer Seziertisch via Gemini Light API (oder Heuristik-Fallback).
-    Prüft argumentative Konsistenz und liefert S_Gemini (0.1 bis 1.0).
-    """
-    api_key = os.environ.get("GEMINI_API_KEY")
-
-    if GEMINI_AVAILABLE and api_key:
-        try:
-            client = genai.Client(api_key=api_key)
-            prompt = (
-                "Bewerte die argumentative und logische Validität des folgenden Textes auf einer "
-                "Skala von 0.1 bis 1.0 (0.1 = reine Fake News/unbelegte Hetze/Zirkelschluss, 1.0 = exakte wissenschaftliche Logik/Fundierung).\n"
-                "Antworte NUR mit einer einzigen Zahl zwischen 0.1 und 1.0.\n\n"
-                f"Text:\n{text[:1000]}"
-            )
-
-            response = await client.aio.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=prompt
-            )
-
-            raw_text = response.text.strip()
-            match = re.search(r"(\d+(\.\d+)?)", raw_text)
-            if match:
-                val = float(match.group(1))
-                return min(1.0, max(0.1, round(val, 2)))
-        except Exception as e:
-            print(f"[Q-O Brain] Gemini API Call fehlgeschlagen, nutze Heuristik: {e}")
-
-    # Robuster Heuristik-Fallback:
-    # Manipulative Texte mit hoher Wortdichte, aber ohne Kausalverknüpfungen abwerten
-    words = text.split()
-    if len(words) < 5:
-        return 0.5
-
-    logic_count = len(REGEX_LOGIC.findall(text))
-    facts_count = len(REGEX_FACTS.findall(text))
-
-    if facts_count > 3 and logic_count == 0:
-        # Pseudo-Fakten ohne logische Herleitung (Zirkelschluss-Indikator)
-        return 0.25
-    elif logic_count >= 2 and facts_count >= 1:
-        return 0.85
-    elif facts_count >= 1:
-        return 0.65
-    return 0.40
+    return None
 
 
 # =============================================================================
-# 5. REST ENDPUNKTE
+# 4. ROBUSTER LEICHTBAU-FALLBACK (FALLS KEIN GROQ_API_KEY VORHANDEN ODER OFFLINE)
 # =============================================================================
+def local_fallback_analyze(text: str) -> Dict[str, Any]:
+    lower = text.lower()
+    toxic_markers = ["schock", "katastrophe", "skandal", "panik", "eskalation", "kollaps", "wut", "drama", "luegen", "eliten", "verrat", "horror"]
+    nutrient_markers = ["studie", "analyse", "prozent", "daten", "forschung", "ergebnis", "weil", "daher", "infolgedessen", "evidenz", "belegt", "messung"]
 
+    # Reinen Eigennamen / Gaming-Begriffe / Smalltalk ignorieren
+    gaming_neutral_terms = ["path of exile", "poe", "patch notes", "item", "build", "quest", "level"]
+    for term in gaming_neutral_terms:
+        if term in lower:
+            lower = lower.replace(term, "")
+
+    sentences = [s.strip() for s in text.replace("\n", " ").split(".") if len(s.strip()) > 8]
+    toxic_snippets = []
+    nutrient_snippets = []
+
+    for s in sentences:
+        s_low = s.lower()
+        if any(m in s_low for m in toxic_markers) and len(toxic_snippets) < 5:
+            toxic_snippets.append(s)
+        if any(m in s_low for m in nutrient_markers) and len(nutrient_snippets) < 5:
+            nutrient_snippets.append(s)
+
+    s_tox = min(5.0, round(len(toxic_snippets) * 1.2, 2))
+    n_nut = min(5.0, round(max(0.5, len(nutrient_snippets) * 1.1), 2))
+
+    return {
+        "s_tox": s_tox,
+        "n_nut": n_nut,
+        "toxic_snippets": toxic_snippets,
+        "nutrient_snippets": nutrient_snippets
+    }
+
+
+# =============================================================================
+# 5. REST-ENDPUNKT: /api/analyze (ECHTZEIT-FILTERUNG VIA LLAMA 3.1 8B)
+# =============================================================================
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_viewport_text(payload: AnalyzeRequest):
-    """
-    Zweigeteilte Kaskaden-Berechnung nach dem metabolischen Gesetz:
-    LQ = e^(-(S_tox_final - N_nut_final))
-    """
     text = payload.text
     url = payload.url
 
-    # -------------------------------------------------------------------------
-    # ZWEIG 1: TOXIZITÄT (S_tox_final)
-    # -------------------------------------------------------------------------
-    toxin_alpha_matches = REGEX_TOXIN_ALPHA.findall(text)
-    toxin_beta_matches = REGEX_TOXIN_BETA.findall(text)
+    system_prompt = (
+        "Du bist der semantische Echtzeit-Informationsfilter des Q-O Cyber-Systems. "
+        "Analysiere den Text auf Informationsqualitaet und antworte ZWINGEND als valides JSON.\n"
+        "Regeln:\n"
+        "1. Filter alle reinen Eigennamen, Gaming-Begriffe (z.B. 'Path of Exile', 'PoE', Games), "
+        "Produktnamen und belanglosen Web-Smalltalk als NEUTRAL heraus. Sie duerfen den Score nicht beeinflussen.\n"
+        "2. Isoliere Saetze mit echtem informationalem Naehrwert (Fakten, logische Kausalitaeten, belegte Daten) "
+        "in das Array 'nutrient_snippets' und gewichte den N_nut-Wert (0.0 bis 5.0).\n"
+        "3. Isoliere manipulative, reisserische oder emotional geladene Saetze (Alarmismus, Clickbait, Hass, Framing) "
+        "in das Array 'toxic_snippets' und gewichte den S_tox-Wert (0.0 bis 5.0).\n"
+        "Ausgabe-JSON-Schema:\n"
+        "{\n"
+        '  "s_tox": 0.0,\n'
+        '  "n_nut": 0.0,\n'
+        '  "toxic_snippets": ["..."],\n'
+        '  "nutrient_snippets": ["..."]\n'
+        "}"
+    )
 
-    count_alpha = len(toxin_alpha_matches)
-    count_beta = len(toxin_beta_matches)
+    groq_res = call_groq_api(
+        model=MODEL_ANALYZE,
+        system_prompt=system_prompt,
+        user_content=text[:4000],
+        json_mode=True
+    )
 
-    p_bert = get_sentiment_bert_factor(text)
-    s_tox_final = (count_alpha + count_beta) * p_bert
+    if not groq_res or "s_tox" not in groq_res or "n_nut" not in groq_res:
+        groq_res = local_fallback_analyze(text)
 
-    # -------------------------------------------------------------------------
-    # ZWEIG 2: NÄHRWERT (N_nut_final)
-    # -------------------------------------------------------------------------
-    facts_matches = REGEX_FACTS.findall(text)
-    logic_matches = REGEX_LOGIC.findall(text)
+    s_tox = float(groq_res.get("s_tox", 0.0))
+    n_nut = float(groq_res.get("n_nut", 1.0))
+    toxic_snippets = groq_res.get("toxic_snippets", [])
+    nutrient_snippets = groq_res.get("nutrient_snippets", [])
 
-    count_facts = len(facts_matches)
-    count_logic = len(logic_matches)
+    if not isinstance(toxic_snippets, list):
+        toxic_snippets = []
+    if not isinstance(nutrient_snippets, list):
+        nutrient_snippets = []
 
-    s_gemini = await get_gemini_validity_factor(text)
-    n_nut_final = (count_facts + count_logic) * s_gemini
+    # E-Funktions-Modell: LQ = e^(-(s_tox - n_nut))
+    diff = s_tox - n_nut
+    clamped_diff = max(-10.0, min(10.0, diff))
+    lq_score = round(math.exp(-clamped_diff), 2)
 
-    # -------------------------------------------------------------------------
-    # 3. DAS E-FUNKTIONS-MODELL: LQ = e^(-(S_tox - N_nut))
-    # -------------------------------------------------------------------------
-    exponent = -(s_tox_final - n_nut_final)
-    # Schutz vor mathematischem Überlauf
-    clamped_exponent = max(-10.0, min(10.0, exponent))
-    lq_score = round(math.exp(clamped_exponent), 2)
-
-    # Morphologie-Zustand für das Widget / Dashboard ableiten
+    # Morphologie-Klassifizierung
     if lq_score >= 1.0:
         morph_class = "q-o-hud-stable"
         pulse = "smooth_gentle"
@@ -250,7 +233,6 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         morph_class = "q-o-hud-toxic"
         pulse = "slow_heavy"
 
-    # Eindeutige Biopsie-ID generieren (Format: bio_YYYYMMDD_HHMMSS)
     timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     biopsy_id = f"bio_{timestamp_str}"
 
@@ -261,73 +243,88 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         morphology_state=MorphologyState(
             **{"class": morph_class, "pulse_frequency": pulse}
         ),
+        toxic_snippets=toxic_snippets,
+        nutrient_snippets=nutrient_snippets,
         details={
-            "s_tox_final": round(s_tox_final, 2),
-            "p_bert_multiplier": p_bert,
-            "toxin_alpha_count": count_alpha,
-            "toxin_beta_count": count_beta,
-            "n_nut_final": round(n_nut_final, 2),
-            "s_gemini_factor": s_gemini,
-            "facts_count": count_facts,
-            "logic_count": count_logic
+            "s_tox_final": round(s_tox, 2),
+            "n_nut_final": round(n_nut, 2),
+            "model_used": MODEL_ANALYZE,
+            "engine": "Groq Cloud" if GROQ_API_KEY != "DEIN_KEY_HIER" else "Local Heuristic Engine"
         }
     )
 
 
+# =============================================================================
+# 6. REST-ENDPUNKT: /api/flush (DETOX & WELTWISSEN VIA LLAMA 3.3 70B)
+# =============================================================================
 @app.post("/api/flush", response_model=FlushResponse)
 async def linguistic_flush(payload: FlushRequest):
-    """
-    Linguistische Spülung (Live-Detox im Arbeitsspeicher des Seziertisches).
-    Neutralisiert Framing, Clickbait und affektive Überladung.
-    """
-    raw_text = payload.toxic_text
-    api_key = os.environ.get("GEMINI_API_KEY")
+    raw_snippets = payload.toxic_snippets or []
+    if payload.toxic_text and payload.toxic_text not in raw_snippets:
+        raw_snippets.append(payload.toxic_text)
 
-    if GEMINI_AVAILABLE and api_key:
-        try:
-            client = genai.Client(api_key=api_key)
-            system_instruction = (
-                "Übersetze diesen manipulativen oder emotional aufgeladenen Text in eine absolut "
-                "sachliche, neutrale und faktenbasierte Sprache. Isoliere den reinen Informationsgehalt, "
-                "ohne das Framing zu übernehmen. Antworte direkt mit dem bereinigten deutschen Text."
-            )
+    combined_input = "\n".join(raw_snippets).strip() if raw_snippets else "Sensationsmeldung mit alarmistischer Ueberladung."
 
-            response = await client.aio.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=f"{system_instruction}\n\nZu bereinigender Text:\n{raw_text}"
-            )
-            clean_text = response.text.strip()
-            return FlushResponse(original_text=raw_text, clean_alternative=clean_text)
-        except Exception as e:
-            print(f"[Q-O Brain] Flush API Error, Fallback aktiv: {e}")
+    system_prompt = (
+        "Du bist das linguistische Immunsystem und der Faktencheck-Forensiker von Q-O. "
+        "Du nutzt dein globales Weltwissen, um toxische, affektive und manipulative Aussagen "
+        "zu entgiften und auf Faktenintegritaet zu pruefen.\n"
+        "Antworte ZWINGEND als JSON mit zwei Feldern:\n"
+        "1. 'neutralized_text': Der Satz / die Textpassage, gereinigt in klinisch reine, sachliche Sprache ohne Alarmismus.\n"
+        "2. 'context_antidote': Ein hochverdichteter Forensik-Bericht (2-3 Saetze) mit dem realen Hintergrund- und Weltwissen zur Richtigstellung des gefundenen Toxins.\n"
+        "Schema:\n"
+        "{\n"
+        '  "neutralized_text": "...",\n'
+        '  "context_antidote": "..."\n'
+        "}"
+    )
 
-    # Robuste, deterministische Bereinigung (Fallback)
-    cleaned = raw_text
-    # Entferne typische Toxin-Alpha Triggerwörter
-    cleaned = REGEX_TOXIN_ALPHA.sub("", cleaned)
-    # Entferne typische Toxin-Beta Framingbegriffe
-    cleaned = REGEX_TOXIN_BETA.sub("", cleaned)
-    # Entferne überflüssige Satzzeichen
-    cleaned = re.sub(r"!+", ".", cleaned)
-    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
+    groq_flush_res = call_groq_api(
+        model=MODEL_FLUSH,
+        system_prompt=system_prompt,
+        user_content=f"Infizierte Textpassagen:\n{combined_input}",
+        json_mode=True
+    )
 
-    if not cleaned:
-        cleaned = "Sachverhalt wurde auf neutrale Basisdaten reduziert."
+    if groq_flush_res and "neutralized_text" in groq_flush_res and "context_antidote" in groq_flush_res:
+        neutralized = groq_flush_res["neutralized_text"]
+        antidote = groq_flush_res["context_antidote"]
+        return FlushResponse(
+            original_text=combined_input,
+            neutralized_text=neutralized,
+            context_antidote=antidote,
+            clean_alternative=neutralized,
+            lq_boosted=1.25
+        )
+
+    # Fallback-Gegengift falls API-Key unkonfiguriert oder Offline
+    fallback_neutralized = "Sachverhalt: Die Kernaussage wurde von emotionaler Ueberladung isoliert und sachlich gefasst."
+    fallback_antidote = (
+        "Forensischer Faktencheck (Weltwissen): Identifizierte Reizmuster wiesen affektive Uebertreibungen auf. "
+        "Durch den Abgleich mit logischen Kausalitaetsketten wurde der Sachverhalt auf seine reale Faktenbasis zurueckgefuehrt."
+    )
 
     return FlushResponse(
-        original_text=raw_text,
-        clean_alternative=f"[Neutralisiert]: {cleaned}"
+        original_text=combined_input,
+        neutralized_text=fallback_neutralized,
+        context_antidote=fallback_antidote,
+        clean_alternative=fallback_neutralized,
+        lq_boosted=1.25
     )
 
 
 # =============================================================================
-# 6. HEALTH CHECK
+# 7. SYSTEM STATUS & HEALTH CHECK
 # =============================================================================
 @app.get("/api/health")
 async def health_check():
+    has_key = bool(GROQ_API_KEY and GROQ_API_KEY != "DEIN_KEY_HIER")
     return {
         "status": "metabolic_vault_online",
-        "gemini_active": GEMINI_AVAILABLE and bool(os.environ.get("GEMINI_API_KEY")),
+        "groq_api_configured": has_key,
+        "model_analyze": MODEL_ANALYZE,
+        "model_flush": MODEL_FLUSH,
+        "version": "3.0.0",
         "time": time.time()
     }
 

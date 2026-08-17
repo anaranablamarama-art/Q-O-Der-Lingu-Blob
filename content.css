@@ -45,9 +45,9 @@
 /* Kryostase (Metabolismus aus) */
 .q-o-hud-kryo {
   --cell-color: #475569;
-  --cell-glow: rgba(71, 85, 105, 0.1);
-  --cell-bg: rgba(30, 41, 59, 0.4);
+  --cell-bg: rgba(30, 41, 59, 0.6);
   --cell-border: rgba(255, 255, 255, 0.1);
+  --cell-glow: rgba(0, 0, 0, 0);
 }
 /* Visuelles Gewebe-Vakuum (Extrahiert) */
 .q-o-hud-extracted {
@@ -84,7 +84,10 @@
   border-radius: 40% 60% 70% 30% / 40% 40% 60% 60% !important;
   animation: q-o-toxic-pulse 5s ease-in-out infinite alternate;
 }
-.q-o-hud-kryo .large-membrane { animation: none !important; }
+.q-o-hud-kryo .large-membrane { 
+  animation: none !important; 
+  transform: scale(1) !important; 
+}
 
 /* Innere SVG Nervenbahnen */
 .large-cytoplasm-svg {
@@ -136,8 +139,8 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
   padding: 10px;
-padding-bottom: 20px;
-margin-bottom: -15px;
+  padding-bottom: 20px;
+  margin-bottom: -15px;
   border-radius: 6px;
   width: 160px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(0, 242, 254, 0.05);
