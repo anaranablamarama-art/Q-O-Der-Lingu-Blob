@@ -109,3 +109,11 @@ uvicorn main:app --reload
 2. Schalte oben rechts den **Entwicklermodus** ein.
 3. Klicke oben links auf **Entpackte Erweiterung laden** und wähle den Ordner deines Lingu-Blobs aus.
 4. Öffne eine beliebige Webseite (z. B. Wikipedia oder Amazon), mache einen Hard-Reload mit `Strg + F5`, öffne das HUD und schalte den Metabolismus an!
+
+## ⚠️ Haftungsausschluss & Disclaimer (Experimental Prototype)
+
+Dieses Projekt befindet sich in einem experimentellen Prototypen-Stadium und dient ausschließlich zu Forschungs-, Bildungs- und Testzwecken im Bereich der Computerlinguistik. 
+
+1. **Keine Gewähr für Richtigkeit:** Die vom System generierten Bewertungen (LQ-Scores), linguistischen Einordnungen und Richtigstellungen (Gegengift via Llama 3.3) basieren auf automatisierten statistischen KI-Modellen. Der Entwickler übernimmt keinerlei Haftung oder Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der ausgegebenen Informationen oder Faktenchecks.
+2. **Datenschutz:** Das Tool arbeitet nach dem Prinzip "Privacy by Design". Alle extrahierten Daten (Sitzungsverlauf, Text-Snippets) werden ausschließlich lokal in der IndexedDB des Benutzers gespeichert und zu keinem Zeitpunkt auf Server des Entwicklers übertragen. Die Nutzung der externen Groq-API unterliegt den Datenschutzbestimmungen von Groq.
+3. **Nutzungsrisiko:** Die Nutzung des Add-ons und des lokalen Backends erfolgt auf eigene Gefahr. Der Entwickler haftet nicht für eventuelle Schäden an Hard- oder Software, Systemabstürze oder Datenverlust, die durch die Installation oder den Betrieb dieses Prototypen entstehen.
