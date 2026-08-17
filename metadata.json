@@ -1,0 +1,6 @@
+{
+  "name": "Q-O Cyber-Zelle Design Core",
+  "description": "Gallertartige Tiefsee-Zellen-Ästhetik für das Q-O HUD mit morphing Zellmembran, Organellen-SVG und adaptiven Farb-Zuständen.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

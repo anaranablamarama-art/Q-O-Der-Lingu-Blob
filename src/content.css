@@ -1,0 +1,443 @@
+/* ==========================================================================
+   PROJEKT "Q-O" — DIE VISUELLE DNA (DESIGN CORE)
+   Gallertartige, 3D Tiefsee-Cyber-Zelle
+   ========================================================================== */
+
+:root {
+  --cell-color: #00f2fe;
+  --cell-glow: rgba(0, 242, 254, 0.5);
+  --cell-bg-tint: rgba(0, 242, 254, 0.15);
+  --cell-membrane-border: rgba(255, 255, 255, 0.35);
+  --cell-wobble-duration: 9s;
+  --cell-frenzy-speed: 1;
+}
+
+/* ==========================================
+   ZUSTANDS-DEFINITIONEN (CSS-VARIABLEN)
+   ========================================== */
+
+/* 1. ZUSTAND: STABIL (Cyan-Blau) — Ruhiges, langsames Wabern */
+.q-o-hud-stable {
+  --cell-color: #00f2fe;
+  --cell-glow: rgba(0, 242, 254, 0.55);
+  --cell-bg-tint: rgba(0, 242, 254, 0.15);
+  --cell-membrane-border: rgba(255, 255, 255, 0.4);
+  --cell-wobble-duration: 9s;
+}
+
+/* 2. ZUSTAND: DEFORMIERT (Orange) — Asymmetrisches, schnelleres Ausbeulen */
+.q-o-hud-deformed {
+  --cell-color: #ff9900;
+  --cell-glow: rgba(255, 153, 0, 0.65);
+  --cell-bg-tint: rgba(255, 153, 0, 0.22);
+  --cell-membrane-border: rgba(255, 220, 180, 0.5);
+  --cell-wobble-duration: 4s;
+}
+
+/* 3. ZUSTAND: TOXISCH (Tiefrot) — Zackig, panisches hochfrequentes Zittern */
+.q-o-hud-toxic {
+  --cell-color: #ff0055;
+  --cell-glow: rgba(255, 0, 85, 0.85);
+  --cell-bg-tint: rgba(255, 0, 85, 0.3);
+  --cell-membrane-border: rgba(255, 180, 200, 0.7);
+  --cell-wobble-duration: 1.2s;
+}
+
+/* ==========================================
+   BASIS-CONTAINER (FIXIERT IM BROWSER-VIEWPORT)
+   ========================================== */
+.q-o-cell-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 65px;
+  height: 65px;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  perspective: 600px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.q-o-cell-container:hover {
+  transform: scale(1.08);
+}
+
+.q-o-cell-container:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================
+   1. ÄUSSERE ZELLMEMBRAN (GALLERTARTIG & 3D)
+   ========================================== */
+.q-o-membrane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--cell-bg-tint);
+  border: 1px solid var(--cell-membrane-border);
+  box-shadow: 
+    inset 0 0 16px var(--cell-glow),
+    0 0 18px var(--cell-glow),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: border-radius, transform, box-shadow;
+  
+  /* Strikte fließende Transition für Farb- und Glow-Wechsel */
+  transition: 
+    background 1.5s ease-in-out,
+    border-color 1.5s ease-in-out,
+    box-shadow 1.5s ease-in-out;
+
+  animation: q-o-membrane-wobble var(--cell-wobble-duration) ease-in-out infinite alternate;
+}
+
+/* Membran-Reflexions-Highlight (Bio-Glanzschicht) */
+.q-o-membrane::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  left: 14%;
+  width: 44%;
+  height: 28%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 75%);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 1.5s ease-in-out;
+}
+
+/* Tiefer Zytoplasma-Glow Boden */
+.q-o-membrane::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  right: -15%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, var(--cell-color) 0%, transparent 70%);
+  filter: blur(6px);
+  opacity: 0.45;
+  pointer-events: none;
+  transition: background 1.5s ease-in-out;
+}
+
+/* ==========================================
+   2. ZYTOPLASMA & ORGANELLEN (INLINE-SVG NERVEN)
+   ========================================== */
+.q-o-cytoplasm-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  transition: filter 1.5s ease-in-out;
+  filter: drop-shadow(0 0 3px var(--cell-color));
+}
+
+/* Nervenbahnen Pfade */
+.q-o-neural-path {
+  fill: none;
+  stroke: var(--cell-color);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.65;
+  transition: stroke 1.5s ease-in-out, opacity 1.5s ease-in-out;
+  animation: q-o-neural-pulse 4s ease-in-out infinite alternate;
+}
+
+.q-o-neural-path.secondary {
+  stroke-width: 0.8;
+  opacity: 0.45;
+  stroke-dasharray: 2 3;
+}
+
+.q-o-neural-node {
+  fill: var(--cell-color);
+  opacity: 0.85;
+  transition: fill 1.5s ease-in-out;
+  animation: q-o-node-spark 3s ease-in-out infinite alternate;
+}
+
+/* ==========================================
+   3. ZELLKERN (NUCLEUS) & KERNKÖRPERCHEN (NUCLEOLUS)
+   ========================================== */
+.q-o-nucleus-wrapper {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform;
+  animation: q-o-nucleus-float 6s ease-in-out infinite alternate;
+}
+
+/* Äußere sichelförmige Kontur, die den Kern umschließt */
+.q-o-crescent-membrane {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.6px solid var(--cell-color);
+  border-right-color: transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 0 10px var(--cell-color),
+    inset 0 0 6px var(--cell-color);
+  transform: rotate(35deg);
+  transition: border-color 1.5s ease-in-out, box-shadow 1.5s ease-in-out;
+  animation: q-o-crescent-spin 14s linear infinite;
+}
+
+/* Innere leuchtende Vakuole */
+.q-o-nucleus-body {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95), var(--cell-color) 60%, rgba(0, 0, 0, 0.4) 100%);
+  box-shadow: 0 0 12px var(--cell-color);
+  transition: background 1.5s ease-in-out, box-shadow 1.5s ease-in-out;
+}
+
+/* Extrem dichter leuchtender Kernkörperchen-Punkt (Nucleolus) */
+.q-o-nucleolus {
+  position: absolute;
+  width: 5.5px;
+  height: 5.5px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 
+    0 0 8px #ffffff,
+    0 0 14px var(--cell-color);
+  animation: q-o-nucleolus-energy 2.2s ease-in-out infinite alternate;
+}
+
+/* ==========================================
+   SPEZIFISCHE ANIMATIONEN JE NACH ZUSTAND
+   ========================================== */
+
+/* DEFORMIERTER ZUSTAND: Asymmetrisches Ausbeulen & Organellen-Flackern */
+.q-o-hud-deformed .q-o-membrane {
+  animation: q-o-deformed-bulge 3.5s ease-in-out infinite alternate;
+}
+
+.q-o-hud-deformed .q-o-cytoplasm-svg {
+  animation: q-o-organelle-flicker 2.8s ease-in-out infinite;
+}
+
+.q-o-hud-deformed .q-o-nucleus-wrapper {
+  animation: q-o-nucleus-jitter 2s ease-in-out infinite alternate;
+}
+
+/* TOXISCHER ZUSTAND: Zackige Membran, totale Deformation & Orbital Frenzy */
+.q-o-hud-toxic .q-o-membrane {
+  animation: q-o-toxic-spasm 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite alternate;
+  border-width: 1.5px;
+  box-shadow: 
+    inset 0 0 22px var(--cell-glow),
+    0 0 28px var(--cell-glow),
+    0 0 45px rgba(255, 0, 85, 0.4);
+}
+
+.q-o-hud-toxic .q-o-cytoplasm-svg {
+  animation: orbitalFrenzy 0.45s linear infinite;
+}
+
+.q-o-hud-toxic .q-o-neural-path {
+  stroke-width: 1.8;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px #ff0055);
+}
+
+.q-o-hud-toxic .q-o-nucleus-wrapper {
+  animation: q-o-toxic-core-panic 0.3s ease-in-out infinite alternate;
+}
+
+.q-o-hud-toxic .q-o-nucleolus {
+  animation: q-o-nucleolus-overload 0.25s ease-in-out infinite alternate;
+}
+
+/* ==========================================
+   KEYFRAME-ANIMATIONEN
+   ========================================== */
+
+/* 1. STABILES WABERN (Organische Tiefsee-Fluktuation) */
+@keyframes q-o-membrane-wobble {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg) scale(1);
+  }
+  33% {
+    border-radius: 50% 60% 70% 40% / 40% 60% 30% 60%;
+    transform: rotate(4deg) scale(1.02, 0.98);
+  }
+  66% {
+    border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%;
+    transform: rotate(-3deg) scale(0.98, 1.03);
+  }
+  100% {
+    border-radius: 40% 60% 60% 40% / 60% 50% 40% 60%;
+    transform: rotate(2deg) scale(1.01, 1.01);
+  }
+}
+
+/* 2. DEFORMIERTES AUSBEULEN (Asymmetrisch) */
+@keyframes q-o-deformed-bulge {
+  0% {
+    border-radius: 35% 65% 30% 70% / 70% 30% 70% 30%;
+    transform: skewX(-4deg) rotate(0deg);
+  }
+  50% {
+    border-radius: 80% 20% 75% 25% / 25% 75% 20% 80%;
+    transform: skewX(6deg) scale(1.06, 0.94) rotate(8deg);
+  }
+  100% {
+    border-radius: 20% 80% 35% 65% / 60% 40% 80% 20%;
+    transform: skewX(-3deg) scale(0.95, 1.07) rotate(-6deg);
+  }
+}
+
+/* 3. TOXISCHER KRAMPF (Zackig, panisch & deformiert) */
+@keyframes q-o-toxic-spasm {
+  0% {
+    border-radius: 22% 78% 15% 85% / 85% 15% 80% 20%;
+    transform: translate(-1.5px, 1px) rotate(-4deg) scale(1.08, 0.92);
+  }
+  25% {
+    border-radius: 88% 12% 82% 18% / 18% 82% 15% 85%;
+    transform: translate(2px, -1.5px) rotate(5deg) scale(0.92, 1.1);
+  }
+  50% {
+    border-radius: 15% 85% 25% 75% / 75% 25% 85% 15%;
+    transform: translate(-2px, -1px) rotate(-6deg) scale(1.12, 0.88);
+  }
+  75% {
+    border-radius: 79% 21% 65% 35% / 35% 65% 18% 82%;
+    transform: translate(1.5px, 2px) rotate(4deg) scale(0.89, 1.09);
+  }
+  100% {
+    border-radius: 30% 70% 18% 82% / 82% 18% 70% 30%;
+    transform: translate(-1px, 1.5px) rotate(-2deg) scale(1.05, 0.95);
+  }
+}
+
+/* 4. ORBITAL FRENZY (Hochfrequentes inneres Kreisen & Zittern) */
+@keyframes orbitalFrenzy {
+  0% {
+    transform: rotate(0deg) scale(1.05);
+    filter: drop-shadow(0 0 6px #ff0055) hue-rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg) scale(0.92) translate(1px, -1px);
+    filter: drop-shadow(0 0 10px #ff0055) hue-rotate(20deg);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+    filter: drop-shadow(0 0 6px #ff0055) hue-rotate(0deg);
+  }
+}
+
+/* 5. NERVEN-PULS */
+@keyframes q-o-neural-pulse {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0.45;
+  }
+  100% {
+    stroke-dashoffset: 20;
+    opacity: 0.85;
+  }
+}
+
+/* 6. NODES FUNKELN */
+@keyframes q-o-node-spark {
+  0% {
+    r: 1.2;
+    opacity: 0.4;
+  }
+  100% {
+    r: 2.2;
+    opacity: 1;
+  }
+}
+
+/* 7. KERN FLOTTATION */
+@keyframes q-o-nucleus-float {
+  0% {
+    transform: translate(-1px, -1px);
+  }
+  50% {
+    transform: translate(1.5px, 1px);
+  }
+  100% {
+    transform: translate(-0.5px, 1.5px);
+  }
+}
+
+/* 8. SICHEL ROTATION */
+@keyframes q-o-crescent-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 9. NUCLEOLUS ENERGIE */
+@keyframes q-o-nucleolus-energy {
+  0% {
+    transform: scale(0.85);
+    box-shadow: 0 0 6px #ffffff, 0 0 10px var(--cell-color);
+  }
+  100% {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px #ffffff, 0 0 18px var(--cell-color);
+  }
+}
+
+/* 10. FLACKERN BEI DEFORMIERT */
+@keyframes q-o-organelle-flicker {
+  0%, 100% { opacity: 0.8; transform: rotate(0deg); }
+  25% { opacity: 0.45; transform: rotate(5deg) scale(0.96); }
+  50% { opacity: 0.95; transform: rotate(-4deg) scale(1.03); }
+  75% { opacity: 0.5; transform: rotate(3deg); }
+}
+
+@keyframes q-o-nucleus-jitter {
+  0% { transform: translate(-2px, 1px) scale(0.95); }
+  100% { transform: translate(2px, -1.5px) scale(1.05); }
+}
+
+/* 11. PANIK BEI TOXISCH */
+@keyframes q-o-toxic-core-panic {
+  0% { transform: translate(-3px, 2px) scale(1.15) rotate(-12deg); }
+  100% { transform: translate(3px, -2px) scale(0.88) rotate(15deg); }
+}
+
+@keyframes q-o-nucleolus-overload {
+  0% {
+    transform: scale(0.7);
+    background: #ffffff;
+    box-shadow: 0 0 14px #ff0055, 0 0 25px #ffffff;
+  }
+  100% {
+    transform: scale(1.45);
+    background: #fff0f5;
+    box-shadow: 0 0 25px #ff0055, 0 0 40px #ff0055;
+  }
+}
