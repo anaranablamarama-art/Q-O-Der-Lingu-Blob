@@ -18,21 +18,27 @@ Das Q-O-Ökosystem ist eine geschlossene, serverlose Kreislauf-Pipeline, die kom
 
 ---
 
-## 🧠 2. Das Metabolische Gesetz & Die KI-Kaskade
+### 2. Das Metabolische Gesetz & Die Semantische Groq-Pipeline (Llama 3)
 
-Der Text aus deinem Browser-Sichtfeld wird im Millisekunden-Takt an das Backend geschickt. Dort spaltet sich die Formel in zwei gegensätzliche Kräfte auf:
+Der Text aus deinem Browser-Sichtfeld wird im 4-Sekunden-Takt an das FastAPI-Backend geschickt. Dort gilt nach wie vor das eiserne, cyber-biologische Naturgesetz des Lingu-Blobs. Allerdings arbeitet das System nicht mehr auf fehleranfälliger Textebene (Regex), sondern auf rein semantischer Vektorebene über das ultraschnelle KI-Immunsystem der **Groq-API (Llama 3)**:
 
-$$LQ = e^{-\left( \big[ (\text{Toxin}_{\alpha} + \text{Toxin}_{\beta}) \cdot \mathbf{BERT} \big] \;-\; \big[ (\text{Fakten} + \text{Logik}) \cdot \mathbf{Gemini} \big] \right)}$$
+$$LQ = e^{-(S_{\text{tox}} - N_{\text{nut}})}$$
 
-#### 1. Der Toxizitäts-Zweig (Der linke Term):
-* **Die statistische Basis:** Das System zählt über reguläre Ausdrücke (Regex) klassische Clickbait-Trigger ($\text{Toxin}_{\alpha}$) und ideologische Framing-Begriffe ($\text{Toxin}_{\beta}$).
-* **Der $\mathbf{BERT}$-Katalysator:** Das hochspezialisierte Modell `german-sentiment-bert` liest den Absatz parallel als emotionaler Biosensor. Es bewertet unterschwellige Aggressivität, moralische Panik und feindselige Polarität.
-* **Die Wirkung in der Formel:** BERT liefert einen Multiplikator zwischen **$1.0$ (neutral)** und **$3.0$ (hochgradig aggressiv/feindselig)**. Ein manipulativer Text jagt den Gift-Wert exponentiell nach oben, weil BERT die bösartige Absicht hinter den Zeilen erkennt – selbst wenn kaum Reizwörter fallen.
+#### 1. Der Schadstoff-Zweig ($S_{\text{tox}}$ — Der linke Term):
+*   **Die semantische Extraktion:** Das hocheffiziente Modell `llama-3.1-8b-instant` liest den Textkontext als ganzheitliches Sprachgewebe. Es analysiert die emotionale Erregung, Clickbait-Muster und feindselige Polarität auf Vektorebene.
+*   **Die Toxin-Gewichtung:** Llama 3.1 isoliert die infizierten Sätze live im Text und vergibt einen hochpräzisen, kontinuierlichen Schadstoff-Wert ($S_{\text{tox}}$) zwischen `0.0` (klinisch rein) und `5.0` (akut toxische Zersetzung). 
+*   **Die Wirkung in der Formel:** Ein reißerischer, manipulativer Text jagt den Gift-Wert im Exponenten nach oben. Der Linguistische Quotient ($LQ$) stürzt unaufhaltsam in den Keller (unter `0.5`), und der Reaktor in der Mitte mutiert augenblicklich in den rot verkrampften Entzündungszustand (`q-o-lab-toxic`).
 
-#### 2. Der Nährstoff-Zweig (Der rechte Term): 
-* **Die statistische Basis:** Das System zählt empirische Belege, Zahlen und Quellen ($\text{Fakten}$) sowie kausale Konjunktionen wie *"weil"* oder *"infolgedessen"* ($\text{Logik}$).
-* **Der $\mathbf{Gemini}$-Filter:** `Gemini Light` arbeitet zeitgleich als logischer Seziertisch. Es prüft blitzschnell die argumentative Validität. Es entlarvt Scheinargumente, Zirkelschlüsse und erfundene Fake-Quellen.
-* **Die Wirkung in der Formel:** Gemini liefert einen Bewertungsfaktor zwischen **$0.1$ (haltlose Scheinargumentation/Lüge)** und **$1.0$ (wissenschaftlich exakt belegt)**. Wenn ein Text versucht, das System mit Fake-Fakten auszutricksen, drückt Gemini den Nährwert gegen Null. Der Lingu-Blob "verhungert" visuell auf deinem Bildschirm.
+#### 2. Der Nährstoff-Zweig ($N_{\text{nut}}$ — Der rechte Term):
+*   **Die informationale Validierung:** Zeitgleich durchkämmt Llama 3.1 die Sätze nach substanziellem Mehrwert, empirischen Belegen, wissenschaftlicher Substanz und logischen Kausalbeziehungen.
+*   **Das Named-Entity-Schutzschild:** Im Gegensatz zu starren Filtern erkennt das Modell Eigennamen, Gaming-Begriffe (z. B. Spieletitel wie *"Path of Exile"*) oder reines Web-Rauschen und stuft diese autonom als **neutral (0.0)** ein. Sie beeinflussen das System nicht.
+*   **Die Nährstoff-Gewichtung:** Nur Sätze mit echtem informationalem Gehalt wandern in das Array `nutrient_snippets` und generieren einen Nährwert-Score ($N_{\text{nut}}$) zwischen `0.0` und `5.0`.
+*   **Die Wirkung in der Formel:** Ein logisch brillanter, faktendichter Text zieht den Wert nach oben, drückt den Exponenten ins Positive und lässt den $LQ$ weit über `1.0` schnellen. Die Zelle erstrahlt im gesunden, pulsierenden Cyan (`q-o-lab-stable`).
+
+#### 3. Der Homöostase-Flush (Zone 3 & Llama 3.3 70B):
+Klickt der Nutzer im Werkzeugkasten ganz rechts auf den Spül-Befehl, wird das High-End-Modell `llama-3.3-70b-versatile` als forensisches Reinigungs-Katalysator aktiviert. Es nutzt sein **globales Kontext- und Weltwissen**, um die gefundenen Toxine inhaltlich zu sezieren:
+*   Es neutralisiert den emotionalen Affekt und formuliert die Sätze in klinisch reine, sachliche Sprache um (`neutralized_text`).
+*   Es generiert ein **syntaktisches Gegengift** (`context_antidote`) – einen Faktencheck-Bericht, der das reale Weltwissen als unzensierten Beweis live in das Labor einspielt, während das Gewebe in die stabile Homöostase zurückkehrt.
 
 ---
 
