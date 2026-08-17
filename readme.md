@@ -17,7 +17,7 @@
 
 Der extrahierte Text aus deinem Browser-Sichtfeld wird im 4-Sekunden-Takt an das Backend geschickt. Dort gilt das eiserne, cyber-biologische Naturgesetz des Lingu-Blobs. Das System arbeitet auf rein semantischer Vektorebene über das KI-Immunsystem der **Groq-API**:
 
-$$LQ = e^{-(S_{\text{tox}} - N_{\text{nut}})}$$
+$$LQo = e^{-(S_{\text{tox}} - N_{\text{nut}})}$$
 
 #### A. Der Schadstoff-Zweig ($S_{\text{tox}}$ — Der linke Term):
 * **Die semantische Extraktion:** Das hocheffiziente Modell `llama-3.1-8b-instant` liest den Textkontext als ganzheitliches Sprachgewebe. Es analysiert emotionale Erregung, Clickbait-Muster und feindselige Polarität auf Vektorebene.
