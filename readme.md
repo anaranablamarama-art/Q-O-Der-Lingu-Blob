@@ -1,81 +1,93 @@
-# 🧬 Q-O (Lingu-Blob) — Der Cyber-Biologische Surf-Begleiter
+# 🧬 Q-O // Cyber-Medizinisches Analyselabor & Linguistischer Biosensor
 
-Stell dir vor, die Internetseiten, die du täglich liest, hätten eine spürbare, biologische Auswirkung auf ein Lebewesen. **Q-O (Der Lingu-Blob)** holt genau das auf deinen Bildschirm. Er ist ein datenschutzfreundlicher, rein lokaler Cyber-Organismus, der als treuer Begleiter unten rechts in deiner Bildecke mitlebt. Er saugt im Vorbeisurfen die sprachliche Substanz deiner beschten Webseiten auf, seziert die Informationsqualität über eine intelligente KI-Kaskade und reagiert in Echtzeit mit organischen Verformungen und Farbwechseln. 
-
-Wenn du wissen willst, was das Internet mit deiner Wahrnehmung macht, frag einfach den Lingu-Blob.
+**Q-O** ist ein experimentelles, cyber-biologisches Ökosystem, das als passiver linguistischer Biosensor in deiner Informationsumwelt agiert. Als symbiotisches Browser-Add-on verändert es Webinhalte nicht aktiv, sondern macht dich in Echtzeit auf manipulative Toxin-Phrasen, Clickbait und künstliche Sprachstrukturen aufmerksam. Über ein geschütztes Daten-Schmuggler-Relais extrahierst du verdächtige Gewebeproben per Mausklick direkt in dein lokales Drei-Zonen-Cyber-Labor, um sie dort mit echtem KI-Weltwissen forensisch zu sezieren.
 
 ---
 
-## 👁️ 1. Das System im Überblick
+### 🗺️ Die System-Architektur im Überblick
 
-Das Q-O-Ökosystem ist eine geschlossene, serverlose Kreislauf-Pipeline, die komplett privat auf deinem eigenen Rechner läuft:
-
-
-1. **Die Echtzeit-Wahrnehmung (Das Widget):** Während du liest, scannt eine extrem schlanke Browser-Erweiterung (`content.js`) den Text in deinem Sichtfeld.
-2. **Die KI-Kaskade (Der Motor):** Der Text wird zerlegt. Der Lingu-Blob berechnet seine Lebensenergie nicht-linear über das biologische Gesetz der Immunantwort:  LQ = e^(-(S_tox - N_nut)).
-3. **Das lokale Archiv (`QO_Metabolic_Vault`):** Klickst du auf Biopsie, saugt sich der Lingu-Blob im Browser visuell komplett transparent leer. Seine extrahierte Daten-Essenz wird als versiegelte Kapsel in der lokalen Datenbank des Browsers abgelegt.
-4. **Die Forensik (Das Labor):** Im Drei-Zonen-Dashboard lädst du die historischen Proben per Drag & Drop auf den Seziertisch, um Webseiten zurückzuverfolgen und Texte per KI zu untersuchen.
+1. **Linguistischer Biosensor (Widget):** Schmiegt sich als gläserner Tiefsee-Zellkörper in dein Browser-Sichtfeld. Er startet im neutralen Kryo-Schlaf und erwacht global über alle Tabs, sobald der Metabolismus scharfgeschaltet wird.
+2. **Daten-Schmuggler-Relais (`background.js`):** Ein privilegiertes Manifest-V3-Hintergrund-Relais, das die CORS- und PNA-Schranken großer Webseiten lautlos tunnelt, um Datenverluste zu verhindern.
+3. **KI-Zellkern (`main.py`):** Ein federleichter FastAPI-Server, der auf schwergewichtiges lokales Laden (wie BERT oder PyTorch) verzichtet und stattdessen die ultraschnelle, freie Groq-API ansteuert.
+4. **Cyber-Labor (`index.html` / `index.js`):** Eine CSP-konforme, rein lokale Drei-Zonen-Analyse-Schnittstelle zur forensischen Beweisführung und Gewebebank-Verwaltung.
 
 ---
 
-### 2. Das Metabolische Gesetz & Die Semantische Groq-Pipeline (Llama 3)
+### 📐 2. Das Metabolische Gesetz & Die Semantische Groq-Pipeline (Llama 3)
 
-Der Text aus deinem Browser-Sichtfeld wird im 4-Sekunden-Takt an das FastAPI-Backend geschickt. Dort gilt nach wie vor das eiserne, cyber-biologische Naturgesetz des Lingu-Blobs. Allerdings arbeitet das System nicht mehr auf fehleranfälliger Textebene (Regex), sondern auf rein semantischer Vektorebene über das ultraschnelle KI-Immunsystem der **Groq-API (Llama 3)**:
+Der extrahierte Text aus deinem Browser-Sichtfeld wird im 4-Sekunden-Takt an das Backend geschickt. Dort gilt das eiserne, cyber-biologische Naturgesetz des Lingu-Blobs. Das System arbeitet auf rein semantischer Vektorebene über das KI-Immunsystem der **Groq-API**:
 
 $$LQ = e^{-(S_{\text{tox}} - N_{\text{nut}})}$$
 
 #### 1. Der Schadstoff-Zweig ($S_{\text{tox}}$ — Der linke Term):
-*   **Die semantische Extraktion:** Das hocheffiziente Modell `llama-3.1-8b-instant` liest den Textkontext als ganzheitliches Sprachgewebe. Es analysiert die emotionale Erregung, Clickbait-Muster und feindselige Polarität auf Vektorebene.
-*   **Die Toxin-Gewichtung:** Llama 3.1 isoliert die infizierten Sätze live im Text und vergibt einen hochpräzisen, kontinuierlichen Schadstoff-Wert ($S_{\text{tox}}$) zwischen `0.0` (klinisch rein) und `5.0` (akut toxische Zersetzung). 
-*   **Die Wirkung in der Formel:** Ein reißerischer, manipulativer Text jagt den Gift-Wert im Exponenten nach oben. Der Linguistische Quotient ($LQ$) stürzt unaufhaltsam in den Keller (unter `0.5`), und der Reaktor in der Mitte mutiert augenblicklich in den rot verkrampften Entzündungszustand (`q-o-lab-toxic`).
+* **Die semantische Extraktion:** Das hocheffiziente Modell `llama-3.1-8b-instant` liest den Textkontext als ganzheitliches Sprachgewebe. Es analysiert emotionale Erregung, Clickbait-Muster und feindselige Polarität auf Vektorebene.
+* **Die Toxin-Gewichtung:** Llama 3.1 isoliert die infizierten Sätze live im Text und vergibt einen hochpräzisen Schadstoff-Wert ($S_{\text{tox}}$) zwischen `0.0` (klinisch rein) und `5.0` (akut toxische Zersetzung).
+* **Die Wirkung:** Ein manipulativer Text jagt den Gift-Wert im Exponenten nach oben. Der Linguistische Quotient ($LQ$) stürzt unter `0.5`, und der Reaktor in der Mitte mutiert augenblicklich in den rot pulsierenden Entzündungszustand (`q-o-lab-toxic`).
 
 #### 2. Der Nährstoff-Zweig ($N_{\text{nut}}$ — Der rechte Term):
-*   **Die informationale Validierung:** Zeitgleich durchkämmt Llama 3.1 die Sätze nach substanziellem Mehrwert, empirischen Belegen, wissenschaftlicher Substanz und logischen Kausalbeziehungen.
-*   **Das Named-Entity-Schutzschild:** Im Gegensatz zu starren Filtern erkennt das Modell Eigennamen, Gaming-Begriffe (z. B. Spieletitel wie *"Path of Exile"*) oder reines Web-Rauschen und stuft diese autonom als **neutral (0.0)** ein. Sie beeinflussen das System nicht.
-*   **Die Nährstoff-Gewichtung:** Nur Sätze mit echtem informationalem Gehalt wandern in das Array `nutrient_snippets` und generieren einen Nährwert-Score ($N_{\text{nut}}$) zwischen `0.0` und `5.0`.
-*   **Die Wirkung in der Formel:** Ein logisch brillanter, faktendichter Text zieht den Wert nach oben, drückt den Exponenten ins Positive und lässt den $LQ$ weit über `1.0` schnellen. Die Zelle erstrahlt im gesunden, pulsierenden Cyan (`q-o-lab-stable`).
-
-#### 3. Der Homöostase-Flush (Zone 3 & Llama 3.3 70B):
-Klickt der Nutzer im Werkzeugkasten ganz rechts auf den Spül-Befehl, wird das High-End-Modell `llama-3.3-70b-versatile` als forensisches Reinigungs-Katalysator aktiviert. Es nutzt sein **globales Kontext- und Weltwissen**, um die gefundenen Toxine inhaltlich zu sezieren:
-*   Es neutralisiert den emotionalen Affekt und formuliert die Sätze in klinisch reine, sachliche Sprache um (`neutralized_text`).
-*   Es generiert ein **syntaktisches Gegengift** (`context_antidote`) – einen Faktencheck-Bericht, der das reale Weltwissen als unzensierten Beweis live in das Labor einspielt, während das Gewebe in die stabile Homöostase zurückkehrt.
+* **Die informationale Validierung:** Zeitgleich durchkämmt Llama 3.1 die Sätze nach substanziellem Mehrwert, empirischen Belegen und logischen Kausalbeziehungen.
+* **Das Named-Entity-Schutzschild:** Im Gegensatz zu starren Filtern erkennt das Modell Eigennamen, Gaming-Begriffe (z. B. Spieletitel wie *"Path of Exile"*) oder reines Web-Rauschen und stuft diese autonom als **neutral (0.0)** ein, damit sie das System nicht verfälschen.
+* **Die Nährstoff-Gewichtung:** Nur Sätze mit echtem informationalem Gehalt wandern in das Array `nutrient_snippets` und generieren einen Nährwert-Score ($N_{\text{nut}}$) zwischen `0.0` und `5.0`.
+* **Die Wirkung:** Ein logisch brillanter Text lässt den $LQ$ weit über `1.0` schnellen. Die Zelle erstrahlt im gesunden, pulsierenden Cyan (`q-o-lab-stable`).
 
 ---
 
-## 🎨 3. Die Anatomie & Morphologie des Lingu-Blobs
+### 🌊 2.5 Die Morphologie des Biosensors (Das Live-Widget im Browser)
 
-Der Lingu-Blob ist kein flaches Icon, sondern eine dreidimensionale, gallertartige Tiefsee-Zelle. Sie besteht aus einer transparenten Membran, inneren Nervenbahnen (Inline-SVG) und einem leuchtenden, sichelförmigen Zellkern.
+Das sichtbare Widget injiziert sich direkt in das DOM des aktiven Browser-Tabs. Es besteht aus einem gläsernen Tiefsee-Zellkörper, der über komplexe CSS3-Keyframe-Verformungen und Filter-Effekte die unsichtbare Qualität des Textgewebes visualisiert:
 
-### Die drei biologischen Resonanz-Zustände:
-
-* **🟢 STABIL (Ausgangszustand) | LQ >= 1.0**
-  * *Die Optik:* Ruhiges, klares Cyan-Blau.
-  * *Die Mechanik:* Die Membran wellt sich in einem harmonischen, langsamen 10-Sekunden-Rhythmus. 
-  * *Die Bedeutung:* Die Sprachumwelt ist sauber, faktenbasiert und frei von emotionaler Manipulation.
-* **🟡 DEFORMIERT (Framing) | LQ 0.5 bis 0.99**
-  * *Die Optik:* Warnendes, unruhiges Bio-Orange/Gelb.
-  * *Die Mechanik:* Die Membran verliert ihre Symmetrie und beult sich nervös und asymmetrisch aus.
-  * *Die Bedeutung:* Erste Gewebeirritation durch ansteigendes emotionales Rauschen oder Vorurteile im Text.
-* **🔴 TOXISCH (Manipulation) | LQ < 0.5**
-  * *Die Optik:* Unheilvolles, aggressives Tiefrot/Violett.
-  * *Die Mechanik:* **Toxische Starre.** Die Zellmembran verkrampft in einer zackigen Deformation. Das Innere rotiert nicht mehr hysterisch, sondern leuchtet in einem extrem langsamen, dumpfen und trägen Atem-Puls (alle 5 Sekunden) auf. 
-  * *Die Bedeutung:* Massiver Verfall der vitalen Text-Nährstoffe durch Clickbait, Hass oder gezielte Manipulation.
+* **Kryo-Schlaf (`q-o-hud-kryo`):** Der Standard-Startwert beim Laden einer Webseite. Die Zelle ist in ein mattes, lebloses Grau getaucht, alle Wobble- und Puls-Animationen sind über einen harten `!important`-Riegel komplett eingefroren, um 0 % CPU-Leistung zu verbrauchen. 
+* **Homöostase-Zustand (`q-o-hud-stable`):** Sobald der Metabolismus aktiv ist und der Text einen $LQ \ge 1.0$ aufweist, erwacht das Gewebe. Die Zelle leuchtet im strahlenden Cyan, die inneren Nervenbahnen (SVG-Pfade) pulsieren ruhig, und die äußere Membran verformt sich in Wellen fließend im Raum.
+* **Stress-Zustand (`q-o-hud-deformed`):** Sinkt die Sprachqualität durch Clickbait oder reißerischen Alarmismus auf einen $LQ$ zwischen $0.5$ und $0.99$, mutiert die Zelle live. Der Rhythmus beschleunigt sich, die Wellenbewegungen werden hektisch und die Membran färbt sich in ein unruhiges Bio-Orange.
+* **Toxischer Zustand (`q-o-hud-toxic`):** Bei akuter Manipulation ($LQ < 0.5$) gerät das System in den roten Entzündungszustand. Die Zelle verkrampft sich visuell, verengt ihren Radius, blinkt in unregelmäßigen Abständen tiefrot auf und signalisiert akute linguistische Gefahr.
+* **Das sterile HUD-Steuerfeld:** Das integrierte Hover-Menü nutzt eine ergonomische 450ms Start-Latenz und 200ms Kulanz-Toleranz. Es verhindert versehentliche Auslöser beim Vorbeiscrollen und dient als Schaltzentrale für den globalen Metabolismus-Wechsel sowie für die sterile **Biopsie-Extraktion**.
 
 ---
 
-## 🎮 4. Haptik & Interaktions-Logik
+### 🔬 3. Die Drei-Zonen-Architektur des Labors
 
-### Begleiter-Modus (Im Browser-Tab)
-* **Elastisches Drag & Drop:** Du kannst den Lingu-Blob mit der Maus überall auf dem Bildschirm platzieren. Beim Ziehen zieht er sich wie ein Muskel zusammen (`scale(0.88)`). Lässt du ihn los, federt er organisch nach und merkt sich seine Position dauerhaft (`localStorage`).
-* **Hover-Latenz (450ms):** Erst wenn die Maus eine knappe halbe Sekunde still auf dem Lingu-Blob ruht, öffnet sich ein steriles, rein textbasiertes Steuerfeld. Beim Ziehen bleibt es komplett blockiert.
-* **Die Steuer-Befehle:**
-  * `⚡ Metabolismus an`: Weckt das System auf. Der Lingu-Blob atmet friedlich im neutralen Cyan-Blau.
-  * `💤 Metabolismus aus`: Versetzt die Zelle in Kryostase. Sie wird matt, abgedunkelt und alle Animationen frieren komplett ein.
-  * `🧪 Biopsie`: Löst den Extraktions-Impuls aus. Der Kern blitzt auf, die Zelle saugt sich visuell vollständig transparent leer (`opacity: 0.08`), schreibt das Logbuch in die IndexedDB und bricht einen neuen Tab zum Labor auf.
-* **Portal-Sprung:** Ein schneller Doppelklick auf die Zelle öffnet das Labor direkt als leeren Seziertisch.
+Das Labor-Dashboard ist strikt in drei haptische, interaktive Funktionsbereiche unterteilt:
 
-### Labor-Modus (`index.html` Dashboard)
-Das Labor ist absolut CSP-konform (kein blockierter Inline-Code) und arbeitet in einem asymmetrischen Drei-Spalten-Layout:
-* **Zone 1 (Links) — Die Gewebebank:** Ein vertikaler Sediment-Strang, auf dem deine Proben-Kapseln chronologisch wie ein geologischer Bohrkern aufgereiht sind. Jede Kapsel ist ein haptisches Drag-Element.
-* **Zone 2 (Mitte) — Der Seziertisch:** Du ziehst eine Kapsel von links per Drag & Drop hinein. Die Kryo-Halterung blitzt auf, die Zelle rastet magnetisch im Zentrum ein und erwacht im Großformat (250px) im damaligen Krankheitszustand. Im Zytoplasma werden drei anklickbare **Gewebeherde** (*Synthetisch*, *Diffus*, *Nekrotisch*) als interaktive Overlays freigelegt.
-* **Zone 3 (Rechts) — Der Werkzeugkasten:** Schaltet sich nach dem Drop frei. Ein Klick auf die Krankheitsherde in der Mitte filtert die Forensik-Tabelle rechts und listet die infizierten Quell-URLs auf. Ein Klick auf **"Linguistische Spülung"** übersetzt die toxischen Textfragmente live im Arbeitsspeicher in eine neutrale, saubere Alternative, wodurch die rote Zelle im Zentrum visuell fließend zurück in das gesunden Cyan morphiert.
+* **Zone 1 (Links) — Gewebebank-Regal:** Ein dynamisches Archiv, das alle gezogenen Biopsien direkt aus der `IndexedDB` ausliest. Dank einer rückwärtslaufenden Schleifen-Kaskade ist die Sortierung chronologisch perfekt – deine allerneueste Live-Sitzung thront immer ganz oben auf Platz 1, während alte Sedimente nach unten absinken.
+* **Zone 2 (Mitte) — Reaktor-Tisch:** Die interaktive Petrischale. Ziehst du eine Kapsel aus Zone 1 per Drag & Drop hierher, blitzt das Gehäuse über einen CSS-Reflow-Trigger haptisch weiß auf (`cryo-flash-anim`), blendet die Start-Instruktionen aus und lässt den Lingu-Blob im Großformat (250px) mitsamt seinen inneren Organellen auferstehen.
+* **Zone 3 (Rechts) — Forensischer Seziertisch:** Der Werkzeugkasten mutiert visuell und textlich synchron zum Zustand der geladenen Probe. Bei gesunden Proben schaltet er auf "NÄHRSTOFF-CLUSTER", bei toxischen auf "GIFT-CLUSTER". Klickst du auf die Cluster-Begriffe, klappt ein Inline-Fenster auf und präsentiert dir **schwarz auf weiß die echten, unzensierten Originalsätze** der Website als forensischen Beweis.
+
+---
+
+### 🛡️ 4. Der Homöostase-Flush & Das Weltwissen-Immunsystem
+
+Klickst du ganz rechts in Zone 3 auf den Spül-Befehl (`btn-linguistic-flush`), zündest du das KI-Immunsystem:
+1. Das Labor schickt die isolierten Textbeispiele per Fetch-POST an den Endpunkt `/api/flush` deiner `main.py`.
+2. Das High-End-Modell `llama-3.3-70b-versatile` wird auf den Groq-Servern aktiviert und zapft sein **globales Kontext- und Weltwissen** an, um den Inhalt der Sätze auf Faktenintegrität zu prüfen.
+3. Das Modell neutralisiert den emotionalen Affekt, formuliert den Text in klinisch reine Sprache um (`neutralized_text`) und generiert ein **syntaktisches Gegengift** (`context_antidote`) – einen hochverdichteten Faktencheck-Bericht zur Richtigstellung.
+4. Das Labor empfängt das Paket, lässt die Zelle im Reaktor fließend zurück nach Cyan morphieren und flutet Zone 3 mit einem leuchtend grünen Bereich, der das reale Weltwissen als unfehlbaren Beweis einblendet.
+
+---
+
+### 🛡️ 4.5 Transparenz, Lokalität & Datenschutz-Garantie
+
+Q-O wurde nach dem Prinzip "Privacy by Design" entwickelt, um dem Nutzer die absolute Souveränität über seine Daten und seine Privatsphäre zu garantieren:
+
+* **Volle Forensische Transparenz:** Das System arbeitet ohne Blackbox. Jede Klassifizierung, jeder Score und jeder Krankheitsherd wird in Zone 3 durch die nackten, echten Originalsätze der Website bewiesen. Der Nutzer sieht genau, worauf die KI anspringt.
+* **Strikte Lokale Souveränität:** Das gesamte Cyber-Labor (`index.html`) läuft autark als rein lokale Client-Anwendung direkt von deiner Festplatte (`file:///`). Es benötigt keinen externen Webserver und lädt keine Tracking-Skripte.
+* **Erweiterungs-Tresor (No Cloud Storage):** Alle gezogenen Gewebekapseln werden ausschließlich lokal in der browserinternen `IndexedDB` deines eigenen PCs gespeichert. Es gibt keine externe Cloud-Datenbank; deine Surf-Historie und Biopsien bleiben zu 100 % auf deiner Hardware.
+* **Erhöhte CSP-Sicherheit:** Das Dashboard arbeitet strikt konform mit den modernsten Content Security Policies (CSP). Es verzichtet komplett auf gefährliche Inline-Scripts oder veraltete HTML-Event-Handler (`onclick`), um Cross-Site-Scripting (XSS) physisch unmöglich zu machen.
+
+---
+
+### 🚀 5. Installations- & Startanleitung
+
+#### 1. API-Schlüssel einrichten
+Erstelle dir einen kostenlosen, blitzschnellen API-Key auf [://groq.com](https://://groq.com) und trage ihn in deiner `main.py` in der Variable `GROQ_API_KEY` ein.
+
+#### 2. Python-Backend zünden
+Stelle sicher, dass `fastapi` und `uvicorn` installiert sind. Starte den Server im Hauptverzeichnis deiner Festplatte über dein Terminal:
+```bash
+uvicorn main:app --reload
+```
+
+#### 3. Browser-Add-on laden
+1. Öffne Google Chrome und navigiere zu `chrome://extensions/`.
+2. Schalte oben rechts den **Entwicklermodus** ein.
+3. Klicke oben links auf **Entpackte Erweiterung laden** und wähle den Ordner deines Lingu-Blobs aus.
+4. Öffne eine beliebige Webseite (z. B. Wikipedia oder Amazon), mache einen Hard-Reload mit `Strg + F5`, öffne das HUD und schalte den Metabolismus an!
