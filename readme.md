@@ -1,6 +1,6 @@
 # 🧬 Q-O // Cyber-Medizinisches Analyselabor & Linguistischer Biosensor
 
-**Q-O** ist ein experimentelles, cyber-biologisches Ökosystem, das als passiver linguistischer Biosensor in deiner Informationsumwelt agiert. Als symbiotisches Browser-Add-on verändert es Webinhalte nicht aktiv, sondern macht dich in Echtzeit auf manipulative Toxin-Phrasen, Clickbait und künstliche Sprachstrukturen aufmerksam. Über ein geschütztes Daten-Schmuggler-Relais extrahierst du verdächtige Gewebeproben per Mausklick direkt in dein lokales, konsolidiertes Drei-Zonen-Cyber-Labor, um sie dort mit echtem KI-Weltwissen forensisch zu sezieren.
+**Q-O** ist ein experimentelles, cyber-biologisches Ökosystem, das als passiver linguistischer Biosensor in deiner Informationsumwelt agiert. Als symbiotisches Browser-Add-on verändert es Webinhalte nicht aktiv, sondern macht dich in Echtzeit auf manipulative Toxin-Phrasen, Clickbait und künstliche Sprachstrukturen aufmerksam. Über ein geschütztes Daten-Relais extrahierst du verdächtige Gewebeproben per Mausklick direkt in dein lokales, konsolidiertes Drei-Zonen-Cyber-Labor, um sie dort mit echtem KI-Weltwissen forensisch zu sezieren.
 
 ---
 
@@ -69,7 +69,7 @@ Klickst du ganz rechts in Zone 3 auf den Spül-Befehl (`btn-linguistic-flush`), 
 1. Das Labor schickt die isolierten Textbeispiele per Fetch-POST an den Endpunkt `/api/flush` deiner `main.py`.
 2. Das High-End-Modell `llama-3.3-70b-versatile` wird auf den Groq-Servern aktiviert und zapft sein **globales Kontext- und Weltwissen** an, um den Inhalt der Sätze auf Faktenintegrität zu prüfen.
 3. Das Modell neutralisiert den emotionalen Affekt, formuliert den Text in klinisch reine Sprache um (`neutralized_text`) und generiert ein **syntaktisches Gegengift** (`context_antidote`) – einen hochverdichteten Faktencheck-Bericht zur Richtigstellung.
-4. Das Labor empfängt das Paket, lässt die Zelle im Reaktor (Zone 2) fließend zurück nach Cyan morphieren und flutet Zone 3 mit einem leuchtend grünen Bereich, der das reale Weltwissen als unfehlbaren Beweis einblendet.
+4. Das Labor empfängt das Paket, lässt die Zelle im Reaktor (Zone 2) fließend zurück nach Cyan morphieren und flutet Zone 3 mit einem leuchtend grünen Bereich, der das reale Weltwissen als relativierende Information einblendet.
 
 ---
 
