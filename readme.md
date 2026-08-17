@@ -1,4 +1,4 @@
-# 🧬 Q-O // Cyber-Medizinisches Analyselabor & Linguistischer Biosensor
+# 🧬 Q-O // Cyber-Medizinisches Analyselabor & Linguistischer Biosensor - Prototyp
 
 **Q-O** ist ein experimentelles, cyber-biologisches Ökosystem, das als passiver linguistischer Biosensor in deiner Informationsumwelt agiert. Als symbiotisches Browser-Add-on verändert es Webinhalte nicht aktiv, sondern macht dich in Echtzeit auf manipulative Toxin-Phrasen, Clickbait und künstliche Sprachstrukturen aufmerksam. Über ein geschütztes Daten-Schmuggler-Relais extrahierst du verdächtige Gewebeproben per Mausklick direkt in dein lokales Drei-Zonen-Cyber-Labor, um sie dort mit echtem KI-Weltwissen forensisch zu sezieren.
 
