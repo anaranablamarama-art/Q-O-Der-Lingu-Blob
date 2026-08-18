@@ -91,11 +91,13 @@
         border: 2px solid var(--cell-border);
         box-shadow: inset 0 0 40px var(--cell-glow), 0 0 35px var(--cell-glow);
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-                    border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-                    box-shadow 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: background 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.7s ease;
         animation: var(--wobble-anim);
       }
 
@@ -122,7 +124,7 @@
         height: 100%;
         pointer-events: none;
         filter: drop-shadow(0 0 8px var(--cell-color));
-        transition: filter 1.2s ease;
+        transition: filter 0.7s ease;
       }
 
       .large-neural-path {
@@ -131,7 +133,7 @@
         stroke-width: 2;
         stroke-linecap: round;
         opacity: 0.75;
-        transition: stroke 1.2s ease, opacity 1.2s ease;
+        transition: stroke 0.7s ease, opacity 0.7s ease;
         animation: q-o-neural-pulse 4s ease-in-out infinite alternate;
       }
 
@@ -144,51 +146,52 @@
       .large-neural-node {
         fill: var(--cell-color);
         opacity: 0.85;
-        transition: fill 1.2s ease;
+        transition: fill 0.7s ease;
       }
 
       /* Sichel-Zellkern im absoluten Zentrum */
       .large-nucleus-wrapper {
-        position: relative;
-        width: 90px;
-        height: 90px;
+        position: absolute;
+        width: 80px;
+        height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
         animation: q-o-nucleus-float 7s ease-in-out infinite alternate;
         z-index: 10;
+        pointer-events: none;
       }
 
       .large-crescent {
         position: absolute;
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
-        box-shadow: inset 10px 6px 0 0 #ffffff, inset 16px 10px 0 0 var(--cell-color);
+        box-shadow: inset 8px 5px 0 0 #ffffff, inset 14px 8px 0 0 var(--cell-color);
         transform: rotate(45deg);
-        filter: drop-shadow(0 0 12px var(--cell-color));
+        filter: drop-shadow(0 0 10px var(--cell-color));
         animation: q-o-crescent-spin 28s linear infinite;
-        opacity: 0.9;
+        opacity: 0.85;
       }
 
       .large-nucleus-body {
         position: relative;
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%;
         background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--cell-color) 45%, #051329 100%);
-        box-shadow: 0 0 25px var(--cell-color), inset 0 0 14px rgba(255, 255, 255, 0.7);
+        box-shadow: 0 0 20px var(--cell-color), inset 0 0 10px rgba(255, 255, 255, 0.7);
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
       .large-nucleolus {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: radial-gradient(circle at 30% 30%, #ffffff 0%, var(--cell-color) 70%, #000000 100%);
-        box-shadow: 0 0 14px #ffffff, 0 0 20px var(--cell-color);
+        box-shadow: 0 0 12px #ffffff, 0 0 16px var(--cell-color);
         animation: q-o-nucleolus-energy 2.8s ease-in-out infinite alternate;
       }
 
@@ -203,7 +206,7 @@
         box-shadow: 0 0 12px #00f2fe;
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 20;
+        z-index: 25;
       }
       .herd-synthetic:hover {
         transform: rotate(45deg) scale(1.35);
@@ -212,15 +215,15 @@
 
       .herd-diffuse {
         position: absolute;
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: radial-gradient(circle, rgba(255, 153, 0, 0.8) 0%, rgba(255, 153, 0, 0.2) 65%, transparent 100%);
         box-shadow: 0 0 15px #ff9900;
         cursor: pointer;
         animation: q-o-herd-smolder 3s ease-in-out infinite alternate;
         transition: transform 0.2s ease;
-        z-index: 20;
+        z-index: 25;
       }
       .herd-diffuse:hover {
         transform: scale(1.4);
@@ -229,8 +232,8 @@
 
       .herd-necrotic {
         position: absolute;
-        width: 26px;
-        height: 26px;
+        width: 24px;
+        height: 24px;
         border-radius: 35% 65% 60% 40% / 40% 30% 70% 60%;
         background: radial-gradient(circle, #f43f5e 0%, #a855f7 60%, #4c0519 100%);
         border: 1.5px solid #f43f5e;
@@ -238,22 +241,11 @@
         cursor: pointer;
         animation: q-o-orbital-frenzy 1.2s ease-in-out infinite;
         transition: transform 0.2s ease;
-        z-index: 20;
+        z-index: 25;
       }
       .herd-necrotic:hover {
         transform: scale(1.4) rotate(15deg);
         box-shadow: 0 0 30px #f43f5e, 0 0 45px #a855f7;
-      }
-
-      /* Kryo-Halterung Blitz-Effekt */
-      .cryo-flash-anim {
-        animation: q-o-cryo-flash 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      }
-
-      @keyframes q-o-cryo-flash {
-        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9), 0 0 40px var(--cell-color); border-color: #ffffff; background-color: rgba(255, 255, 255, 0.25); }
-        50% { box-shadow: 0 0 50px 15px rgba(255, 255, 255, 0.6), 0 0 60px var(--cell-color); }
-        100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.35); background-color: rgba(255, 255, 255, 0.01); }
       }
 
       /* Kinetische Keyframes */
@@ -381,7 +373,7 @@
         <div
           id="cryo-holder"
           class="relative flex items-center justify-center transition-all duration-300 rounded-full border-2 border-dashed"
-          style="width: 350px; height: 350px; border-color: rgba(0, 242, 254, 0.35); box-shadow: 0 0 25px rgba(0, 242, 254, 0.15); background-color: rgba(255, 255, 255, 0.01);"
+          style="width: 460px; height: 460px; border-color: rgba(0, 242, 254, 0.35); box-shadow: 0 0 25px rgba(0, 242, 254, 0.15); background-color: rgba(255, 255, 255, 0.01);"
         >
           <!-- Text-Platzhalter vor dem ersten Drop -->
           <div id="drop-instruction" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center pointer-events-none transition-opacity duration-300">
@@ -394,9 +386,11 @@
             <p class="text-xs text-gray-400 max-w-xs">Gewebeprobe aus der linken Bank hierher ziehen...</p>
           </div>
 
-          <!-- GROSSE VERSION DES BLOBS (250px x 250px) -->
-          <div id="large-cell" class="relative flex items-center justify-center transition-all duration-700 opacity-0 transform scale-90 pointer-events-none" style="width: 250px; height: 250px;">
-            <div id="reactor-blob-core" class="large-membrane">
+          <!-- DIE PETRISCHALE (REIN VISUELL & MORPHOLOGISCH, TEXTFREI) -->
+          <div id="reactor-petri-dish" class="rounded-full border border-gray-900/40 bg-gray-950/5 flex items-center justify-center relative transition-all duration-700 hidden z-10" style="width: 440px; height: 440px;">
+            
+            <!-- DER INNERE ZELLKERN (NACKT, TEXTFREI, MORPHIERT LIVE BEIM URL-KLICK) -->
+            <div id="reactor-blob-core" class="rounded-full border border-cyan-500/20 bg-cyan-950/10 shadow-[0_0_50px_-10px_rgba(6,182,212,0.15)] flex flex-col items-center justify-center transition-all duration-700 relative overflow-hidden group large-membrane" style="width: 250px; height: 250px;">
               
               <!-- Zytoplasma SVG mit radialen Nervenbahnen -->
               <svg class="large-cytoplasm-svg" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">

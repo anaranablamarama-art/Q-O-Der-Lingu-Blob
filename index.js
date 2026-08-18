@@ -1,20 +1,21 @@
 /**
  * ============================================================================
- * Q-O LABOR // SYMMETRISCHES 2-BOXEN-TAB-SYSTEM & FORENSIK-STEUERUNG (INDEX.JS)
+ * Q-O LABOR // REINE VISUELLE MORPHOLOGIE & SYMMETRISCHES 2-BOXEN-TAB-SYSTEM
  * ============================================================================
  * 
- * STRATEGISCHE TRENNUNG:
- * - ZONE 2 (MITTE): Fester Reaktor / Petrischale für die GESAMTE Biopsie
- *   (Wird beim Kapsel-Drop/Laden einmalig steril eingefärbt & bleibt eingefroren)
- * - ZONE 3 (RECHTS): Symmetrisches 2-Boxen-System mit Tab-Reitern ([STRUKTUR] / [ZITATE])
- *   (Mutiert beim Klick auf eine URL NUR das Status-Dach & die 2 Anzeige-Listen)
+ * STRATEGISCHE DUAL-REAKTOR-TRENNUNG MIT REIN VISUELLEM MIKROSKOP-ZOOM:
+ * - ZONE 2 (MITTE): 
+ *   - #reactor-petri-dish: Äußerer Aura-Ring als PERMANENTES Sitzungs-Gedächtnis
+ *     (Färbt sich beim Kapsel-Drop einmalig im Gesamt-Score der Kapsel ein & bleibt stabil eingefroren)
+ *   - #reactor-blob-core: Reaktiv morphierender, nackter & textfreier Zellkern
+ *     (Zoomt beim Klick auf eine spezifische URL im Sourcing-Logbuch rein visuell über Farbe & Bio-Kinetik)
  * 
- * SYMMETRISCHES 2-BOXEN-TAB-SYSTEM:
- * 1. #toxic-main-vault (#tab-toxic-macro, #tab-toxic-micro, #toxic-display-list)
- * 2. #nutrient-main-vault (#tab-nutrient-macro, #tab-nutrient-micro, #nutrient-display-list)
+ * - ZONE 3 (RECHTS): Symmetrisches 2-Boxen-System mit Tab-Reitern ([STRUKTUR] / [ZITATE])
+ *   1. #toxic-main-vault (#tab-toxic-macro, #tab-toxic-micro, #toxic-display-list)
+ *   2. #nutrient-main-vault (#tab-nutrient-macro, #tab-nutrient-micro, #nutrient-display-list)
  * 
  * ISOLIERTER FLUSH (#btn-linguistic-flush):
- * - Greift sich schreibgeschützt die echten Zitate aus sourceItem.toxic_snippets ab
+ * - Greift sich schreibgeschützt die echten Zitate / Makros ab und neutralisiert sie.
  * - PERSISTENZ: Multi-Layer (IndexedDB 'QO_Metabolic_Vault' & LocalStorage)
  */
 
@@ -29,15 +30,11 @@
   const capsuleCountBadge = document.getElementById('capsule-count-badge');
   const btnClearVault = document.getElementById('btn-clear-vault');
 
-  // Zone 2: Seziertisch & Petrischale (Das Reaktor-Denkmal der Biopsie)
+  // Zone 2: Seziertisch & Petrischale (Das rein visuelle Zwei-Schichten-Reaktordenkmal)
   const cryoHolder = document.getElementById('cryo-holder');
   const dropInstruction = document.getElementById('drop-instruction');
-  const largeCell = document.getElementById('large-cell');
-  const reactorBlobCore = document.getElementById('reactor-blob-core') || 
-                          document.querySelector('.large-membrane') || 
-                          largeCell;
-  const reactorScoreDisplay = document.getElementById('reactor-score-display') || 
-                              document.getElementById('tele-lq-val');
+  const reactorPetriDish = document.getElementById('reactor-petri-dish');
+  const reactorBlobCore = document.getElementById('reactor-blob-core');
   const teleSampleId = document.getElementById('tele-sample-id');
   const teleLqVal = document.getElementById('tele-lq-val');
   const teleRatioVal = document.getElementById('tele-ratio-val');
@@ -142,48 +139,59 @@
   }
 
   // ==========================================================================
-  // 3. STERILE REINIGUNG & EINMALIGE REAKTOR-FARBGEBUNG (NUR ZONE 2 MITTE)
+  // 3. STERILE REINIGUNG & EINMALIGE AURA-FARBGEBUNG (PETRISCHALE & KERN)
   // ==========================================================================
   function applySterileReactorColoring(data) {
     if (!data) return;
 
     const lqScore = safeNum(data.lq_score ?? data.lq, 1.0);
-    const morph = getMorphologyState(lqScore);
-    const blobCore = document.getElementById('reactor-blob-core') || 
-                     document.querySelector('.large-membrane') || 
-                     largeCell;
-    const scoreDisplay = document.getElementById('reactor-score-display') || 
-                         teleLqVal;
 
-    // 1. STERILE REINIGUNG: Alle alten Farb- und Morphologie-Klassen restlos entfernen
-    if (blobCore) {
-      blobCore.classList.remove(
+    // 1. PETRISCHALE EINBLENDEN
+    if (reactorPetriDish) {
+      reactorPetriDish.classList.remove('hidden');
+      reactorPetriDish.style.display = 'flex';
+
+      // ÄUSSERER RING ALS PERMANENTES SITZUNGS-GEDÄCHTNIS EINFÄRBEN
+      if (lqScore < 0.5) {
+        reactorPetriDish.style.borderColor = 'rgba(225, 29, 72, 0.45)';
+        reactorPetriDish.style.boxShadow = '0 0 60px rgba(225, 29, 72, 0.2), inset 0 0 35px rgba(225, 29, 72, 0.1)';
+        reactorPetriDish.style.backgroundColor = 'rgba(225, 29, 72, 0.03)';
+      } else if (lqScore < 1.0) {
+        reactorPetriDish.style.borderColor = 'rgba(255, 153, 0, 0.45)';
+        reactorPetriDish.style.boxShadow = '0 0 60px rgba(255, 153, 0, 0.2), inset 0 0 35px rgba(255, 153, 0, 0.1)';
+        reactorPetriDish.style.backgroundColor = 'rgba(255, 153, 0, 0.03)';
+      } else {
+        reactorPetriDish.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+        reactorPetriDish.style.boxShadow = '0 0 60px rgba(0, 242, 254, 0.2), inset 0 0 35px rgba(0, 242, 254, 0.1)';
+        reactorPetriDish.style.backgroundColor = 'rgba(0, 242, 254, 0.02)';
+      }
+    }
+
+    // 2. INNERER ZELLKERN INITIAL SYNCHRON EINFÄRBEN (REIN VISUELL & MORPHOLOGISCH)
+    if (reactorBlobCore) {
+      reactorBlobCore.classList.remove(
         'border-rose-500/30', 'bg-rose-950/10', 'text-rose-400',
         'border-amber-500/30', 'bg-amber-950/10', 'text-amber-400',
         'border-cyan-500/20', 'bg-cyan-950/10', 'text-cyan-400',
         'q-o-hud-stable', 'q-o-hud-deformed', 'q-o-hud-toxic'
       );
 
-      // 2. NEU-EINFÄRBUNG: Exakt synchron zum Gesamt-LQ der Biopsie einrasten
       if (lqScore < 0.5) {
-        blobCore.classList.add('border-rose-500/30', 'bg-rose-950/10', 'text-rose-400', 'q-o-hud-toxic');
-        blobCore.style.boxShadow = '0 0 50px rgba(244, 63, 94, 0.2)';
+        reactorBlobCore.classList.add('border-rose-500/30', 'bg-rose-950/10', 'q-o-hud-toxic');
+        reactorBlobCore.style.borderColor = 'rgba(225, 29, 72, 0.5)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(225, 29, 72, 0.35), inset 0 0 30px rgba(225, 29, 72, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(225, 29, 72, 0.12)';
       } else if (lqScore < 1.0) {
-        blobCore.classList.add('border-amber-500/30', 'bg-amber-950/10', 'text-amber-400', 'q-o-hud-deformed');
-        blobCore.style.boxShadow = '0 0 50px rgba(255, 153, 0, 0.2)';
+        reactorBlobCore.classList.add('border-amber-500/30', 'bg-amber-950/10', 'q-o-hud-deformed');
+        reactorBlobCore.style.borderColor = 'rgba(255, 153, 0, 0.5)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(255, 153, 0, 0.35), inset 0 0 30px rgba(255, 153, 0, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(255, 153, 0, 0.1)';
       } else {
-        blobCore.classList.add('border-cyan-500/20', 'bg-cyan-950/10', 'text-cyan-400', 'q-o-hud-stable');
-        blobCore.style.boxShadow = '0 0 50px rgba(0, 242, 254, 0.2)';
+        reactorBlobCore.classList.add('border-cyan-500/20', 'bg-cyan-950/10', 'q-o-hud-stable');
+        reactorBlobCore.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(0, 242, 254, 0.35), inset 0 0 30px rgba(0, 242, 254, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(0, 242, 254, 0.08)';
       }
-    }
-
-    if (largeCell) {
-      largeCell.className = 'relative flex items-center justify-center transition-all duration-700 opacity-100 transform scale-100 ' + morph.className;
-    }
-
-    if (scoreDisplay) {
-      scoreDisplay.className = 'font-bold text-sm font-mono';
-      scoreDisplay.style.color = morph.colorHex;
     }
   }
 
@@ -217,7 +225,7 @@
         const raw = e.dataTransfer.getData('text/plain');
         if (raw) {
           const data = JSON.parse(raw);
-          // Einmaliges steriles Einstellen des Reaktor-Blobs auf den Gesamt-Score der Kapsel
+          // Einmaliges steriles Einstellen des Reaktor-Blobs & äußeren Aura-Rings auf den Gesamt-Score
           applySterileReactorColoring(data);
           loadSampleIntoSeziertisch(data);
         }
@@ -331,16 +339,15 @@
     currentSample = sample;
     selectedUrlFilter = null;
 
-    // 1. Visueller Aufbau der Makro-Zelle im Seziertisch
+    // 1. Visueller Aufbau der Petrischale im Seziertisch
     if (dropInstruction) {
       dropInstruction.style.opacity = '0';
       dropInstruction.style.pointerEvents = 'none';
     }
 
-    if (largeCell) {
-      largeCell.style.opacity = '1';
-      largeCell.style.pointerEvents = 'auto';
-      largeCell.style.transform = 'scale(1)';
+    if (reactorPetriDish) {
+      reactorPetriDish.classList.remove('hidden');
+      reactorPetriDish.style.display = 'flex';
     }
 
     // 2. Gesamt-Score der Biopsie für den Reaktor
@@ -349,7 +356,7 @@
     const sampleNnut = safeNum(sample.n_nut ?? sample.nnut, 1.5);
     const overallMorph = getMorphologyState(sampleLq);
 
-    // Einmalige sterile Einfärbung des Reaktor-Blobs
+    // Einmalige sterile Einfärbung des Reaktor-Blobs & der Petrischalen-Aura
     applySterileReactorColoring(sample);
 
     // 3. Header & Feste Reaktor-Telemetrie am Seziertisch unten
@@ -393,7 +400,7 @@
 
     renderSessionHistory(historyList);
 
-    // Automatischer Erst-Fokus auf den ersten Tab (steuert NUR Zone 3 rechts an)
+    // Automatischer Erst-Fokus auf den ersten Tab (reaktiver Zoom des inneren Kerns)
     if (historyList.length > 0) {
       selectSpecificSourceData(historyList[0]);
     }
@@ -452,10 +459,8 @@
   }
 
   // ==========================================================================
-  // 7. STRATEGISCHE QUELLENAUSWAHL MIT SYMMETRISCHEM 2-BOXEN-TAB-SYSTEM
+  // 7. STRATEGISCHE QUELLENAUSWAHL & REAKTIVER VISUELLER MIKROSKOP-ZOOM
   // ==========================================================================
-  // WICHTIG: Hier wird KEINESFALLS blobCore, scoreDisplay oder largeCell
-  // (Zone 2 Mitte) modifiziert! Die Petrischale bleibt unberührt eingefroren!
   function selectSpecificSourceData(sourceEntry) {
     if (!sourceEntry) return;
 
@@ -481,7 +486,7 @@
 
     activeSourceData = entryData;
 
-    // 1. ABSOLUTE VARIABLEN-SICHERUNG (Exakte Kopplung an Python-Datenströme mit Fallbacks)
+    // 1. ABSOLUTE VARIABLEN-SICHERUNG
     const macrosTox = Array.isArray(entryData.macro_tox_categories) 
       ? entryData.macro_tox_categories 
       : (Array.isArray(entryData.macro_reasons) ? entryData.macro_reasons : []);
@@ -491,6 +496,39 @@
 
     const tabLq = safeNum(entryData.lq_score ?? entryData.lq, 1.0);
     const tabMorph = getMorphologyState(tabLq);
+
+    // ========================================================================
+    // 🔍 DER REAKTIVE MIKROSKOP-ZOOM (REIN VISUELL & MORPHOLOGISCH):
+    // Der innere Kern '#reactor-blob-core' morphiert blitzschnell passend zu genau
+    // dieser angeklickten URL, während der äußere Ring '#reactor-petri-dish'
+    // unberührt bleibt und die globale Sitzungs-Aura schützt!
+    // ========================================================================
+    if (reactorBlobCore) {
+      // Sterile Reinigung der alten Farb- und Morphologieklassen
+      reactorBlobCore.classList.remove(
+        'border-rose-500/30', 'bg-rose-950/10', 'text-rose-400',
+        'border-amber-500/30', 'bg-amber-950/10', 'text-amber-400',
+        'border-cyan-500/20', 'bg-cyan-950/10', 'text-cyan-400',
+        'q-o-hud-stable', 'q-o-hud-deformed', 'q-o-hud-toxic'
+      );
+
+      if (tabLq < 0.5) {
+        reactorBlobCore.classList.add('border-rose-500/30', 'bg-rose-950/10', 'q-o-hud-toxic');
+        reactorBlobCore.style.borderColor = 'rgba(225, 29, 72, 0.5)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(225, 29, 72, 0.35), inset 0 0 30px rgba(225, 29, 72, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(225, 29, 72, 0.12)';
+      } else if (tabLq < 1.0) {
+        reactorBlobCore.classList.add('border-amber-500/30', 'bg-amber-950/10', 'q-o-hud-deformed');
+        reactorBlobCore.style.borderColor = 'rgba(255, 153, 0, 0.5)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(255, 153, 0, 0.35), inset 0 0 30px rgba(255, 153, 0, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(255, 153, 0, 0.1)';
+      } else {
+        reactorBlobCore.classList.add('border-cyan-500/20', 'bg-cyan-950/10', 'q-o-hud-stable');
+        reactorBlobCore.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+        reactorBlobCore.style.boxShadow = '0 0 50px rgba(0, 242, 254, 0.35), inset 0 0 30px rgba(0, 242, 254, 0.15)';
+        reactorBlobCore.style.backgroundColor = 'rgba(0, 242, 254, 0.08)';
+      }
+    }
 
     // 2. STATUS-DACH GANZ RECHTS ANSTEUERN (#tools-status-badge & #tools-status-title)
     if (toolsStatusBadge) {
@@ -517,8 +555,7 @@
     }
 
     // 5. SITZUNGS-DEFAULT & AUTOMATISCHER REFLOW:
-    // Jedes Mal, wenn eine neue URL angeklickt wird, beide Boxen standardmäßig auf STRUKTUR ('macro')
-    // zurücksetzen und aktiv die Tabs simulieren!
+    // Standardmäßig auf STRUKTUR ('macro') zurücksetzen
     currentToxicTab = 'macro';
     currentNutrientTab = 'macro';
 
@@ -795,10 +832,9 @@
         }
         if (capsuleCountBadge) capsuleCountBadge.textContent = '0 Proben';
 
-        if (largeCell) {
-          largeCell.style.opacity = '0';
-          largeCell.style.transform = 'scale(0.85)';
-          largeCell.style.pointerEvents = 'none';
+        if (reactorPetriDish) {
+          reactorPetriDish.classList.add('hidden');
+          reactorPetriDish.style.display = 'none';
         }
         if (dropInstruction) {
           dropInstruction.style.opacity = '1';
@@ -874,7 +910,7 @@
   // 10. INITIALISIERUNG & MULTI-LAYER VAULT-LADEN
   // ==========================================================================
   function initLaboratory() {
-    console.log('[Q-O Labor] Initialisiere symmetrisches 2-Boxen-Tab-System...');
+    console.log('[Q-O Labor] Initialisiere rein visuelle Petrischale mit Mikroskop-Zoom...');
 
     const urlParams = new URLSearchParams(window.location.search);
     const requestedId = urlParams.get('id');
