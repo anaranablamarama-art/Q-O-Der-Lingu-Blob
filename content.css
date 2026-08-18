@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Q-O LINGU-BLOB DESIGN-DNA & HOVER-WRAPPING (CONTENT.CSS)
+   Q-O LINGU-BLOB BIO-KINETISCHE FLUID-PHYSIK & GEOMETRIE-DNA (CONTENT.CSS)
    ========================================================================== */
 
 /* Der übergeordnete gemeinsame Container (Verhindert das Hover-Zucken) */
@@ -26,27 +26,27 @@
   cursor: grabbing;
 }
 
-/* --- DIE DREI BIOLOGISCHEN RESONANZ-ZUSTÄNDE --- */
+/* --- DIE DREI BIOLOGISCHEN RESONANZ-ZUSTÄNDE (RUHIG & GEDÄMPFT) --- */
 .q-o-hud-stable {
   --cell-color: #00f2fe;
-  --cell-glow: rgba(0, 242, 254, 0.45);
-  --cell-bg: rgba(0, 242, 254, 0.12);
-  --cell-border: rgba(0, 242, 254, 0.4);
+  --cell-glow: rgba(0, 242, 254, 0.35);
+  --cell-bg: rgba(0, 242, 254, 0.10);
+  --cell-border: rgba(0, 242, 254, 0.35);
   --flash-color: rgba(0, 242, 254, 0.65);
 }
 .q-o-hud-deformed {
   --cell-color: #ff9900;
-  --cell-glow: rgba(255, 153, 0, 0.45);
-  --cell-bg: rgba(255, 153, 0, 0.15);
-  --cell-border: rgba(255, 153, 0, 0.45);
+  --cell-glow: rgba(255, 153, 0, 0.35);
+  --cell-bg: rgba(255, 153, 0, 0.12);
+  --cell-border: rgba(255, 153, 0, 0.40);
   --flash-color: rgba(255, 153, 0, 0.65);
 }
 .q-o-hud-toxic {
   --cell-color: #f43f5e;
-  --cell-glow: rgba(244, 63, 94, 0.5);
-  --cell-bg: rgba(244, 63, 94, 0.18);
-  --cell-border: rgba(244, 63, 94, 0.5);
-  --flash-color: rgba(244, 63, 94, 0.7);
+  --cell-glow: rgba(244, 63, 94, 0.40);
+  --cell-bg: rgba(244, 63, 94, 0.15);
+  --cell-border: rgba(244, 63, 94, 0.45);
+  --flash-color: rgba(244, 63, 94, 0.70);
 }
 /* Kryostase (Metabolismus aus) */
 .q-o-hud-kryo {
@@ -68,48 +68,45 @@
 }
 
 /* 1. DER HAUPTKÖRPER (DIE MEMBRAN) */
-/* Weich gerundet, kein Hart-Schnitt, gläsernes Zytoplasma */
+/* Weich gerundet, lebendiges amöbenartiges Fluid-Gefäß, gläsernes Zytoplasma */
 .large-membrane {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   background: var(--cell-bg);
   border: 1.5px solid var(--cell-border);
-  box-shadow: inset 0 0 14px var(--cell-glow), 0 0 16px var(--cell-glow);
+  box-shadow: inset 0 0 12px var(--cell-glow), 0 0 14px var(--cell-glow);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
-  will-change: transform, box-shadow;
+  will-change: transform, border-radius, box-shadow;
 }
 
-/* 2. ZELL-BLITZ (600ms sanfter, radialer Glow bei Schwellenwert-Wechsel) */
+/* 2. ZELL-BLITZ: Feuert NUR EINMALIG für 600ms bei Schwellenwert-Wechsel, KEIN permanenter Loop! */
 .large-membrane.q-o-cell-flash {
   box-shadow: inset 0 0 25px var(--flash-color), 0 0 35px var(--flash-color) !important;
   transition: box-shadow 0.1s ease-out !important;
 }
 
-/* 3. METABOLISCHES ATMEN & KINETISCHER ANKER */
+/* 3. GEZÄHMTE FLUID-KINETIK (BERUHIGTE ATEM-ZYKLEN) */
 
-/* Zustand Cyan (LQ >= 1.0): Tiefes, ruhiges Atmen (0.99 - 1.01) im 8s-Takt & zentrierter Anker */
+/* Zustand Cyan (LQ >= 1.0): 8 Sekunden, extrem fließend, gläsern und zentriert */
 .q-o-hud-stable .large-membrane {
-  border-radius: 48% 52% 50% 50% / 50% 48% 52% 50%;
-  animation: q-o-breathe-cyan 8s ease-in-out infinite;
+  animation: q-o-fluid-cyan 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
-/* Zustand Orange (LQ < 1.0): Beschleunigtes Atmen im 5s-Takt & Asymmetrische Verschiebung zum Oval (+1.5px, -1px) */
+/* Zustand Orange (LQ < 1.0): 6 Sekunden, sanft unruhiger & Verschiebung zum Oval (+1.5px, -1px) */
 .q-o-hud-deformed .large-membrane {
-  border-radius: 46% 54% 52% 48% / 53% 47% 53% 47%;
-  animation: q-o-breathe-orange 5s ease-in-out infinite;
+  animation: q-o-fluid-orange 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
-/* Zustand Rot (LQ < 0.5): Flaches Atmen (3.5s-Takt) mit unregelmäßigem Mikro-Zittern & Verschiebung zum Splitter (-1.5px, +1.5px) */
+/* Zustand Rot (LQ < 0.5): 7 Sekunden beruhigtes Fluid-Atmen mit extrem gedämpftem 0.2px Mikro-Zittern & Verschiebung zum Splitter (-1.5px, +1.5px) */
 .q-o-hud-toxic .large-membrane {
-  border-radius: 45% 55% 48% 52% / 52% 46% 54% 48%;
-  animation: q-o-breathe-red 3.5s ease-in-out infinite, q-o-tremor 0.35s ease-in-out infinite alternate;
+  animation: q-o-fluid-red 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite, q-o-tox-shiver 0.3s ease-in-out infinite alternate;
 }
 
 /* Kryo-Zustand: Bewegungslos */
@@ -119,7 +116,7 @@
   border-radius: 50% !important;
 }
 
-/* --- DIE 3px MIKRO-ORGANELLEN (DREIECKS-POTENTIALPUNKTE) --- */
+/* --- DIE DREI PLASTISCHEN MIKRO-ORGANELLEN (8px - 10px DASHBOARD-SEMIOTIK) --- */
 .q-o-organelles-constellation {
   position: absolute;
   inset: 0;
@@ -137,59 +134,59 @@
   will-change: transform;
 }
 
-/* Organelle 1: Cyan Mikro-Kreis (perfekt symmetrisch, 50% radius) */
+/* 1. Cyan-Organelle (Stabilität): 8px x 8px, perfekt symmetrisch kreisrund mit zartem Glow */
 .q-o-dot-cyan {
-  width: 3px;
-  height: 3px;
-  top: 24px;
-  left: 39px;
+  width: 8px;
+  height: 8px;
+  top: 22px;
+  left: 36px;
   border-radius: 50%;
   background-color: #00f2fe;
-  box-shadow: 0 0 5px #00f2fe, 0 0 1px #ffffff;
+  box-shadow: 0 0 6px #00f2fe, 0 0 2px #ffffff;
   opacity: 0.45;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
 }
 
-/* Organelle 2: Orange Mikro-Oval (minimal länglich, 40% 60% 40% 60%) */
+/* 2. Orange-Organelle (Stress/Deformation): 10px x 6px, plastisch gestrecktes Oval */
 .q-o-dot-orange {
-  width: 4.5px;
-  height: 3px;
-  bottom: 25px;
-  right: 25px;
-  border-radius: 40% 60% 40% 60%;
+  width: 10px;
+  height: 6px;
+  bottom: 23px;
+  right: 22px;
+  border-radius: 35% 65% 35% 65% / 50% 50% 50% 50%;
   background-color: #ff9900;
-  box-shadow: 0 0 5px #ff9900;
+  box-shadow: 0 0 6px #ff9900;
   opacity: 0.45;
   animation-delay: -2.6s;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
 }
 
-/* Organelle 3: Rotes Mikro-Fragment (unregelmäßiger Splitter) */
+/* 3. Rote-Organelle (Toxizität/Spannung): 9px x 9px, unregelmäßig asymmetrisches, spitzes Splitter-Fragment */
 .q-o-dot-red {
-  width: 3.5px;
-  height: 3px;
-  bottom: 24px;
-  left: 23px;
-  border-radius: 30% 70% 60% 40% / 50% 30% 70% 50%;
+  width: 9px;
+  height: 9px;
+  bottom: 22px;
+  left: 20px;
+  border-radius: 20% 80% 40% 60% / 70% 30% 80% 20%;
   background-color: #f43f5e;
-  box-shadow: 0 0 5px #f43f5e;
+  box-shadow: 0 0 6px #f43f5e;
   opacity: 0.45;
   animation-delay: -5.3s;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
 }
 
-/* Betone die jeweils aktive Organelle dezent synchron zum Zustand */
+/* Betone die jeweils aktive Organelle dezent synchron zum metabolischen Zustand */
 .q-o-hud-stable .q-o-dot-cyan {
   opacity: 0.95;
-  box-shadow: 0 0 7px #00f2fe, 0 0 2px #ffffff;
+  box-shadow: 0 0 10px #00f2fe, 0 0 3px #ffffff;
 }
 .q-o-hud-deformed .q-o-dot-orange {
   opacity: 0.95;
-  box-shadow: 0 0 7px #ff9900, 0 0 2px #ffe4b5;
+  box-shadow: 0 0 10px #ff9900, 0 0 3px #ffe4b5;
 }
 .q-o-hud-toxic .q-o-dot-red {
   opacity: 0.95;
-  box-shadow: 0 0 7px #f43f5e, 0 0 2px #fecdd3;
+  box-shadow: 0 0 10px #f43f5e, 0 0 3px #fecdd3;
 }
 .q-o-hud-kryo .q-o-organelle {
   opacity: 0.2;
@@ -197,64 +194,94 @@
   animation: none !important;
 }
 
-/* --- ATEM- & KINETIK-KEYFRAMES --- */
+/* --- BIO-KINETISCHE FLUID-KEYFRAMES (ORGANISCHE 4-PHASEN AMÖBE) --- */
 
-/* Cyan: Ruhiges Atmen 0.99 - 1.01 im 8s-Takt, zentriert */
-@keyframes q-o-breathe-cyan {
+/* Cyan: 8s beruhigendes, fließendes Amöben-Atmen, zentriert (0.985 bis 1.015) */
+@keyframes q-o-fluid-cyan {
   0% {
-    transform: translate(0px, 0px) scale(0.99);
+    border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
+    transform: translate(0px, 0px) scale(0.99) rotate(0deg);
+  }
+  25% {
+    border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%;
+    transform: translate(0.4px, -0.4px) scale(1.01) rotate(0.8deg);
   }
   50% {
-    transform: translate(0px, 0px) scale(1.01);
+    border-radius: 30% 70% 70% 30% / 50% 30% 70% 50%;
+    transform: translate(-0.4px, 0.4px) scale(1.00) rotate(-0.5deg);
+  }
+  75% {
+    border-radius: 65% 35% 45% 55% / 55% 45% 55% 45%;
+    transform: translate(0.3px, 0.3px) scale(1.015) rotate(0.6deg);
   }
   100% {
-    transform: translate(0px, 0px) scale(0.99);
+    border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
+    transform: translate(0px, 0px) scale(0.99) rotate(0deg);
   }
 }
 
-/* Orange: Beschleunigtes Atmen im 5s-Takt, leichte Verschiebung nach oben rechts (Oval-Fokus) */
-@keyframes q-o-breathe-orange {
+/* Orange: 6s harmonisches Amöben-Morphing, sanfter Zug nach oben rechts (Oval-Fokus: +1.5px, -1px) */
+@keyframes q-o-fluid-orange {
   0% {
-    transform: translate(1px, -0.8px) scale(0.985);
+    border-radius: 46% 54% 35% 65% / 54% 46% 58% 42%;
+    transform: translate(1px, -0.8px) scale(0.985) rotate(-0.8deg);
+  }
+  25% {
+    border-radius: 58% 42% 62% 38% / 38% 62% 42% 58%;
+    transform: translate(1.4px, -1.0px) scale(1.01) rotate(1.0deg);
   }
   50% {
-    transform: translate(1.8px, -1.2px) scale(1.015);
+    border-radius: 35% 65% 65% 35% / 60% 35% 65% 40%;
+    transform: translate(1.8px, -1.2px) scale(1.015) rotate(-1.0deg);
+  }
+  75% {
+    border-radius: 62% 38% 40% 60% / 45% 55% 40% 60%;
+    transform: translate(1.3px, -0.9px) scale(0.99) rotate(0.5deg);
   }
   100% {
-    transform: translate(1px, -0.8px) scale(0.985);
+    border-radius: 46% 54% 35% 65% / 54% 46% 58% 42%;
+    transform: translate(1px, -0.8px) scale(0.985) rotate(-0.8deg);
   }
 }
 
-/* Rot: Flaches Atmen im 3.5s-Takt, Verschiebung nach unten links (Splitter-Fokus) */
-@keyframes q-o-breathe-red {
+/* Rot: 7s beruhigtes Fluid-Atmen, sanfter Zug nach unten links (Splitter-Fokus: -1.5px, +1.5px), KEINE Hektik */
+@keyframes q-o-fluid-red {
   0% {
-    transform: translate(-1.2px, 1.2px) scale(0.98);
+    border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(-1.2px, 1.2px) scale(0.985) rotate(-1.0deg);
+  }
+  25% {
+    border-radius: 65% 35% 60% 40% / 35% 65% 35% 65%;
+    transform: translate(-1.5px, 1.5px) scale(1.015) rotate(1.2deg);
   }
   50% {
-    transform: translate(-1.8px, 1.8px) scale(1.02);
+    border-radius: 30% 70% 40% 60% / 65% 35% 60% 40%;
+    transform: translate(-1.8px, 1.8px) scale(0.995) rotate(-1.0deg);
+  }
+  75% {
+    border-radius: 70% 30% 55% 45% / 40% 60% 35% 65%;
+    transform: translate(-1.4px, 1.4px) scale(1.01) rotate(0.8deg);
   }
   100% {
-    transform: translate(-1.2px, 1.2px) scale(0.98);
+    border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(-1.2px, 1.2px) scale(0.985) rotate(-1.0deg);
   }
 }
 
-/* Dezentestes Mikro-Zittern bei toxischem Zustand (max 0.4px) */
-@keyframes q-o-tremor {
+/* Extrem gedämpftes Mikro-Zittern bei Rot (Ausschlag max 0.2px, unaufdringlich beim Lesen) */
+@keyframes q-o-tox-shiver {
   0% {
-    margin-top: 0px;
-    margin-left: 0px;
+    transform: translate(0px, 0px) rotate(0deg);
   }
   50% {
-    margin-top: -0.4px;
-    margin-left: 0.3px;
+    transform: translate(0.2px, -0.2px) rotate(0.2deg);
   }
   100% {
-    margin-top: 0.3px;
-    margin-left: -0.4px;
+    transform: translate(-0.2px, 0.2px) rotate(-0.2deg);
   }
 }
 
-/* Ultralangsames 8s Schwebemuster der 3px Organellen (max 1px Verschiebung) */
+/* Sanftes 8s Schwebemuster der Organellen */
 @keyframes q-o-float {
   0% {
     transform: translate(0px, 0px);

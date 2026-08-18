@@ -1,10 +1,10 @@
 // ============================================================================
-// LINGU-BLOB ERWEITERUNG — REAKTIVE MIKRO-GEOMETRIE & KINETIK (CONTENT.JS)
+// LINGU-BLOB ERWEITERUNG — REAKTIVE MIKRO-GEOMETRIE & FLUID-KINETIK (CONTENT.JS)
 // ============================================================================
 // Stummer, unaufdringlicher Lese-Begleiter mit non-disruptiver peripherer
-// Kinetik, 3 Mikro-Organellen, Zell-Blitz bei LQ-Grenzübertritt, metabolischem
-// Atmen und asymmetrischem kinetischen Anker.
-// Vollständig integriert mit dem privilegierten background.js Tunnel & Vault.
+// Fluid-Kinetik, 3 skalierten Mikro-Organellen (8-10px), einmaligem Zell-Blitz
+// (600ms) bei Schwellenwert-Wechsel, amöbenartigem Atmen und asymmetrischem kinetischen Anker.
+// Vollständig integriert mit dem privilegierten background.js Tunnel & FastAPI Port 8000.
 // ============================================================================
 
 (function () {
@@ -30,7 +30,7 @@
   let hoverTimer = null;
   let isDragging = false;
 
-  // 2. DOM-INJEKTION (Reaktiver Zellkörper mit 3 Mikro-Organellen)
+  // 2. DOM-INJEKTION (Reaktiver Zellkörper mit 3 plastischen Mikro-Organellen & Fluid-Körper)
   function injectLinguBlob() {
     if (document.getElementById('q-o-symbiont-wrapper')) return;
 
@@ -48,14 +48,14 @@
       <!-- Der gläserne Tiefsee-Zellkörper (Initial im Kryo-Zustand) -->
       <div id="q-o-blob-container" class="q-o-hud-kryo">
         <div class="large-membrane">
-          <!-- Dreiecks-Konstellation der 3px Mikro-Organellen -->
+          <!-- Dreiecks-Konstellation der 3 plastischen Mikro-Organellen (8px-10px) -->
           <div class="q-o-organelles-constellation">
-            <!-- 1. Cyan Mikro-Kreis (border-radius: 50%) -->
-            <div class="q-o-organelle q-o-dot-cyan" title="LQ Symmetrie-Punkt (Cyan)"></div>
-            <!-- 2. Orange Mikro-Oval (border-radius: 40% 60% 40% 60%) -->
-            <div class="q-o-organelle q-o-dot-orange" title="LQ Deformations-Punkt (Orange)"></div>
-            <!-- 3. Rotes Mikro-Fragment (unregelmäßiger Splitter) -->
-            <div class="q-o-organelle q-o-dot-red" title="LQ Toxizitäts-Fragment (Rot)"></div>
+            <!-- 1. Cyan Mikro-Kreis (8x8px, border-radius: 50%) -->
+            <div class="q-o-organelle q-o-dot-cyan" title="LQ Symmetrie-Punkt (Cyan, 8px Kreis)"></div>
+            <!-- 2. Orange Mikro-Oval (10x6px, plastisch gestrecktes Oval) -->
+            <div class="q-o-organelle q-o-dot-orange" title="LQ Deformations-Punkt (Orange, 10x6px Oval)"></div>
+            <!-- 3. Rotes Mikro-Fragment (9x9px, unregelmäßiger Splitter) -->
+            <div class="q-o-organelle q-o-dot-red" title="LQ Toxizitäts-Fragment (Rot, 9x9px Splitter)"></div>
           </div>
 
           <!-- Zytoplasma Nervenbahnen (SVG) -->
@@ -97,7 +97,7 @@
     return 'toxic';                           // Metabolismus-Rot
   }
 
-  // Führt die sanfte periphere Zustands-Umschaltung durch
+  // Führt die sanfte periphere Zustands-Umschaltung mit reaktiver Fluid-Physik durch
   function updateWidgetState(lqScore, explicitMorphClass) {
     const blob = document.getElementById('q-o-blob-container');
     if (!blob) return;
@@ -111,7 +111,7 @@
     const newCategory = calculateThresholdCategory(lqScore);
     const targetClass = explicitMorphClass || `q-o-hud-${newCategory}`;
 
-    // 1. ZELL-BLITZ: Nur bei echtem Wechsel der Grenzwert-Kategorie für 600ms zünden
+    // 1. ZELL-BLITZ: Nur bei echtem Wechsel der Grenzwert-Kategorie EINMALIG für 600ms zünden
     if (currentThresholdCategory !== null && currentThresholdCategory !== 'kryo' && currentThresholdCategory !== newCategory) {
       triggerCellFlash(blob);
     }
@@ -278,7 +278,7 @@
     });
   }
 
-  // 6. SCHMUGGLER-ANBINDUNG & SITZUNGS-LOGBUCH (Live-Sync via background.js)
+  // 6. SCHMUGGLER-ANBINDUNG & SITZUNGS-LOGBUCH (Live-Sync via background.js & FastAPI Port 8000)
   async function syncMetabolismWithBackend() {
     const blobElement = document.getElementById('q-o-blob-container');
     if (!blobElement || isDragging) return;
