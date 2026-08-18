@@ -1,5 +1,5 @@
-# 🧬 PROJEKT Q-O // 
-# Lingu-Blob - Großäugig, Sensibel, Diskret
+# 🧬 PROJEKT Q-O // Lingu-Blob 
+#  Großäugig -  Sensibel  - Diskret
 
 > **Assistiver, peripherer Biosensor & forensisches Cyber-Cockpit zur Echtzeit-Messung reizabhängiger Informations-Ökologie**
 
