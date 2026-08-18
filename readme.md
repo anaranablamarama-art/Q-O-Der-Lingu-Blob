@@ -1,4 +1,4 @@
-# 🧬 PROJEKT Q-O // METABOLISCHE HOMÖOSTASE FÜR DAS FREIE INTERNET
+# 🧬 PROJEKT Q-O // Lingu-Blob - Großäugig, Sensibel, Diskret
 > **Assistiver, peripherer Biosensor & forensisches Cyber-Cockpit zur Echtzeit-Messung kognitiver Informations-Ökologie**
 
 ---
