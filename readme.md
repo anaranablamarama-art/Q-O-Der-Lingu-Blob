@@ -1,119 +1,283 @@
-# 🧬 Q-O // Cyber-Medizinisches Analyselabor & Linguistischer Biosensor
-
-**Q-O** ist ein experimentelles, cyber-biologisches Ökosystem, das als passiver linguistischer Biosensor in deiner Informationsumwelt agiert. Als symbiotisches Browser-Add-on verändert es Webinhalte nicht aktiv, sondern macht dich in Echtzeit auf manipulative Toxin-Phrasen, Clickbait und künstliche Sprachstrukturen aufmerksam. Über ein geschütztes Daten-Relais extrahierst du verdächtige Gewebeproben per Mausklick direkt in dein lokales, konsolidiertes Drei-Zonen-Cyber-Labor, um sie dort mit echtem KI-Weltwissen forensisch zu sezieren.
-
----
-
-### 🗺️ Die System-Architektur im Überblick
-
-1. **Linguistischer Biosensor (Widget & HUD):** Schmiegt sich als gläserner Tiefsee-Zellkörper in das DOM deines Browser-Sichtfelds. Er startet im neutralen Kryo-Schlaf und erwacht global über alle geöffneten Tabs synchron, sobald der Metabolismus scharfgeschaltet wird.
-2. **Daten-Schmuggler-Relais (`background.js`):** Ein privilegiertes Manifest-V3-Hintergrund-Relais (Service Worker). Es tunnelt die CORS- und PNA-Schranken großer Webseiten, fungiert als Singleton-Tab-Manager und steuert das asynchrone Phasen-Gedächtnis.
-3. **KI-Zellkern (`main.py`):** Ein federleichter FastAPI-Server, der auf schwergewichtiges lokales Laden (wie BERT oder PyTorch) verzichtet und die ultraschnelle, freie Groq-API ansteuert, um Textqualitäten rein auf semantischer Vektorebene zu interpretieren.
-4. **Cyber-Labor (`index.html` / `index.js`):** Eine CSP-konforme, rein lokale Drei-Zonen-Analyse-Schnittstelle zur forensischen Beweisführung, Multiquellen-Historienforschung und Gewebebank-Verwaltung.
+# 🧬 PROJEKT Q-O // METABOLISCHE HOMÖOSTASE FÜR DAS FREIE INTERNET
+> **Assistiver, peripherer Biosensor & forensisches Cyber-Cockpit zur Echtzeit-Messung kognitiver Informations-Ökologie**
 
 ---
 
-### 📐 2. Das Metabolische Gesetz & Die Semantische Groq-Pipeline (Llama 3)
+## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR INFORMATIONS-HOMÖOSTASE
 
-Der extrahierte Text aus deinem Browser-Sichtfeld wird im 4-Sekunden-Takt an das Backend geschickt. Dort gilt das eiserne, cyber-biologische Naturgesetz des Lingu-Blobs. Das System arbeitet auf rein semantischer Vektorebene über das KI-Immunsystem der **Groq-API**:
+Das Projekt **Q-O** ist ein nicht-invasiver, assistiver Biosensor für das offene Textfeld des Internets. Das System fungiert als kognitive Membran zwischen digitaler Reizüberflutung und menschlicher Informationsaufnahme. 
 
-$$LQo = e^{-(S_{\text{tox}} - N_{\text{nut}})}$$
+Anstatt Inhalte durch Zensur, Ad-Blocker oder autoritäre Filterlisten zu sperren, quantifiziert Q-O die **Informations-Homöostase** einer Webseite in Echtzeit:
+* **Fakten-Nährwert ($\mathcal{N}_{\text{nut}}$):** Dichte an empirischer Substanz, logischer Beweisführung, methodischer Transparenz und konstruktivem Erkenntnisgewinn.
+* **Manipulative Toxizität ($\mathcal{S}_{\text{tox}}$):** Konzentration von affektivem Framing, künstlicher Empörung, reißerischer Verknappung, Clickbait-Konditionierung und logischen Fehlschlüssen.
 
-#### A. Der Schadstoff-Zweig ($S_{\text{tox}}$ — Der linke Term):
-* **Die semantische Extraktion:** Das hocheffiziente Modell `llama-3.1-8b-instant` liest den Textkontext als ganzheitliches Sprachgewebe. Es analysiert emotionale Erregung, Clickbait-Muster und feindselige Polarität auf Vektorebene.
-* **Die Toxin-Gewichtung:** Llama 3.1 isoliert die infizierten Sätze live im Text und vergibt einen hochpräzisen Schadstoff-Wert ($S_{\text{tox}}$) zwischen `0.0` (klinisch rein) und `5.0` (akut toxische Zersetzung).
-* **Die Wirkung:** Ein manipulativer Text jagt den Gift-Wert im Exponenten nach oben. Der Linguistische Quotient ($LQ$) stürzt unter `0.5`, und der Reaktor in der Mitte mutiert augenblicklich in den rot pulsierenden Entzündungszustand (`q-o-lab-toxic`).
-
-#### B. Der Nährstoff-Zweig ($N_{\text{nut}}$ — Der rechte Term):
-* **Die informationale Validierung:** Zeitgleich durchkämmt Llama 3.1 die Sätze nach substanziellem Mehrwert, empirischen Belegen und logischen Kausalbeziehungen.
-* **Das Named-Entity-Schutzschild:** Im Gegensatz zu starren Filtern erkennt das Modell Eigennamen, Gaming-Begriffe (z. B. Spieletitel wie *"Path of Exile"*) oder reines Web-Rauschen und stuft diese autonom als **neutral (0.0)** ein, damit sie das System nicht verfälschen.
-* **Die Nährstoff-Gewichtung:** Nur Sätze mit echtem informationalem Gehalt wandern in das Array `nutrient_snippets` und generieren einen Nährwert-Score ($N_{\text{nut}}$) zwischen `0.0` und `5.0`.
-* **Die Wirkung:** Ein logisch brillanter Text lässt den $LQ$ weit über `1.0` schnellen. Die Zelle erstrahlt im gesunden, pulsierenden Cyan (`q-o-lab-stable`).
+Q-O transformiert unstrukturierte Textmassen in eine lebendige metabolische Signatur, visualisiert diese als ruhige biologische Morphologie direkt im Sichtfeld und stellt bei Bedarf ein forensisches Sezierlabor zur Verfügung.
 
 ---
 
-### 🌊 2.5 Die Morphologie des Biosensors (Das Live-Widget im Browser)
+## 2. 👁️ WIDGET: DER PERIPHERE BEGLEITER (HUD & BIO-KINETIK)
 
-Das sichtbare Widget injiziert sich direkt in das DOM des aktiven Browser-Tabs. Es besteht aus einem gläsernen Tiefsee-Zellkörper, der über komplexe CSS3-Keyframe-Verformungen und Filter-Effekte die unsichtbare Qualität des Textgewebes visualisiert:
+Das Widget lebt als unaufdringliches, schwebendes Bio-Organell direkt im aktiven Browser-Tab. Es integriert sich nahtlos in das periphere Gesichtsfeld des Lesers, ohne den Textfluss oder das Layout der Zielseite zu unterbrechen.
 
-* **Kryo-Schlaf (`q-o-hud-kryo`):** Der Standard-Startwert beim Laden einer Webseite. Die Zelle ist in ein mattes, lebloses Grau getaucht, alle Wobble- und Puls-Animationen sind über einen harten `!important`-Riegel komplett eingefroren, um 0 % CPU-Leistung zu verbrauchen. 
-* **Homöostase-Zustand (`q-o-hud-stable`):** Sobald der Metabolismus aktiv ist und der Text einen $LQ \ge 1.0$ aufweist, erwacht das Gewebe. Die Zelle leuchtet im strahlenden Cyan, die inneren Nervenbahnen (SVG-Pfade) pulsieren ruhig, und die äußere Membran verformt sich in Wellen fließend im Raum.
-* **Stress-Zustand (`q-o-hud-deformed`):** Sinkt die Sprachqualität durch Clickbait oder reißerischen Alarmismus auf einen $LQ$ zwischen $0.5$ und $0.99$, mutiert die Zelle live. Der Rhythmus beschleunigt sich, die Wellenbewegungen werden hektisch und die Membran färbt sich in ein unruhiges Bio-Orange.
-* **Toxischer Zustand (`q-o-hud-toxic`):** Bei akuter Manipulation ($LQ < 0.5$) gerät das System in den roten Entzündungszustand. Die Zelle verkrampft sich visuell, verengt ihren Radius, blinkt in unregelmäßigen Abständen tiefrot auf und signalisiert akute linguistische Gefahr.
-* **Das sterile HUD-Steuerfeld:** Das integrierte Hover-Menü nutzt eine ergonomische 450ms Start-Latenz und 200ms Kulanz-Toleranz. Es verhindert versehentliche Auslöser beim Vorbeiscrollen und dient als Schaltzentrale für den globalen, tab-synchronisierten Metabolismus-Wechsel sowie für die sterile **Biopsie-Extraktion**.
-
----
-
-### 🔬 3. Die Drei-Zonen-Architektur des Labors
-
-Das Labor-Dashboard ist strikt in drei haptische, interaktive Funktionsbereiche unterteilt:
-
-#### Zone 1 (Links) — Gewebebank-Regal:
-Ein dynamisches Archiv, das alle gezogenen Biopsien direkt aus der `IndexedDB` ausliest. Dank einer rückwärtslaufenden Schleifen-Kaskade ist die Sortierung chronologisch perfekt – deine allerneueste Surfsitzung thront immer ganz oben auf Platz 1, während alte Abschnitte fließend nach unten absinken. Am Fuß des Regals befindet sich zudem der **🗑️ Gewebebank leeren (Vault Detox) Button**, der die gesamte IndexedDB mit einem Klick über `store.clear()` rückstandslos sterilisiert und alle UI-Bereiche zurücksetzt.
-
-#### Zone 2 (Mitte) — Reaktor-Tisch:
-Die interaktive Petrischale. Ziehst du eine Kapsel aus Zone 1 per Drag & Drop hierher, blitzt das Gehäuse über einen CSS-Reflow-Trigger haptisch weiß auf (`cryo-flash-anim`), blendet die Start-Instruktionen aus und lässt den Lingu-Blob im Großformat (250px) mitsamt seinen inneren Organellen auferstehen.
-
-#### Zone 3 (Rechts) — Forensischer Seziertisch (Der Top-Down Ansatz):
-Der Werkzeugkasten ist als logisch kaskadiertes Analysezentrum aufgebaut und von oben nach unten strukturiert:
-1. **🛸 Begleitermodus aktivieren / Labor schließen:** Thront ganz oben. Er schließt das Labor augenblicklich und schießt den Nutzer per Funk-Signal zurück auf den exakten Browser-Tab, von dem aus die Biopsie gestartet wurde. Dieser Fluchtweg bleibt auch nach einer kompletten Gewebebank-Sterilisation permanent aktiv.
-2. **🌐 Sitzungs-Verlauf (Quellenforschung):** Listet alle in dieser Phase besuchten Webseiten als farbcodierte Chips (Cyan/Orange/Rot) auf. Klickt der Nutzer auf eine URL, filtert sich die gesamte Spalte darunter live und isoliert ausschließlich die Daten dieser spezifischen Quelle.
-3. **Dynamische Titel-Mutation:** Passt sich dem Score der gewählten URL an (NÄHRSTOFF-, STRESS- oder GIFT-CLUSTER).
-4. **Reale Forensische Textbeispiele:** Klickt man auf die strukturellen Archetypen (wie *Alarmismus* oder *Fakten-Dichte*), öffnet sich ein Monospace-Fenster und präsentiert **schwarz auf weiß die echten, unzensierten Originalsätze** der Website als forensischen Beweis.
-
----
-
-### 🛡️ 4. Der Homöostase-Flush & Das Weltwissen-Immunsystem
-
-Klickst du ganz rechts in Zone 3 auf den Spül-Befehl (`btn-linguistic-flush`), zündest du das KI-Immunsystem:
-1. Das Labor schickt die isolierten Textbeispiele per Fetch-POST an den Endpunkt `/api/flush` deiner `main.py`.
-2. Das High-End-Modell `llama-3.3-70b-versatile` wird auf den Groq-Servern aktiviert und zapft sein **globales Kontext- und Weltwissen** an, um den Inhalt der Sätze auf Faktenintegrität zu prüfen.
-3. Das Modell neutralisiert den emotionalen Affekt, formuliert den Text in klinisch reine Sprache um (`neutralized_text`) und generiert ein **syntaktisches Gegengift** (`context_antidote`) – einen hochverdichteten Faktencheck-Bericht zur Richtigstellung.
-4. Das Labor empfängt das Paket, lässt die Zelle im Reaktor (Zone 2) fließend zurück nach Cyan morphieren und flutet Zone 3 mit einem leuchtend grünen Bereich, der das reale Weltwissen als relativierende Information einblendet.
-
----
-
-### 🔒 4.5 Transparenz, Lokalität & Datenschutz-Garantie
-
-Q-O wurde nach dem Prinzip "Privacy by Design" entwickelt, um dem Nutzer die absolute Souveränität über seine Daten und seine Privatsphäre zu garantieren:
-
-* **Volle Forensische Transparenz:** Das System arbeitet ohne Blackbox. Jede Klassifizierung, jeder Score und jeder Krankheitsherd wird durch die nackten, echten Originalsätze der Website bewiesen. Der Nutzer sieht genau, worauf die KI anspringt.
-* **Strikte Lokale Souveränität:** Das gesamte Cyber-Labor (`index.html`) läuft autark als rein lokale Client-Anwendung direkt von deiner Festplatte (`file:///`). Es benötigt keinen externen Webserver und lädt keine Tracking-Skripte.
-* **Erweiterungs-Tresor (No Cloud Storage):** Alle gezogenen Gewebekapseln werden ausschließlich lokal in der browserinternen `IndexedDB` deines eigenen PCs gespeichert. Es gibt keine externe Cloud-Datenbank; deine Surf-Historie und Biopsien bleiben zu 100 % auf deiner Hardware.
-* **Erhöhte CSP-Sicherheit:** Das Dashboard arbeitet strikt konform mit den modernsten Content Security Policies (CSP). Es verzichtet komplett auf gefährliche Inline-Scripts oder veraltete HTML-Event-Handler (`onclick`), um Cross-Site-Scripting (XSS) physisch unmöglich zu machen.
-
----
-
-### 🛸 4.6 Der asynchrone Phasen-Cutter & Singleton-Tab-Manager
-
-Um Daten-Chaos und überflüssigen RAM-Verbrauch zu verhindern, steuert die `background.js` im Hintergrund zwei zentrale logische Kern-Prozesse:
-
-*   **Singleton-Tab-Management:** Klickt der Nutzer im Web-Biosensor auf "Biopsie", prüft das Hintergrund-Relais alle offenen Browser-Tabs via `chrome.tabs.query`. Existiert bereits ein Labor-Dashboard, wird kein neues Fenster geöffnet, sondern das bestehende Dashboard blitzschnell im Hintergrund aktualisiert, fokussiert und nach vorne in das Sichtfeld des Nutzers gerissen.
-*   **Der Phasen-Cutter (Akkumulation vs. Reset):** Beim automatischen 4-Sekunden-Takt filtert die `background.js` eintreffende URLs über ein `Read-Modify-Write`-Protokoll, sodass in einer laufenden Sitzung nur *einzigartige* (Unique) Domains im `session_history`-Array landen. Dadurch wird das linke Regal perfekt als eine einzige, konsolidierte Sitzungskapsel sauber gehalten. Erst wenn die Biopsie explizit ausgelöst und die DB-Transaktion im `.oncomplete`-Handler versiegelt wird, flasht ein interner Speicher-Reset: Die globale Session-ID wird erneuert und alle RAM-Arrays werden radikal genullt, damit die nächste Surf-Phase klinisch rein von Altlasten starten kann.
-
----
-
-### 🚀 5. Installations- & Startanleitung
-
-#### 1. API-Schlüssel einrichten
-Erstelle dir einen kostenlosen, blitzschnellen API-Key auf [://groq.com](https://://groq.com) und trage ihn in deiner `main.py` in der Variable `GROQ_API_KEY` ein. *(Hinweis: Die App verfügt über einen automatischen os.environ-Abruf sowie eine Offline-Fallback-Engine, falls keine Umgebungsvariable gesetzt ist).*
-
-#### 2. Python-Backend zünden
-Stelle sicher, dass `fastapi` und `uvicorn` installiert sind. Starte den Server im Hauptverzeichnis deiner Festplatte über dein Terminal:
-```bash
-uvicorn main:app --reload
+```
++-------------------------------------------------------------+
+|  Äußere Membran (Weich gerundetes Bio-Fluidum, HSB-Glow)    |
+|   +-----------------------------------------------------+   |
+|   |  Gläserner Innenkern (Glassmorphism Core)           |   |
+|   |                                                     |   |
+|   |       [ Kreis ]         [ Oval ]      [ Splitter ]  |   |
+|   |       Stabilität         Stress          Toxin      |   |
+|   |       (Homöostase)     (Agitation)    (Affekt-Gift) |   |
+|   |                                                     |   |
+|   |   Zentrierter Puls   Asymmetrie-Zug   Kristall-Gefahr|  |
+|   +-----------------------------------------------------+   |
++-------------------------------------------------------------+
 ```
 
-#### 3. Browser-Add-on laden
-1. Öffne Google Chrome und navigiere zu `chrome://extensions/`.
-2. Schalte oben rechts den **Entwicklermodus** ein.
-3. Klicke oben links auf **Entpackte Erweiterung laden** und wähle den Ordner deines Lingu-Blobs aus.
-4. Öffne eine beliebige Webseite (z. B. Wikipedia oder Amazon), mache einen Hard-Reload mit `Strg + F5`, öffne das HUD und schalte den Metabolismus an!
+### Die drei inneren geometrischen Organellen
+Im gläsernen Kern des Widgets schweben drei geometrisch distinkte Organellen, die als permanente Potentialpunkte agieren:
+1. **Der Kreis (Stabilität & Homöostase):** 
+   Ruht perfekt zentriert. Pulsiert in sanftem, tiefem Rhythmus (Cyan/Smaragd). Zeigt an, dass der Text reich an Nährstoffen ist und keine affektiven Verzerrungen aufweist.
+2. **Das Oval (Stress & kognitive Agitation):**
+   Verzieht die Achsen-Symmetrie bei steigendem Bias oder künstlicher Verknappung. Die Frequenz beschleunigt sich, die Färbung wechselt in wärmere Bernstein-/Orange-Töne.
+3. **Der zackige Splitter (Toxin & Affekt-Vergiftung):**
+   Wird bei akuter Toxizität oder massiver Schlagzeilen-Agitation im inneren Kern aktiviert. Er symbolisiert spitze, verletzende Argumentationsmuster und affektive Trigger.
 
-## ⚠️ Haftungsausschluss & Disclaimer (Experimental Prototype)
+---
 
-Dieses Projekt befindet sich in einem experimentellen Prototypen-Stadium und dient ausschließlich zu Forschungs-, Bildungs- und Testzwecken im Bereich der Computerlinguistik. 
+## 3. 🧪 LABOR: DAS CYBER-COCKPIT (DAS ENTSCHLACKTE 3-ZONEN-LAYOUT)
 
-1. **Keine Gewähr für Richtigkeit:** Die vom System generierten Bewertungen (LQ-Scores), linguistischen Einordnungen und Richtigstellungen (Gegengift via Llama 3.3) basieren auf automatisierten statistischen KI-Modellen. Der Entwickler übernimmt keinerlei Haftung oder Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der ausgegebenen Informationen oder Faktenchecks.
-2. **Datenschutz:** Das Tool arbeitet nach dem Prinzip "Privacy by Design". Alle extrahierten Daten (Sitzungsverlauf, Text-Snippets) werden ausschließlich lokal in der IndexedDB des Benutzers gespeichert und zu keinem Zeitpunkt auf Server des Entwicklers übertragen. Die Nutzung der externen Groq-API unterliegt den Datenschutzbestimmungen von Groq.
-3. **Nutzungsrisiko:** Die Nutzung des Add-ons und des lokalen Backends erfolgt auf eigene Gefahr. Der Entwickler haftet nicht für eventuelle Schäden an Hard- oder Software, Systemabstürze oder Datenverlust, die durch die Installation oder den Betrieb dieses Prototypen entstehen.
+Ein Klick auf das Widget oder die Tastatur-Geste öffnet das Singleton-Labor (`index.html`) – ein schreibgeschütztes forensisches Cockpit, aufgeteilt in drei funktionale Säulen:
+
+```
++----------------------------------------------------------------------------------------------------+
+|                                    Q-O FORENSIC COCKPIT                                            |
++------------------------------------+--------------------------------+------------------------------+
+| ZONE 1: GEWEBEBANK (Vault)         | ZONE 2: PETRISCHALE (Reaktor)  | ZONE 3: SEZIERTISCH (Matrix) |
+|                                    |                                |                              |
+| [ 🧪 PROBE A: Wikipedia ] (LQ 1.4) |   +------------------------+   | +--------------------------+ |
+| [ 🧪 PROBE B: TechCrunch ](LQ 0.8) |   |  Eingefrorener         |   | | 🚨 SCHADSTOFF-ZENTRALE   | |
+| [ 🧪 PROBE C: Bild.de ]   (LQ 0.2) |   |  Sitzungs-Blob         |   | | [STRUKTUR] | [ZITATE]   | |
+|                                    |   |  (Unerschütterliches   |   | | > 📊 [MAKRO] Clickbait   | |
+| [ ⚡ VAULT DETOX (Sterilisieren) ]  |   |   Denkmal der Phase)   |   | +--------------------------+ |
+|                                    |   +------------------------+   | +--------------------------+ |
+|                                    |   LQ-Score: 0.24 | Sym: 38%    | | 💎 NÄHRSTOFF-ZENTRALE    | |
+|                                    |   s_tox: 3.80   | n_nut: 0.30  | | [STRUKTUR] | [ZITATE]   | |
+|                                    |   [ 🧪 FLUSH-ANTIDOT ]         | | > • Keine Zitate isoliert| |
+|                                    |                                | +--------------------------+ |
++------------------------------------+--------------------------------+------------------------------+
+```
+
+1. **Zone 1: Linke Gewebebank (Biopsy Vault):**
+   Chronologisches Probenregal aller versiegelten Sitzungen aus der IndexedDB (`QO_Metabolic_Vault`). Ermöglicht das Umschalten zwischen verschiedenen Web-Biopsien sowie die vollständige Vault-Sterilisation (**Vault Detox**).
+2. **Zone 2: Petrischale (Zentrales Reaktions-Denkmal):**
+   Isolierter, kryo-konservierter Organismus-Zustand der ausgewählten Biopsie. Zeigt das mathematische Gleichgewicht, Gesamt-LQ, Delta-Werte und ermöglicht das Auslösen der linguistischen Spülung (**Flush-Antidot**).
+3. **Zone 3: Rechter Seziertisch (Symmetrische 2-Boxen-Zentrale):**
+   Dualer Inspektionstisch, aufgeteilt in **Schadstoff-Zentrale** (Toxizität) und **Nährstoff-Zentrale** (Substanz). Jede Box besitzt ein Tab-System zur Umschaltung zwischen **STRUKTUR** (Makro-Kategorien) und **ZITATE** (Wortwörtliche Evidenz-Fragmente).
+
+---
+
+## 4. 🧠 FUNKTIONSWEISE ANALYSE: SPRACHMODELLE & MATHEMATISCHE FORMEL
+
+### Die kinetische Homöostase-Formel
+Der **Linguistic Quality Index ($LQ$)** berechnet sich aus dem exponentiellen Spannungsfeld zwischen manipulativen Toxinen und informationellem Nährwert:
+
+$$LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}$$
+
+* Wenn $\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}$, ist $LQ = e^0 = 1.0$ (Neutraler Gleichgewichtszustand).
+* Wenn $\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}$, wächst $LQ > 1.0$ (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
+* Wenn $\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}$, fällt $LQ \to 0$ (Hohe Toxizität, kognitive Überlastung).
+
+### Das duale Berechnungs-Gesetz (Mikro- und Makro-Fusion)
+Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster lückenlos zu erfassen, fusioniert Q-O auf einer Skala von $0.0$ bis $5.0$ zwei Beobachtungsebenen:
+
+$$\mathcal{S}_{\text{tox}} = \frac{T_{\text{mikro}} + T_{\text{makro}}}{2}, \quad \mathcal{N}_{\text{nut}} = \frac{N_{\text{mikro}} + N_{\text{makro}}}{2}$$
+
+```
+                +-------------------------------------------------------+
+                |                    TEXT-BIOMORPHIE                    |
+                +---------------------------+---------------------------+
+                                            |
+                    +-----------------------+-----------------------+
+                    |                                               |
+         [ MIKRO-EBENE (ZITATE) ]                        [ MAKRO-EBENE (STRUKTUR) ]
+         Isolierte Sätze & Phrasen                       Ganzheitliches Textfeld
+         - Alarmistische Reizwörter                      - Aggressive Schlagzeilen-Dichte
+         - Clickbait-Phrasen                             - Fehlende Primärquellen
+         - Methodische Belege                            - Logische Argumentationskette
+                    |                                               |
+                    +-----------------------+-----------------------+
+                                            |
+                               [ DUALER LLM-STREAM ]
+                                            |
+         +----------------------------------+----------------------------------+
+         |                                                                     |
+  Llama 3.1 8B (Groq JSON)                                         Llama 3.3 70B (Versatile)
+  - 4-Sekunden-Takt                                                - Schreibgeschützter Flush
+  - t_mikro, t_makro, n_mikro, n_makro                             - Kontext-Antidot & Bereinigung
+  - JSON-Schema mit 4 Arrays                                       - LQ-Boost Rekonstruktion
+```
+
+---
+
+## 5. 🏄‍♂️ HYPOTHETISCHE SURFERFAHRUNG: DREI FORENSISCHE STATIONEN
+
+### Station 1: Der Wikipedia-Tiefgang (Enzyklopädische Homöostase)
+* **Ziel:** `de.wikipedia.org/wiki/Photosynthese`
+* **Textbeschaffenheit:** Neutraler Duktus, dichte Quellenangaben, kausale Erklärungen, keinerlei Adjektiv-Überladung.
+* **Phänomenologie des Widgets:**
+  * **Farbe:** Klares, tiefes Cyanblau (`#06b6d4`) bis Smaragdgrün.
+  * **Kinetik:** Extrem langsames, beruhigendes Atmen ($0.4\text{ Hz}$). 
+  * **Organell:** Der **Kreis** verharrt millimetergenau im mathematischen Zentrum des Glaskerns.
+  * **Messwerte:** $T_{\text{mikro}} = 0.0$, $T_{\text{makro}} = 0.0$, $N_{\text{mikro}} = 4.2$, $N_{\text{makro}} = 4.8 \implies LQ \approx 2.45$.
+
+```
+[ WIKIPEDIA ] ───►  (  ●  )  Cyan-Puls (0.4 Hz)  ───►  LQ: 2.45  (Perfekte Homöostase)
+```
+
+---
+
+### Station 2: Der Clickbait-Artikel (Kognitiver Stress & Framing)
+* **Ziel:** Viral-Blog: *"Diese 5 geheimen Tech-Tricks werden dein Leben für immer verändern (Nummer 3 ist illegal!)"*
+* **Textbeschaffenheit:** Künstliche Verknappung, FOMO, übertriebene Superlative, geringer Faktengehalt.
+* **Phänomenologie des Widgets:**
+  * **Farbe:** Wärmeres Bernstein/Orange (`#f59e0b`).
+  * **Kinetik:** Unruhige, asymmetrische Oszillation ($1.2\text{ Hz}$), feine zelluläre Zuckungen.
+  * **Organell:** Der innere Kreis kontrahiert zu einem **Oval**, das leicht nach links oben driftet.
+  * **Messwerte:** $T_{\text{mikro}} = 3.2$, $T_{\text{makro}} = 2.8$, $N_{\text{mikro}} = 0.8$, $N_{\text{makro}} = 1.0 \implies LQ \approx 0.36$.
+  * **Im Seziertisch:** Identifiziert Zitate wie *"wird dein Leben für immer verändern"* und strukturelle Makro-Kategorien wie `📊 [MAKRO] Reißerische Verknappung`.
+
+```
+[ CLICKBAIT ] ──►  (  ⬭  )  Bernstein-Drift (1.2 Hz) ──►  LQ: 0.36  (Kognitiver Stress)
+```
+
+---
+
+### Station 3: Die Boulevard-Startseite (Makro-Toxizität ohne Zitate)
+* **Ziel:** `b1ld.de` Startseite
+* **Textbeschaffenheit:** Eine Ansammlung aus Teasern, isolierten Reizwörtern ("HAMMER!", "SKANDAL!", "BLUT-DRAMA!"), Angst-Induktion und Großbuchstaben. Häufig keine zusammenhängenden grammatikalischen Sätze im DOM.
+* **Phänomenologie des Widgets:**
+  * **Farbe:** Glühendes Warn-Rot (`#ef4444`) mit violettem Unterton.
+  * **Kinetik:** Schneller, spitzer Puls ($2.1\text{ Hz}$). Die äußere Hülle bleibt weich gerundet, aber der innere Glaskern zeigt extreme innere Spannung.
+  * **Organell:** Das Organell zieht sich zu einem **zackigen Splitter** zusammen.
+  * **Messwerte:** $T_{\text{mikro}} = 1.0$ (kaum zitierbare Sätze), aber $T_{\text{makro}} = 4.9$, $N_{\text{mikro}} = 0.1$, $N_{\text{makro}} = 0.2 \implies LQ \approx 0.08$.
+  * **Der Forensik-Effekt im Seziertisch:** Da keine vollständigen Sätze als Mikro-Zitate existieren, schaltet die Schadstoff-Zentrale automatisch auf **STRUKTUR** und belegt die Toxizität lückenlos über `📊 [MAKRO] Aggressive Schlagzeilen-Dichte` und `📊 [MAKRO] Affektive Hysterie`.
+
+```
+[ BILD.DE ] ───►  (  ▲  )  Roter Reizpuls (2.1 Hz)   ──►  LQ: 0.08  (Reine Makro-Toxizität)
+```
+
+---
+
+## 6. 🧘 UEX FIRST: DIE PHILOSOPHIE DER ABSOLUTEN ABLENKUNGSFREIHEIT
+
+Q-O bricht radikal mit traditionellen Warn-Popups, aggressiven Banner-Einblendungen oder moralisierenden Zensur-Overlays:
+
+1. **Konstante äußere Kontur (Keine äußere Mutation):**
+   Die äußere Membran des Widgets bleibt immer organisch, weich gerundet und fließend. Sie mutiert **niemals** nach außen in zackige Stacheln oder störende Ecken. Die visuelle Ruhe des Nutzers hat oberste Priorität.
+2. **Warnung über periphere Parameter:**
+   Das Gehirn nimmt periphere Reize über Frequenz, Farbton (Cyan $\to$ Bernstein $\to$ Rubinrot) und asymmetrische Spannungsverschiebung wahr, ohne dass der Fokus vom Lesen abgerissen wird.
+3. **Freiwillige Vertiefung:**
+   Das System drängt sich nicht auf. Erst wenn der Nutzer bewusst verstehen möchte, *warum* das Widget in den Stressmodus übergegangen ist, öffnet er mit einem Klick das Labor.
+
+---
+
+## 7. 🌋 TIEFE SYSTEMFUNKTION: DIE FORENSIK-GARANTIE
+
+Ein häufiges Versagen herkömmlicher Fakten-Checker ist das Ausbleiben konkreter Belege, wenn Texte nicht aus sauberen Hauptsätzen bestehen (z. B. auf News-Aggregatoren, Kacheln oder Social-Media-Feeds).
+
+```
+                      +---------------------------------------+
+                      |   ANALYSE-ERGEBNIS VOM BACKEND        |
+                      +---------------------------------------+
+                                          |
+                        Gibt es Mikro-Zitate im Text?
+                                          |
+                      +-------------------+-------------------+
+                      |                                       |
+                   [ JA ]                                  [ NEIN ]
+                      |                                       |
+             Zitate in Liste rendern              Automatische Weichen-Schaltung
+             (🚨 / 💎 Originalsätze)               auf STRUKTUR (Makro-Kategorien)
+                                                              |
+                                                  ┌───────────────────────────────┐
+                                                  │ 📊 [MAKRO] Reißerische Dichte │
+                                                  │ 📊 [MAKRO] Fehlende Quellen   │
+                                                  └───────────────────────────────┘
+```
+
+### Die automatische Weichen-Umschaltung
+* Liefert das Sprachmodell keine wörtlichen Zitate (`toxic_snippets: []`), bleibt das Dashboard niemals weiß oder leer.
+* Der Seziertisch aktiviert automatisch den Tab **STRUKTUR** und visualisiert die forensischen Makro-Gründe als hochauflösende Chips.
+* Die Beweiskette bleibt mathematisch und visuell zu 100% nachvollziehbar.
+
+---
+
+## 8. 🌊 SIGNALFLUSS: DIE DATEN-AUTOBAHN (END-TO-END)
+
+```
+[ 1. Webseiten DOM (Ziel-Tab) ]
+             │  (MutationObserver & 4s Idle Takt)
+             ▼
+[ 2. content.js (Extension Injektion) ]
+             │  (Extraktion: Sichtbarer Text + Page URL)
+             ▼
+[ 3. background.js (Service Worker Relais) ]
+             │  (CORS-/PNA-Schmuggler via HTTP POST)
+             ▼
+[ 4. Python FastAPI Backend (Port 8000 /api/analyze) ]
+             │  (Dual-Stream Prompting via Groq Llama 3.1 8B)
+             │  - t_mikro, t_makro, n_mikro, n_makro
+             │  - toxic_snippets, nutrient_snippets, macro_categories
+             ▼
+[ 5. Mathematische Matrix & e-Funktion ]
+             │  - s_tox = (t_mikro + t_makro) / 2
+             │  - n_nut = (n_mikro + n_makro) / 2
+             │  - LQ = exp(-(s_tox - n_nut))
+             ▼
+[ 6. Asynchrones Transaktions-Write-Protokoll ]
+             │  (IndexedDB 'QO_Metabolic_Vault' via store.put)
+             │  - Write Lock -> oncomplete Handler -> Sicherer RAM-Reset
+             ▼
+[ 7. Symmetrischer Dashboard-Reflow (index.html Cockpit) ]
+             │  - Petrischale (Kryo-Zustand isoliert)
+             │  - Seziertisch (4-Kanal Hybrid-Matrix synchronisiert)
+```
+
+1. **DOM-Extraktion:** `content.js` scannt den sichtbaren Textbereich der aktuellen Webseite.
+2. **Privilegiertes Relais:** `background.js` tunnelt die Anfrage an das lokale Backend, um Browser-Sicherheitsrestriktionen zu umgehen.
+3. **Groq Dual-Stream:** Llama 3.1 verarbeitet den Text simultan auf Satz- und Struktur-Ebene und liefert ein validiertes JSON-Schema.
+4. **Homöostase-Berechnung:** Die e-Funktion ermittelt den präzisen $LQ$-Score und die Symmetrie-Vektoren.
+5. **Transaktions-Tresor:** Die Daten werden in der IndexedDB versiegelt. Erst nach erfolgreichem `transaction.oncomplete` wird der Service-Worker-Speicher rotiert.
+6. **Cockpit-Reflow:** Das Labor visualisiert alle vier Datenkanäle mit nahtloser Umschaltung zwischen Evidenz-Zitaten und strukturellen Makro-Kategorien.
+
+---
+
+## 🛠️ TECHNOLOGIE-STACK
+
+* **Frontend:** React 18, Tailwind CSS, Lucide Icons, Glassmorphism UI
+* **Extension:** Chrome Manifest V3, Content Scripts, Service Worker Relais, IndexedDB Vault
+* **Backend:** Python FastAPI, Uvicorn, Groq Cloud API
+* **Modelle:** 
+  * `llama-3.1-8b-instant` (Live-Analyse im 4-Sekunden-Takt)
+  * `llama-3.3-70b-versatile` (Schreibgeschützter biochemischer Text-Flush)
+* **Mathematik:** Exponentielle Differenzial-Homöostase ($LQ = e^{-\Delta}$)
+
+---
+
+## 9. ⚠️ FORENSISCHER DISCLAIMER / JURISTISCHES PROTOKOLL
+
+### 1. Experimenteller Prototypen-Status
+Das Projekt **Q-O** ist ein experimentelles Forschungswerkzeug, ein kognitiver Assistenz-Begleiter und ein peripherer Biosensor im aktiven Prototypen-Stadium. Es wurde entwickelt, um die Wahrnehmung digitaler Textstrukturen zu erforschen und die subjektive Reizbelastung im offenen Web zu visualisieren.
+
+### 2. Trennung von linguistischem Stil und absolutem Wahrheitsgehalt
+* **Stil- und Framing-Diagnostik:** Der berechnete **Linguistic Quality Index ($LQ$)** sowie die Teilindikatoren ($\mathcal{S}_{\text{tox}}$, $\mathcal{N}_{\text{nut}}$, $T_{\text{makro}}$, $T_{\text{mikro}}$) messen primär die **Tonalität, die affektive Verzerrung, die emotionale Überhitzung und das stilistische Framing** eines Textes auf Basis der eingesetzten Sprachmodelle (Llama 3.1 8B / Llama 3.3 70B).
+* **Keine Zensurinstanz & kein Wahrheitsmonopol:** Ein niedriger $LQ$-Score oder ein roter Alarmzustand bedeutet **nicht** automatisch, dass die zugrundeliegenden Tatsachenbehauptungen zwingend faktisch falsch sind; gleichermaßen garantiert ein hoher $LQ$-Score keine unumstößliche historische oder wissenschaftliche Wahrheit. Das System fällt **keine autoritären Zensururteile** und dient nicht als juristisches Schiedsgericht.
+
+### 3. Stochastische Natur von LLMs & Haftungsausschluss
+* **Nicht-Deterministische Analyse:** Sprachmodell-basierte Inferenz unterliegt systemischen Wahrscheinlichkeiten (Halluzinationen, stochastische Varianzen, kontextuelle Missverständnisse bei Ironie, Satire oder Fachjargon).
+* **DOM-Rauschen:** Das Parsen unstrukturierter, hochdynamischer Webseiten-DOMs (Werbe-Einbettungen, Cookie-Banner, Paywalls, asynchrone Skripte) kann zu algorithmischen Fehlinterpretationen, Parsing-Verzögerungen oder unvollständigen Textfragmenten führen.
+* **Mündiger Nutzer:** Das System übernimmt keinerlei Haftung für direkte oder indirekte Konsequenzen, die aus der Interpretation der Messwerte entstehen. Q-O versteht sich ausschließlich als didaktisches Werkzeug zur **Stärkung der eigenen Medienkompetenz und Urteilskraft des mündigen Nutzers**.
+
+---
+*Projekt Q-O — Für ein klares, unverzerrtes und selbstbestimmtes Informationsfeld.*
