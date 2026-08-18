@@ -250,209 +250,121 @@
         animation: q-o-cryo-flash 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
       }
 
-      /* ==========================================================================
-         KEYFRAMES
-         ========================================================================== */
+      @keyframes q-o-cryo-flash {
+        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9), 0 0 40px var(--cell-color); border-color: #ffffff; background-color: rgba(255, 255, 255, 0.25); }
+        50% { box-shadow: 0 0 50px 15px rgba(255, 255, 255, 0.6), 0 0 60px var(--cell-color); }
+        100% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.35); background-color: rgba(255, 255, 255, 0.01); }
+      }
+
+      /* Kinetische Keyframes */
       @keyframes q-o-membrane-wobble-stable {
         0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg) scale(1); }
-        33% { border-radius: 50% 60% 70% 40% / 40% 60% 30% 60%; transform: rotate(3deg) scale(1.02, 0.98); }
-        66% { border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%; transform: rotate(-2deg) scale(0.98, 1.02); }
-        100% { border-radius: 40% 60% 60% 40% / 60% 50% 40% 60%; transform: rotate(1deg) scale(1.01, 1.01); }
+        33% { border-radius: 50% 60% 70% 30% / 40% 60% 30% 60%; transform: rotate(2deg) scale(1.02); }
+        66% { border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%; transform: rotate(-1.5deg) scale(0.98); }
+        100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg) scale(1); }
       }
 
       @keyframes q-o-membrane-wobble-deformed {
-        0% { border-radius: 40% 60% 35% 65% / 65% 35% 60% 40%; transform: rotate(0deg); }
-        50% { border-radius: 75% 25% 70% 30% / 30% 70% 25% 75%; transform: rotate(4deg) scale(1.03, 0.97); }
-        100% { border-radius: 25% 75% 40% 60% / 55% 45% 75% 25%; transform: rotate(-3deg) scale(0.97, 1.03); }
+        0% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; transform: rotate(-3deg) scale(1.04); }
+        50% { border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%; transform: rotate(4deg) scale(0.96); }
+        100% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; transform: rotate(-3deg) scale(1.04); }
       }
 
       @keyframes q-o-membrane-wobble-toxic {
-        0% { border-radius: 68% 32% 64% 36% / 38% 70% 30% 62%; transform: rotate(0deg) scale(0.98); }
-        50% { border-radius: 70% 30% 60% 40% / 42% 65% 35% 58%; transform: rotate(1deg) scale(1.02); }
-        100% { border-radius: 66% 34% 62% 38% / 40% 68% 32% 60%; transform: rotate(-0.5deg) scale(0.98); }
-      }
-
-      @keyframes q-o-neural-pulse {
-        0% { opacity: 0.45; }
-        100% { opacity: 0.85; }
+        0% { border-radius: 75% 25% 65% 35% / 40% 70% 30% 60%; transform: rotate(0deg) scale(0.92); }
+        50% { border-radius: 35% 65% 30% 70% / 65% 35% 65% 35%; transform: rotate(1deg) scale(0.95); }
+        100% { border-radius: 75% 25% 65% 35% / 40% 70% 30% 60%; transform: rotate(0deg) scale(0.92); }
       }
 
       @keyframes q-o-nucleus-float {
-        0% { transform: translate(-3px, -3px); }
-        50% { transform: translate(4px, 2px); }
-        100% { transform: translate(-2px, 4px); }
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(-3px, 4px) scale(1.03); }
+        100% { transform: translate(2px, -3px) scale(0.98); }
       }
 
       @keyframes q-o-crescent-spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
 
       @keyframes q-o-nucleolus-energy {
-        0% { transform: scale(0.85); box-shadow: 0 0 10px #ffffff, 0 0 18px var(--cell-color); }
-        100% { transform: scale(1.2); box-shadow: 0 0 16px #ffffff, 0 0 28px var(--cell-color); }
+        0% { transform: scale(0.9); opacity: 0.8; }
+        100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px #ffffff); }
       }
 
-      @keyframes q-o-orbital-frenzy {
-        0% { transform: translate(0, 0) rotate(0deg); }
-        25% { transform: translate(-2px, 2px) rotate(4deg); }
-        50% { transform: translate(2px, -1.5px) rotate(-3deg); }
-        75% { transform: translate(-1.5px, -2px) rotate(2deg); }
-        100% { transform: translate(0, 0) rotate(0deg); }
+      @keyframes q-o-neural-pulse {
+        0% { opacity: 0.4; stroke-width: 1.5; }
+        50% { opacity: 0.95; stroke-width: 2.2; }
+        100% { opacity: 0.4; stroke-width: 1.5; }
       }
 
       @keyframes q-o-herd-smolder {
-        0% { opacity: 0.5; transform: scale(0.95); }
-        100% { opacity: 0.9; transform: scale(1.1); }
+        0% { opacity: 0.7; transform: scale(0.9); }
+        100% { opacity: 1; transform: scale(1.1); }
       }
 
-      @keyframes q-o-cryo-flash {
-        0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
-        35% { box-shadow: 0 0 70px 25px rgba(0, 242, 254, 0.85), inset 0 0 45px 15px #ffffff; border-color: #ffffff; }
-        100% { box-shadow: 0 0 25px 4px rgba(0, 242, 254, 0.25); border-color: rgba(0, 242, 254, 0.4); }
+      @keyframes q-o-orbital-frenzy {
+        0% { transform: rotate(0deg) scale(0.9); }
+        50% { transform: rotate(180deg) scale(1.15); }
+        100% { transform: rotate(360deg) scale(0.9); }
       }
     </style>
   </head>
-  <body class="h-screen w-screen overflow-hidden flex flex-col select-none" style="background-color: var(--color-void);">
-
-    <!-- SYSTEM HEADER -->
-    <header class="h-14 border-b border-gray-800 flex items-center justify-between px-6 z-50 flex-shrink-0" style="background-color: rgba(15, 23, 42, 0.95);">
+  <body class="h-screen w-screen overflow-hidden flex flex-col antialiased">
+    
+    <!-- ==========================================================================
+         TOP-NAVIGATION / STATUS-HEADER
+         ========================================================================== -->
+    <header class="h-14 border-b border-gray-800 bg-gray-950 flex items-center justify-between px-6 z-20 flex-shrink-0">
       <div class="flex items-center space-x-3">
-        <div class="w-7 h-7 rounded-full flex items-center justify-center shadow-lg" style="background: radial-gradient(circle at 35% 35%, #ffffff, #00f2fe 60%, #034863 100%); box-shadow: 0 0 14px rgba(0, 242, 254, 0.6);">
-          <div class="w-2 h-2 rounded-full bg-white animate-ping"></div>
+        <div class="w-8 h-8 rounded-full border border-cyan-400/80 flex items-center justify-center shadow-lg shadow-cyan-950/60" style="background: radial-gradient(circle at 35% 35%, #ffffff 0%, #00f2fe 65%, #051329 100%);">
+          <div class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></div>
         </div>
-        <div>
-          <span class="text-sm font-bold tracking-widest uppercase text-white font-mono">Q-O // SEZIER-LABOR</span>
-          <span class="text-xs text-gray-400 border-l border-gray-700 ml-3 pl-3 font-mono">Metabolische Zell-Forensik</span>
+        <div class="flex flex-col">
+          <span class="font-mono font-bold tracking-widest text-sm text-cyan-400">Q-O // LABOR-DASHBOARD</span>
+          <span class="text-[10px] text-gray-500 font-mono">Metabolische Sezierstation & Gewebe-Archiv</span>
         </div>
       </div>
-      <div class="flex items-center space-x-5 text-xs font-mono">
-        <div class="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-gray-700" style="background-color: rgba(255, 255, 255, 0.04);">
-          <div id="db-indicator" class="w-2 h-2 rounded-full bg-cyan-400" style="box-shadow: 0 0 8px #00f2fe;"></div>
-          <span id="db-status-label" class="text-gray-300">Vault: Bereit</span>
-        </div>
-        <div class="text-gray-400">Aktive Probe: <span id="header-sample-label" class="text-cyan-400 font-semibold">Keine Probe</span></div>
+
+      <!-- Mittleres Status-Element -->
+      <div class="flex items-center space-x-2 font-mono text-xs text-gray-400 bg-gray-900/60 px-3 py-1 rounded-full border border-gray-800">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="text-gray-300">Biopsie-Kanal:</span>
+        <span id="header-sample-label" class="text-cyan-400 font-bold">Bereit für Biopsie-Extraktion</span>
+      </div>
+
+      <!-- Rechte Steuerungs-Tools (Statische Info) -->
+      <div class="flex items-center space-x-3 text-xs font-mono text-gray-400">
+        <span class="px-2.5 py-1 rounded-full bg-gray-900 border border-gray-800 text-[10px] text-cyan-400 font-bold">Core v3.3</span>
       </div>
     </header>
 
-    <!-- 3-SPALTEN-WORKSPACE -->
-    <main class="flex-1 flex w-full overflow-hidden" style="height: calc(100vh - 3.5rem);">
-      
+    <!-- ==========================================================================
+         HAUPT-LAYOUT: 3 ZONEN (22% BANK | 53% SEZIERTISCH | 25% FORENSIK)
+         ========================================================================== -->
+    <main class="flex-1 flex overflow-hidden">
+
       <!-- ==========================================================================
-           ZONE 1 (LINKS): DIE VERTIKALE GEWEBEBANK (22% Breite)
+           ZONE 1 (LINKS): GEWEBEBANK / BIOPSIE-KAPSELN (22% Breite)
            ========================================================================== -->
-      <section class="flex flex-col h-full overflow-hidden border-r border-gray-800 relative flex-shrink-0" style="width: 22%; background-color: var(--color-labpanel);">
-        <div class="p-4 border-b border-gray-800 flex items-center justify-between" style="background-color: rgba(255, 255, 255, 0.02);">
-          <div class="flex items-center space-x-2">
-            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-200">📁 Gewebebank</span>
-          </div>
-          <span id="capsule-count-badge" class="text-xs font-mono px-2 py-0.5 rounded-full text-gray-300" style="background-color: rgba(255, 255, 255, 0.08);">0 Proben</span>
+      <section class="flex flex-col h-full border-r border-gray-900/60 bg-gray-950/20 p-4 flex-shrink-0" style="width: 22%;">
+        <div class="flex items-center justify-between border-b border-gray-900 pb-3 mb-4">
+          <h2 class="text-xs font-mono font-bold tracking-widest text-gray-400 uppercase flex items-center space-x-2">
+            <span>📁 Gewebebank</span>
+          </h2>
+          <span id="capsule-count-badge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-gray-800 text-gray-500">0 Proben</span>
         </div>
 
-        <!-- Scrollbarer Sediment-Strang mit durchgehender Nervenbahn-Linie -->
-        <div class="flex-1 overflow-y-auto p-4 relative" id="bank-scroll-container">
-          
-          <!-- ZENTRALER LÖSCH-AKTIVATOR: GEWEBEBANK LEEREN / VAULT DETOX -->
-          <button id="btn-clear-vault" class="w-full mb-4 py-1.5 px-3 rounded-lg border border-red-900 bg-red-950/20 hover:bg-red-900/40 text-[10px] font-mono font-bold tracking-wider text-red-400 hover:text-red-200 transition-all flex items-center justify-center space-x-1">
-            <span>🗑️ Gewebebank leeren / Vault Detox</span>
-          </button>
+        <!-- HIER SITZT ER WIEDER REIN: DER DETOX-HEBEL DIREKT ÜBER DEM REGAL IN ZONE 1 -->
+        <button id="btn-clear-vault" class="w-full mb-4 py-1.5 px-3 rounded-lg border border-red-900/50 bg-red-950/10 hover:bg-red-950/30 text-[9px] font-mono font-bold tracking-wider text-red-400 hover:text-red-200 transition-all flex items-center justify-center">
+          🗑️ Gewebebank leeren / Vault Detox
+        </button>
 
-          <!-- Durchgehende feine vertikale CSS-Nervenbahn / Zeitachse -->
-          <div class="absolute left-7 top-14 bottom-0 w-0.5 opacity-40 pointer-events-none" style="background: linear-gradient(to bottom, #f43f5e, #ff9900, #00f2fe); box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);"></div>
-
-          <!-- Kapsel-Sediment-Liste -->
-          <div class="flex flex-col space-y-4 relative z-10 pl-5" id="capsule-list-wrapper">
-            
-            <!-- STATISCHE TEST-KAPSEL 1: ROT (TOXISCH, Score: 0.35) -->
-            <div
-              id="capsule-bio-toxic"
-              draggable="true"
-              data-biopsy-id="bio_test_toxic"
-              data-lq="0.35"
-              data-stox="3.40"
-              data-nnut="0.75"
-              data-url="https://reisserische-news.de/apokalypse"
-              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
-              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(244, 63, 94, 0.4); box-shadow: 0 0 12px rgba(244, 63, 94, 0.15);"
-            >
-              <div class="flex items-center justify-between">
-                <span class="font-mono text-xs text-gray-300">bio_test_toxic</span>
-                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-red-400 border border-red-500" style="background-color: rgba(244, 63, 94, 0.15);">Toxisch</span>
-              </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-red-500 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #e11d48 70%, #4c0519 100%); box-shadow: 0 0 10px rgba(225, 29, 72, 0.6);"></div>
-                <div class="flex-1 font-mono text-xs">
-                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">0.35</span></div>
-                  <div class="text-gray-500 text-xs truncate">S_tox: 3.40 | N_nut: 0.75</div>
-                </div>
-              </div>
-              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
-                <span>11:42 Uhr</span>
-                <span class="text-red-400 font-semibold">Ziehen &rarr;</span>
-              </div>
-            </div>
-
-            <!-- STATISCHE TEST-KAPSEL 2: ORANGE (DEFORMIERT, Score: 0.75) -->
-            <div
-              id="capsule-bio-deformed"
-              draggable="true"
-              data-biopsy-id="bio_test_deformed"
-              data-lq="0.75"
-              data-stox="1.80"
-              data-nnut="1.50"
-              data-url="https://infotainment-feed.net/breaking-loop"
-              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
-              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(255, 153, 0, 0.4); box-shadow: 0 0 12px rgba(255, 153, 0, 0.15);"
-            >
-              <div class="flex items-center justify-between">
-                <span class="font-mono text-xs text-gray-300">bio_test_deformed</span>
-                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-yellow-400 border border-yellow-500" style="background-color: rgba(255, 153, 0, 0.15);">Deformiert</span>
-              </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-yellow-500 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #ff9900 70%, #7c2d12 100%); box-shadow: 0 0 10px rgba(255, 153, 0, 0.6);"></div>
-                <div class="flex-1 font-mono text-xs">
-                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">0.75</span></div>
-                  <div class="text-gray-500 text-xs truncate">S_tox: 1.80 | N_nut: 1.50</div>
-                </div>
-              </div>
-              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
-                <span>10:15 Uhr</span>
-                <span class="text-yellow-400 font-semibold">Ziehen &rarr;</span>
-              </div>
-            </div>
-
-            <!-- STATISCHE TEST-KAPSEL 3: BLAU (STABIL / CYAN, Score: 1.20) -->
-            <div
-              id="capsule-bio-stable"
-              draggable="true"
-              data-biopsy-id="bio_test_stable"
-              data-lq="1.20"
-              data-stox="0.30"
-              data-nnut="2.80"
-              data-url="https://journal-nature.org/cell-study-2026"
-              class="biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2"
-              style="background-color: rgba(15, 23, 42, 0.85); border-color: rgba(0, 242, 254, 0.4); box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);"
-            >
-              <div class="flex items-center justify-between">
-                <span class="font-mono text-xs text-gray-300">bio_test_stable</span>
-                <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-cyan-400 border border-cyan-400" style="background-color: rgba(0, 242, 254, 0.15);">Gesund</span>
-              </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full flex-shrink-0 border border-cyan-400 shadow" style="background: radial-gradient(circle at 35% 35%, #ffffff, #00f2fe 70%, #034863 100%); box-shadow: 0 0 10px rgba(0, 242, 254, 0.6);"></div>
-                <div class="flex-1 font-mono text-xs">
-                  <div class="flex justify-between text-gray-300">LQ: <span class="text-white font-bold">1.20</span></div>
-                  <div class="text-gray-500 text-xs truncate">S_tox: 0.30 | N_nut: 2.80</div>
-                </div>
-              </div>
-              <div class="text-xs text-gray-500 font-mono flex items-center justify-between border-t border-gray-800 pt-1.5">
-                <span>08:40 Uhr</span>
-                <span class="text-cyan-400 font-semibold">Ziehen &rarr;</span>
-              </div>
-            </div>
-
+        <!-- DAS DYNAMISCHE REGAL (DIE KAPSEL-CHRONOLOGIE) -->
+        <div id="capsule-list-wrapper" class="flex-1 overflow-y-auto space-y-2 pr-1">
+          <!-- Dynamisch oder statisch befüllte Kapseln -->
+          <div class="text-xs text-gray-500 font-mono text-center py-6">
+            Lade Proben aus dem Vault...
           </div>
         </div>
       </section>
@@ -484,7 +396,7 @@
 
           <!-- GROSSE VERSION DES BLOBS (250px x 250px) -->
           <div id="large-cell" class="relative flex items-center justify-center transition-all duration-700 opacity-0 transform scale-90 pointer-events-none" style="width: 250px; height: 250px;">
-            <div class="large-membrane">
+            <div id="reactor-blob-core" class="large-membrane">
               
               <!-- Zytoplasma SVG mit radialen Nervenbahnen -->
               <svg class="large-cytoplasm-svg" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
@@ -521,10 +433,7 @@
                 <div class="large-nucleolus"></div>
               </div>
 
-              <!-- ==========================================================
-                   DIE 3 ANKLICKBAREN GEWEBEHERDE (HOTSPOTS)
-                   ========================================================== -->
-              <!-- Herd 1: Synthetischer Herd (Geometrisch blau-grün) -->
+              <!-- DIE 3 ANKLICKBAREN GEWEBEHERDE (HOTSPOTS) -->
               <div
                 id="herd-1-synthetic"
                 class="herd-synthetic"
@@ -532,7 +441,6 @@
                 title="Synthetischer Herd (Klicken zum Analysieren)"
               ></div>
 
-              <!-- Herd 2: Diffuser Entzündungsherd (Bernsteinfarbene Nebel-Cluster) -->
               <div
                 id="herd-2-diffuse"
                 class="herd-diffuse"
@@ -540,7 +448,6 @@
                 title="Diffuser Entzündungsherd (Klicken zum Analysieren)"
               ></div>
 
-              <!-- Herd 3: Nekrotischer Herd (Tiefviolett, zackig, orbitalFrenzy) -->
               <div
                 id="herd-3-necrotic"
                 class="herd-necrotic"
@@ -575,168 +482,102 @@
       </section>
 
       <!-- ==========================================================================
-           ZONE 3 (RECHTS): TOP-DOWN FORENSISCHE KASKADE & WERKZEUGKASTEN (25% Breite)
+           ZONE 3 (RECHTS): MINIMALISTISCHE & PURISTISCHE FORENSIK (25% Breite)
            ========================================================================== -->
       <section
         id="zone-tools-panel"
         class="flex flex-col h-full overflow-hidden border-l border-gray-800 transition-all duration-500 flex-shrink-0"
         style="width: 25%; background-color: var(--color-labpanel);"
       >
-        <!-- 1. GANZ OBEN: BEGLEITERMODUS / LABOR SCHLIESSEN BUTTON -->
+        <!-- ELEMENT 1: BEGLEITERMODUS / LABOR SCHLIESSEN BUTTON -->
         <div class="p-3 border-b border-gray-800/80 bg-black/40 flex-shrink-0">
-          <button id="btn-begleitermodus" class="w-full py-2 px-3 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800 text-xs font-mono font-bold tracking-wider text-gray-400 hover:text-white transition-all flex items-center justify-center space-x-2">
+          <button id="btn-begleitermodus" class="w-full py-2.5 px-3 rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/50 to-blue-950/50 hover:border-cyan-400 text-xs font-mono font-bold tracking-wider text-cyan-300 hover:text-white transition-all flex items-center justify-center space-x-2 shadow-lg shadow-cyan-950/30">
             <span>🛸 Begleitermodus aktivieren / Labor schließen</span>
           </button>
         </div>
 
-        <div id="zone-tools-content" class="flex-1 overflow-y-auto p-4 flex flex-col space-y-4 font-mono text-xs">
+        <div id="zone-tools-content" class="flex-1 overflow-y-auto p-3 flex flex-col font-mono text-xs">
           
-          <!-- 2. DIREKT DARUNTER: DAS NAVIGATIONS-FENSTER (SITZUNGS-VERLAUF / QUELLENFORSCHUNG) -->
-          <div id="session-history-panel" class="p-3.5 rounded-xl border border-gray-800 bg-gray-900/60 shadow-lg flex flex-col space-y-2">
+          <!-- ELEMENT 2: SITZUNGS-VERLAUF / SOURCING-LOGBUCH -->
+          <div id="session-history-panel" class="p-3 rounded-xl border border-gray-800 bg-gray-900/60 shadow-lg flex flex-col space-y-2 mb-3">
             <div class="text-xs font-bold uppercase tracking-wider text-gray-300 font-mono flex items-center justify-between border-b border-gray-800/80 pb-2">
               <span class="flex items-center space-x-1.5">
                 <span class="text-cyan-400">🌐</span>
-                <span>Sitzungs-Verlauf (Quellen)</span>
+                <span id="tools-status-title">Sitzungs-Verlauf (Quellen)</span>
               </span>
-              <span id="url-history-count" class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 font-bold font-mono">0 Quellen</span>
+              <div class="flex items-center space-x-1.5">
+                <span id="tools-status-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 font-bold font-mono">Tab LQ: --</span>
+                <span id="url-history-count" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 border border-gray-700 font-bold font-mono">0 Quellen</span>
+              </div>
             </div>
-            <div id="url-history-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
-              <!-- Hier spawnen die besuchten Webseiten als interaktive Filter-Kacheln -->
+            <div id="url-history-list" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+              <!-- Quellen-Filterkacheln -->
             </div>
           </div>
 
-          <!-- 3. DARUNTER: STATUS-BADGE & TITEL-MUTATION -->
-          <div id="extractor-panel" class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg" style="background-color: rgba(15, 23, 42, 0.85);">
-            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
-              <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path>
-                </svg>
-                <span class="text-xs font-bold uppercase tracking-wider text-gray-200">Linguistischer Extraktor</span>
-              </div>
-              <span id="tools-status-badge" class="text-xs font-mono px-2 py-0.5 rounded-full text-cyan-400 border border-cyan-400" style="background-color: rgba(0, 242, 254, 0.15);">Aktiv</span>
-            </div>
-
-            <!-- Dynamischer Cluster-Titel (Mutiert nach LQ) -->
-            <div class="flex flex-col space-y-2">
-              <div class="flex items-center justify-between">
-                <div id="cluster-category-title" class="text-gray-400 uppercase text-xs font-bold tracking-wider">NÄHRSTOFF-CLUSTER</div>
-                <span id="herd-focus-label" class="text-[10px] text-gray-400">Herd 1 aktiv</span>
-              </div>
-              
-              <!-- Echte Text-Snippets Container -->
-              <div id="toxic-words-container" class="flex flex-col space-y-1.5">
-                <!-- Snippet-Chips werden dynamisch aus toxic_snippets / nutrient_snippets gerendert -->
-              </div>
-            </div>
-
-            <!-- Interaktiver Monospace Forensik-Inspektor (Beweissätze) -->
-            <div id="forensic-inspector-panel" class="hidden p-3 rounded-lg border border-cyan-500/40 bg-black/60 font-mono text-xs flex flex-col space-y-1.5 transition-all">
-              <div class="flex items-center justify-between text-cyan-400 border-b border-gray-800 pb-1">
-                <span class="font-bold">🔬 Forensischer Beweissatz:</span>
-                <button id="btn-close-inspector" class="text-gray-500 hover:text-white px-1">✕</button>
-              </div>
-              <div id="forensic-snippet-text" class="text-gray-300 italic py-1 leading-relaxed whitespace-pre-wrap"></div>
-              <div id="forensic-snippet-meta" class="text-gray-500 text-xs flex justify-between pt-1 border-t border-gray-900">
-                <span>Originalquelle: Website-Extrakt</span>
-                <span id="forensic-match-tag" class="text-cyan-400 font-bold"></span>
-              </div>
-            </div>
-
-            <!-- Quell-URLs Fallback -->
-            <div class="hidden flex-col space-y-1.5 mt-1" id="toxic-urls-wrapper">
-              <div class="text-gray-500 uppercase text-xs">Quell-URLs</div>
-              <div id="toxic-urls-container" class="flex flex-col space-y-1"></div>
-            </div>
-          </div>
-
-          <!-- 4. DARUNTER: KREISRUNEDES SCHADSTOFF-DIAGRAMM (SPEKTROGRAMM) -->
-          <div id="spectrogram-panel" class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg" style="background-color: rgba(15, 23, 42, 0.85);">
-            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
-              <span class="font-bold text-gray-200 text-xs uppercase tracking-wider">Metabolischer Querschnitt</span>
-              <span class="text-xs text-gray-400">Spektrogramm</span>
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <!-- Kreisförmiges UI-Diagramm -->
-              <div class="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
-                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                  <path
-                    class="text-gray-800"
-                    stroke-width="3.5"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                  <path
-                    id="schadstoff-circle"
-                    class="text-cyan-400 transition-all duration-700"
-                    stroke-dasharray="25, 100"
-                    stroke-width="3.5"
-                    stroke-linecap="round"
-                    stroke="currentColor"
-                    fill="none"
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center font-mono">
-                  <span id="schadstoff-val" class="text-xs font-bold text-white">25%</span>
-                  <span class="text-gray-500 uppercase" style="font-size: 8px;">Tox-Last</span>
+          <!-- ELEMENT 3: SYMMETRISCHES 2-BOXEN-TAB-SYSTEM (SEZIERTISCH) -->
+          <div id="snippets-master-panel" class="flex flex-col">
+            
+            <!-- 🔴 HAUPT-GEFÄSS 1: SCHADSTOFF-ZENTRALE -->
+            <div id="toxic-main-vault" class="p-3 rounded-xl border border-red-950/40 bg-red-950/5 mb-3 font-mono">
+              <div class="flex items-center justify-between border-b border-gray-800/60 pb-1.5 mb-2 text-[9px]">
+                <div class="flex items-center space-x-1.5">
+                  <span class="font-bold uppercase tracking-wider text-red-400">🚨 Schadstoffe</span>
+                  <span id="micro-toxic-badge" class="text-[9px] px-1.5 py-0.2 rounded-full bg-red-950/80 text-red-400 border border-red-800/60 font-bold">0</span>
+                </div>
+                <div class="flex items-center space-x-2 text-gray-500 font-bold">
+                  <span id="tab-toxic-macro" class="cursor-pointer transition-all">STRUKTUR</span>
+                  <span>·</span>
+                  <span id="tab-toxic-micro" class="cursor-pointer transition-all">ZITATE</span>
                 </div>
               </div>
-
-              <!-- Schadstoff-Werte -->
-              <div class="flex-1 flex flex-col space-y-1 text-xs">
-                <div class="flex justify-between"><span class="text-gray-400">Affekt-Spitzen:</span> <span id="val-affekt" class="text-red-400 font-bold">0.8 / 10</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">Syntakt. Enge:</span> <span id="val-syntakt" class="text-yellow-400 font-bold">1.2 / 10</span></div>
-                <div class="flex justify-between"><span class="text-gray-400">Nährwert-Quotient:</span> <span id="val-naehrwert" class="text-cyan-400 font-bold">8.4 / 10</span></div>
-              </div>
+              <div id="toxic-display-list" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-[10px]"></div>
             </div>
+
+            <!-- 🟢 HAUPT-GEFÄSS 2: NÄHRSTOFF-ZENTRALE -->
+            <div id="nutrient-main-vault" class="p-3 rounded-xl border border-cyan-950/40 bg-cyan-950/5 mb-4 font-mono">
+              <div class="flex items-center justify-between border-b border-gray-800/60 pb-1.5 mb-2 text-[9px]">
+                <div class="flex items-center space-x-1.5">
+                  <span class="font-bold uppercase tracking-wider text-cyan-400">💎 Nährstoffe</span>
+                  <span id="micro-nutrient-badge" class="text-[9px] px-1.5 py-0.2 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 font-bold">0</span>
+                </div>
+                <div class="flex items-center space-x-2 text-gray-500 font-bold">
+                  <span id="tab-nutrient-macro" class="cursor-pointer transition-all">STRUKTUR</span>
+                  <span>·</span>
+                  <span id="tab-nutrient-micro" class="cursor-pointer transition-all">ZITATE</span>
+                </div>
+              </div>
+              <div id="nutrient-display-list" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-[10px]"></div>
+            </div>
+
           </div>
 
-          <!-- 5. GANZ UNTEN: SPÜL-AKTIVATOR MITSAMT DER GEGENGIFT-BOX -->
-          <div id="flush-panel" class="p-3.5 rounded-xl border border-gray-800 flex flex-col space-y-3 shadow-lg mt-auto" style="background-color: rgba(15, 23, 42, 0.85);">
-            <div class="text-gray-500 uppercase text-xs">Homöostase-Protokoll</div>
+          <!-- ELEMENT 4: DER SIMPLE SPÜL-BEREICH GANZ UNTEN -->
+          <div id="flush-panel" class="p-3.5 rounded-xl border border-emerald-900/50 bg-emerald-950/20 flex flex-col space-y-2.5 shadow-lg mt-auto">
+            <div class="text-emerald-400 uppercase text-[10px] font-bold tracking-wider flex items-center justify-between">
+              <span>🧪 Linguistischer Spül-Aktivator</span>
+              <span class="text-[9px] text-emerald-500/80 font-normal">Schreibgeschützter Detox</span>
+            </div>
+
             <button
               id="btn-linguistic-flush"
-              class="w-full py-3 px-4 rounded-xl border border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center space-x-2 hover:brightness-125"
-              style="background: linear-gradient(to right, rgba(0, 242, 254, 0.2), rgba(0, 242, 254, 0.08)); box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);"
+              class="w-full py-2.5 px-4 rounded-xl border border-emerald-500/50 text-emerald-300 font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center space-x-2 hover:bg-emerald-900/30 hover:border-emerald-400 shadow-md shadow-emerald-950/30"
+              style="background: linear-gradient(to right, rgba(16, 185, 129, 0.2), rgba(6, 78, 59, 0.3));"
             >
               <svg id="flush-spinner-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
               </svg>
               <span id="btn-flush-label">Linguistische Spülung einleiten</span>
             </button>
-            <div id="flush-feedback" class="text-xs text-center font-mono h-4 text-gray-500"></div>
+            <div id="flush-feedback" class="text-[10px] text-center font-mono min-h-[14px] text-emerald-400"></div>
 
-            <!-- EINGESPIELTES LINGUISTISCHES GEGENGIFT (WELTWISSEN & FAKTENCHECK) -->
-            <div id="antidote-container" class="hidden p-3.5 rounded-xl border border-emerald-500/60 font-mono text-xs flex flex-col space-y-2.5 transition-all shadow-xl" style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.45), rgba(4, 47, 46, 0.3));">
-              <div class="flex items-center justify-between border-b border-emerald-500/30 pb-2">
-                <span class="font-bold text-emerald-300 text-xs uppercase tracking-wider flex items-center space-x-1.5">
-                  <span>🧪</span>
-                  <span>Eingespieltes Linguistisches Gegengift</span>
-                </span>
-                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/40">Weltwissen Aktiv</span>
+            <!-- KOMPAKTES TEXTFELD FÜR DEN GEREINIGTEN TEXT -->
+            <div id="antidote-panel" class="p-3 rounded-lg border border-emerald-500/30 bg-black/60 font-mono text-xs hidden flex-col space-y-1.5 transition-all">
+              <div class="text-emerald-400 font-bold text-[10px] uppercase flex items-center justify-between border-b border-emerald-900/50 pb-1">
+                <span>✓ Neutralisierter Text (Biochemische Glättung)</span>
               </div>
-              
-              <div class="flex flex-col space-y-1">
-                <span class="text-emerald-400 text-xs uppercase font-bold tracking-wider">Gereinigter Text (Klinisch rein):</span>
-                <div id="antidote-neutralized-text" class="p-2.5 rounded-lg bg-black/50 border border-emerald-500/30 text-gray-200 leading-relaxed"></div>
-              </div>
-
-              <div class="flex flex-col space-y-1">
-                <span class="text-cyan-300 text-xs uppercase font-bold tracking-wider">Forensischer Faktencheck & Weltwissen:</span>
-                <div id="antidote-world-knowledge" class="p-2.5 rounded-lg bg-black/60 border border-cyan-500/30 text-cyan-200 leading-relaxed italic"></div>
-              </div>
-            </div>
-
-            <!-- EINGESPIELTES LINGUISTISCHES GEGENGIFT CONTAINER PANEL (FALLBACK) -->
-            <div id="antidote-panel" class="p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-950/20 hidden">
-              <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono mb-1.5 flex items-center">
-                🧪 Eingespieltes Linguistisches Gegengift
-              </div>
-              <div id="antidote-text" class="text-xs font-mono text-emerald-300 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-emerald-500/10 whitespace-pre-line">
-                Warte auf biochemische Richtigstellung...
+              <div id="antidote-text-neutral" class="text-emerald-200 italic text-[11px] leading-relaxed max-h-36 overflow-y-auto whitespace-pre-line py-1">
+                Warte auf biochemische Glättung...
               </div>
             </div>
 

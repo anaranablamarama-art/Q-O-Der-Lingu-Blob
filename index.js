@@ -1,86 +1,101 @@
-// ==========================================================================
-// PROJEKT "Q-O" // CYBER-MEDIZINISCHES ANALYSELABOR (INDEX.JS)
-// ==========================================================================
-// Strikt CSP-konform, keine Inline-Scripts, vollständige Event-Listener-Anbindung.
-// Top-Down Kaskade in Zone 3: Navigation oben -> Cluster/Snippets -> Spektrogramm -> Spülung.
-// Exakte Zählung: Quellenanzahl basiert IMMER auf session_history (Sourcing-Logbuch).
-// Zentraler Lösch-Aktivator: Gewebebank leeren / Vault Detox mit IndexedDB-Vaporisierung.
-// Begleitermodus-Schutz: Button #btn-begleitermodus bleibt nach Detox 100% aktiv & ungedimmt.
-// ==========================================================================
+/**
+ * ============================================================================
+ * Q-O LABOR // SYMMETRISCHES 2-BOXEN-TAB-SYSTEM & FORENSIK-STEUERUNG (INDEX.JS)
+ * ============================================================================
+ * 
+ * STRATEGISCHE TRENNUNG:
+ * - ZONE 2 (MITTE): Fester Reaktor / Petrischale für die GESAMTE Biopsie
+ *   (Wird beim Kapsel-Drop/Laden einmalig steril eingefärbt & bleibt eingefroren)
+ * - ZONE 3 (RECHTS): Symmetrisches 2-Boxen-System mit Tab-Reitern ([STRUKTUR] / [ZITATE])
+ *   (Mutiert beim Klick auf eine URL NUR das Status-Dach & die 2 Anzeige-Listen)
+ * 
+ * SYMMETRISCHES 2-BOXEN-TAB-SYSTEM:
+ * 1. #toxic-main-vault (#tab-toxic-macro, #tab-toxic-micro, #toxic-display-list)
+ * 2. #nutrient-main-vault (#tab-nutrient-macro, #tab-nutrient-micro, #nutrient-display-list)
+ * 
+ * ISOLIERTER FLUSH (#btn-linguistic-flush):
+ * - Greift sich schreibgeschützt die echten Zitate aus sourceItem.toxic_snippets ab
+ * - PERSISTENZ: Multi-Layer (IndexedDB 'QO_Metabolic_Vault' & LocalStorage)
+ */
 
 (function () {
   'use strict';
 
-  // IndexedDB Konfiguration
-  const DB_NAME = 'QO_Metabolic_Vault';
-  const STORE_NAME = 'biopsy_archive';
-  const DB_VERSION = 1;
-
-  // DOM Elemente Zone 1 (Gewebebank)
-  const btnClearVault = document.getElementById('btn-clear-vault');
+  // ==========================================================================
+  // DOM-ELEMENTE
+  // ==========================================================================
+  // Zone 1: Gewebebank
   const capsuleListWrapper = document.getElementById('capsule-list-wrapper');
   const capsuleCountBadge = document.getElementById('capsule-count-badge');
+  const btnClearVault = document.getElementById('btn-clear-vault');
 
-  // DOM Elemente Zone 2 (Seziertisch / Sezier-Zelle)
+  // Zone 2: Seziertisch & Petrischale (Das Reaktor-Denkmal der Biopsie)
   const cryoHolder = document.getElementById('cryo-holder');
   const dropInstruction = document.getElementById('drop-instruction');
   const largeCell = document.getElementById('large-cell');
-  const nucleusLqDisplay = document.getElementById('nucleus-lq-display');
-  const headerSampleLabel = document.getElementById('header-sample-label');
-  const dbIndicator = document.getElementById('db-indicator');
-  const dbStatusLabel = document.getElementById('db-status-label');
-
-  // Telemetrie
+  const reactorBlobCore = document.getElementById('reactor-blob-core') || 
+                          document.querySelector('.large-membrane') || 
+                          largeCell;
+  const reactorScoreDisplay = document.getElementById('reactor-score-display') || 
+                              document.getElementById('tele-lq-val');
   const teleSampleId = document.getElementById('tele-sample-id');
   const teleLqVal = document.getElementById('tele-lq-val');
   const teleRatioVal = document.getElementById('tele-ratio-val');
   const teleStateBadge = document.getElementById('tele-state-badge');
+  const headerSampleLabel = document.getElementById('header-sample-label');
 
-  // Die 3 anklickbaren Krankheitsherde im Zytoplasma
+  // Herde im Zytoplasma
   const herd1Synthetic = document.getElementById('herd-1-synthetic');
   const herd2Diffuse = document.getElementById('herd-2-diffuse');
   const herd3Necrotic = document.getElementById('herd-3-necrotic');
 
-  // DOM Elemente Zone 3 (Top-Down Kaskade & Werkzeuge)
+  // Zone 3: Puristische Forensik & Quellen-Umschalter
   const btnBegleitermodus = document.getElementById('btn-begleitermodus');
-  const zoneToolsPanel = document.getElementById('zone-tools-panel');
-  const zoneToolsContent = document.getElementById('zone-tools-content');
   const sessionHistoryPanel = document.getElementById('session-history-panel');
-  const extractorPanel = document.getElementById('extractor-panel');
-  const spectrogramPanel = document.getElementById('spectrogram-panel');
-  const flushPanel = document.getElementById('flush-panel');
+  const toolsStatusTitle = document.getElementById('tools-status-title');
+  const toolsStatusBadge = document.getElementById('tools-status-badge');
   const urlHistoryList = document.getElementById('url-history-list');
   const urlHistoryCount = document.getElementById('url-history-count');
-  const toolsStatusBadge = document.getElementById('tools-status-badge');
-  const herdFocusLabel = document.getElementById('herd-focus-label');
-  const clusterCategoryTitle = document.getElementById('cluster-category-title');
-  const toxicWordsContainer = document.getElementById('toxic-words-container');
-  const toxicUrlsContainer = document.getElementById('toxic-urls-container');
-  const forensicInspectorPanel = document.getElementById('forensic-inspector-panel');
-  const forensicSnippetText = document.getElementById('forensic-snippet-text');
-  const forensicMatchTag = document.getElementById('forensic-match-tag');
-  const btnCloseInspector = document.getElementById('btn-close-inspector');
-  const schadstoffCircle = document.getElementById('schadstoff-circle');
-  const schadstoffVal = document.getElementById('schadstoff-val');
-  const valAffekt = document.getElementById('val-affekt');
-  const valSyntakt = document.getElementById('val-syntakt');
-  const valNaehrwert = document.getElementById('val-naehrwert');
-  
-  // Gegengift-Bereiche in Zone 3
-  const antidotePanel = document.getElementById('antidote-panel');
-  const antidoteText = document.getElementById('antidote-text');
-  const antidoteContainer = document.getElementById('antidote-container');
-  const antidoteNeutralizedText = document.getElementById('antidote-neutralized-text');
-  const antidoteWorldKnowledge = document.getElementById('antidote-world-knowledge');
-  
+
+  // SYMMETRISCHES 2-BOXEN-TAB-SYSTEM
+  // 1. Schadstoff-Gefäß
+  const tabToxicMacro = document.getElementById('tab-toxic-macro');
+  const tabToxicMicro = document.getElementById('tab-toxic-micro');
+  const toxicDisplayList = document.getElementById('toxic-display-list');
+  const microToxicBadge = document.getElementById('micro-toxic-badge');
+
+  // 2. Nährstoff-Gefäß
+  const tabNutrientMacro = document.getElementById('tab-nutrient-macro');
+  const tabNutrientMicro = document.getElementById('tab-nutrient-micro');
+  const nutrientDisplayList = document.getElementById('nutrient-display-list');
+  const microNutrientBadge = document.getElementById('micro-nutrient-badge');
+
+  // Spül-Kanal
   const btnLinguisticFlush = document.getElementById('btn-linguistic-flush');
   const btnFlushLabel = document.getElementById('btn-flush-label');
   const flushSpinnerIcon = document.getElementById('flush-spinner-icon');
   const flushFeedback = document.getElementById('flush-feedback');
+  const antidotePanel = document.getElementById('antidote-panel');
+  const antidoteTextNeutral = document.getElementById('antidote-text-neutral');
 
-  // Aktiver Probenzustand & aktiver URL-Filter für die Tiefen-Steuerung
+  // Aktiver Sitzungs-Zustand & aktiver URL-Filter & Aktive Tabs ('macro' | 'micro')
   let currentSample = null;
   let selectedUrlFilter = null;
+  let activeSourceData = null;
+  let currentToxicTab = 'macro';      // Standard: 'macro' (STRUKTUR)
+  let currentNutrientTab = 'macro';   // Standard: 'macro' (STRUKTUR)
+
+  // ==========================================================================
+  // SICHERE NUMERISCHE EXTRAKTION
+  // ==========================================================================
+  function safeNum(val, fallback = 0) {
+    if (typeof val === 'number' && !isNaN(val)) return val;
+    if (typeof val === 'string') {
+      const parsed = parseFloat(val);
+      if (!isNaN(parsed)) return parsed;
+    }
+    return fallback;
+  }
 
   // ==========================================================================
   // 1. BEGLEITERMODUS: RÜCKSPRUNG-FUNKSIGNAL ZUM URSPRUNGS-TAB
@@ -96,29 +111,24 @@
   }
 
   // ==========================================================================
-  // 2. DAS E-FUNKTIONS-MODELL: LQ = e^(-(S_tox - N_nut))
+  // 2. MORPHOLOGISCHE ZUSTANDSMASCHINE (LQ-DEFINITION)
   // ==========================================================================
-  function calculateLQ(sTox, nNut) {
-    const diff = sTox - nNut;
-    return Math.exp(-diff);
-  }
-
-  function getMorphologyState(lqScore) {
-    if (lqScore >= 1.0) {
+  function getMorphologyState(lq) {
+    if (lq >= 1.0) {
       return {
         key: 'stable',
         className: 'q-o-hud-stable',
         label: 'Gesund / Stabil',
         colorHex: '#00f2fe',
-        badgeClass: 'text-cyan-400 border-cyan-400'
+        badgeClass: 'text-cyan-400 border-cyan-400 bg-cyan-950/60'
       };
-    } else if (lqScore >= 0.5) {
+    } else if (lq >= 0.5) {
       return {
         key: 'deformed',
         className: 'q-o-hud-deformed',
-        label: 'Deformiert / Stress',
+        label: 'Deformiert / Erregt',
         colorHex: '#ff9900',
-        badgeClass: 'text-yellow-400 border-yellow-500'
+        badgeClass: 'text-amber-400 border-amber-500 bg-amber-950/60'
       };
     } else {
       return {
@@ -126,92 +136,63 @@
         className: 'q-o-hud-toxic',
         label: 'Toxisch / Entzündet',
         colorHex: '#e11d48',
-        badgeClass: 'text-red-400 border-red-500'
+        badgeClass: 'text-rose-400 border-rose-500 bg-rose-950/60'
       };
     }
   }
 
   // ==========================================================================
-  // 3. HTML5 DRAG & DROP LOGIK (ZWISCHEN ZONE 1 & ZONE 2)
+  // 3. STERILE REINIGUNG & EINMALIGE REAKTOR-FARBGEBUNG (NUR ZONE 2 MITTE)
   // ==========================================================================
-  function bindCapsuleEvents(capsule) {
-    function extractPayload() {
-      const rawLq = parseFloat(capsule.getAttribute('data-lq'));
-      const rawStox = parseFloat(capsule.getAttribute('data-stox'));
-      const rawNnut = parseFloat(capsule.getAttribute('data-nnut'));
-      
-      let toxicSnippets = [];
-      let nutrientSnippets = [];
-      let sessionHistory = [];
+  function applySterileReactorColoring(data) {
+    if (!data) return;
 
-      try {
-        const rawTox = capsule.getAttribute('data-toxic-snippets');
-        if (rawTox) toxicSnippets = JSON.parse(rawTox);
-      } catch (e) {
-        toxicSnippets = [];
-      }
-      try {
-        const rawNut = capsule.getAttribute('data-nutrient-snippets');
-        if (rawNut) nutrientSnippets = JSON.parse(rawNut);
-      } catch (e) {
-        nutrientSnippets = [];
-      }
-      try {
-        const rawHist = capsule.getAttribute('data-session-history');
-        if (rawHist) sessionHistory = JSON.parse(rawHist);
-      } catch (e) {
-        sessionHistory = [];
-      }
+    const lqScore = safeNum(data.lq_score ?? data.lq, 1.0);
+    const morph = getMorphologyState(lqScore);
+    const blobCore = document.getElementById('reactor-blob-core') || 
+                     document.querySelector('.large-membrane') || 
+                     largeCell;
+    const scoreDisplay = document.getElementById('reactor-score-display') || 
+                         teleLqVal;
 
-      const srcUrl = capsule.getAttribute('data-url') || '';
-      const finalLq = !isNaN(rawLq) ? rawLq : 1.0;
-      const finalStox = !isNaN(rawStox) ? rawStox : 0.5;
-      const finalNnut = !isNaN(rawNnut) ? rawNnut : 1.5;
+    // 1. STERILE REINIGUNG: Alle alten Farb- und Morphologie-Klassen restlos entfernen
+    if (blobCore) {
+      blobCore.classList.remove(
+        'border-rose-500/30', 'bg-rose-950/10', 'text-rose-400',
+        'border-amber-500/30', 'bg-amber-950/10', 'text-amber-400',
+        'border-cyan-500/20', 'bg-cyan-950/10', 'text-cyan-400',
+        'q-o-hud-stable', 'q-o-hud-deformed', 'q-o-hud-toxic'
+      );
 
-      if (!sessionHistory || sessionHistory.length === 0) {
-        sessionHistory = [{
-          url: srcUrl || 'https://journal-nature.org/cell-study-2026',
-          lq_score: finalLq,
-          s_tox: finalStox,
-          n_nut: finalNnut,
-          toxic_snippets: toxicSnippets,
-          nutrient_snippets: nutrientSnippets,
-          timestamp: Date.now()
-        }];
+      // 2. NEU-EINFÄRBUNG: Exakt synchron zum Gesamt-LQ der Biopsie einrasten
+      if (lqScore < 0.5) {
+        blobCore.classList.add('border-rose-500/30', 'bg-rose-950/10', 'text-rose-400', 'q-o-hud-toxic');
+        blobCore.style.boxShadow = '0 0 50px rgba(244, 63, 94, 0.2)';
+      } else if (lqScore < 1.0) {
+        blobCore.classList.add('border-amber-500/30', 'bg-amber-950/10', 'text-amber-400', 'q-o-hud-deformed');
+        blobCore.style.boxShadow = '0 0 50px rgba(255, 153, 0, 0.2)';
+      } else {
+        blobCore.classList.add('border-cyan-500/20', 'bg-cyan-950/10', 'text-cyan-400', 'q-o-hud-stable');
+        blobCore.style.boxShadow = '0 0 50px rgba(0, 242, 254, 0.2)';
       }
-
-      return {
-        biopsy_id: capsule.getAttribute('data-biopsy-id') || 'bio_sample',
-        lq: finalLq,
-        s_tox: finalStox,
-        n_nut: finalNnut,
-        source_url: srcUrl,
-        toxic_snippets: Array.isArray(toxicSnippets) ? toxicSnippets : [],
-        nutrient_snippets: Array.isArray(nutrientSnippets) ? nutrientSnippets : [],
-        session_history: sessionHistory
-      };
     }
 
-    capsule.addEventListener('dragstart', function (e) {
-      capsule.style.opacity = '0.5';
-      const payload = extractPayload();
-      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
-      e.dataTransfer.effectAllowed = 'copy';
-    });
+    if (largeCell) {
+      largeCell.className = 'relative flex items-center justify-center transition-all duration-700 opacity-100 transform scale-100 ' + morph.className;
+    }
 
-    capsule.addEventListener('dragend', function () {
-      capsule.style.opacity = '1';
-    });
-
-    // Direkter Klick auf Kapsel als intuitive Alternative
-    capsule.addEventListener('click', function () {
-      const payload = extractPayload();
-      loadSampleIntoSeziertisch(payload);
-    });
+    if (scoreDisplay) {
+      scoreDisplay.className = 'font-bold text-sm font-mono';
+      scoreDisplay.style.color = morph.colorHex;
+    }
   }
 
-  // Drag-Over auf Kryo-Halterung
-  if (cryoHolder) {
+  // ==========================================================================
+  // 4. HTML5 DRAG & DROP LOGIK FÜR DEN SEZIERTISCH (ZONE 1 -> ZONE 2)
+  // ==========================================================================
+  function setupDragAndDrop() {
+    if (!cryoHolder) return;
+
     cryoHolder.addEventListener('dragover', function (e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'copy';
@@ -236,54 +217,121 @@
         const raw = e.dataTransfer.getData('text/plain');
         if (raw) {
           const data = JSON.parse(raw);
+          // Einmaliges steriles Einstellen des Reaktor-Blobs auf den Gesamt-Score der Kapsel
+          applySterileReactorColoring(data);
           loadSampleIntoSeziertisch(data);
         }
       } catch (err) {
-        console.error('[Q-O Labor] Fehler beim Parsen der Drop-Daten:', err);
+        console.error('[Q-O Labor] Drop-Fehler:', err);
       }
     });
   }
 
-  // ==========================================================================
-  // 4. SEZIERTISCH AKTIVIEREN & ZELL-MORPHOLOGIE RENDERN
-  // ==========================================================================
-  function loadSampleIntoSeziertisch(sample) {
-    const sessionHistory = Array.isArray(sample.session_history) && sample.session_history.length > 0
-      ? sample.session_history
-      : [{
-          url: sample.source_url || 'https://journal-nature.org/cell-study-2026',
-          lq_score: typeof sample.lq === 'number' ? sample.lq : 1.0,
-          s_tox: typeof sample.s_tox === 'number' ? sample.s_tox : 0.5,
-          n_nut: typeof sample.n_nut === 'number' ? sample.n_nut : 1.5,
-          toxic_snippets: Array.isArray(sample.toxic_snippets) ? sample.toxic_snippets : [],
-          nutrient_snippets: Array.isArray(sample.nutrient_snippets) ? sample.nutrient_snippets : [],
+  function bindCapsuleEvents(capsule) {
+    function extractPayload() {
+      const rawLq = parseFloat(capsule.getAttribute('data-lq'));
+      const rawStox = parseFloat(capsule.getAttribute('data-stox'));
+      const rawNnut = parseFloat(capsule.getAttribute('data-nnut'));
+
+      let toxicSnippets = [];
+      let nutrientSnippets = [];
+      let macroToxCategories = [];
+      let macroNutCategories = [];
+      let sessionHistory = [];
+
+      try {
+        const rawTox = capsule.getAttribute('data-toxic-snippets');
+        if (rawTox) toxicSnippets = JSON.parse(rawTox);
+      } catch (e) {
+        toxicSnippets = [];
+      }
+      try {
+        const rawNut = capsule.getAttribute('data-nutrient-snippets');
+        if (rawNut) nutrientSnippets = JSON.parse(rawNut);
+      } catch (e) {
+        nutrientSnippets = [];
+      }
+      try {
+        const rawMacroTox = capsule.getAttribute('data-macro-tox-categories');
+        if (rawMacroTox) macroToxCategories = JSON.parse(rawMacroTox);
+      } catch (e) {
+        macroToxCategories = [];
+      }
+      try {
+        const rawMacroNut = capsule.getAttribute('data-macro-nut-categories');
+        if (rawMacroNut) macroNutCategories = JSON.parse(rawMacroNut);
+      } catch (e) {
+        macroNutCategories = [];
+      }
+      try {
+        const rawHist = capsule.getAttribute('data-session-history');
+        if (rawHist) sessionHistory = JSON.parse(rawHist);
+      } catch (e) {
+        sessionHistory = [];
+      }
+
+      const srcUrl = capsule.getAttribute('data-url') || '';
+      const finalLq = !isNaN(rawLq) ? rawLq : 1.0;
+      const finalStox = !isNaN(rawStox) ? rawStox : 0.5;
+      const finalNnut = !isNaN(rawNnut) ? rawNnut : 1.5;
+
+      if (!sessionHistory || sessionHistory.length === 0) {
+        sessionHistory = [{
+          url: srcUrl || 'https://journal-nature.org/cell-study-2026',
+          lq_score: finalLq,
+          s_tox: finalStox,
+          n_nut: finalNnut,
+          toxic_snippets: toxicSnippets,
+          nutrient_snippets: nutrientSnippets,
+          macro_tox_categories: macroToxCategories,
+          macro_nut_categories: macroNutCategories,
           timestamp: Date.now()
         }];
+      }
 
-    // 1. Array-Persistenz & Multi-Quellen-Historie verankern
-    currentSample = {
-      biopsy_id: sample.biopsy_id || 'bio_sample',
-      lq: typeof sample.lq === 'number' ? sample.lq : 1.0,
-      s_tox: typeof sample.s_tox === 'number' ? sample.s_tox : 0.5,
-      n_nut: typeof sample.n_nut === 'number' ? sample.n_nut : 1.5,
-      source_url: sample.source_url || '',
-      toxic_snippets: Array.isArray(sample.toxic_snippets) ? sample.toxic_snippets : [],
-      nutrient_snippets: Array.isArray(sample.nutrient_snippets) ? sample.nutrient_snippets : [],
-      session_history: sessionHistory
-    };
-
-    // 2. AUTOMATISCHER ERST-FOKUS: Wähle die allerneueste URL der Sitzung (oder source_url)
-    const newestUrlEntry = sessionHistory[sessionHistory.length - 1] || sessionHistory[0];
-    selectedUrlFilter = newestUrlEntry ? newestUrlEntry.url : null;
-
-    // 3. Kryo-Halterung blitzt weiß/cyan auf (Reflow-Animation)
-    if (cryoHolder) {
-      cryoHolder.classList.remove('cryo-flash-anim');
-      void cryoHolder.offsetWidth;
-      cryoHolder.classList.add('cryo-flash-anim');
+      return {
+        biopsy_id: capsule.getAttribute('data-biopsy-id') || 'bio_sample',
+        lq: finalLq,
+        lq_score: finalLq,
+        s_tox: finalStox,
+        n_nut: finalNnut,
+        source_url: srcUrl,
+        toxic_snippets: Array.isArray(toxicSnippets) ? toxicSnippets : [],
+        nutrient_snippets: Array.isArray(nutrientSnippets) ? nutrientSnippets : [],
+        macro_tox_categories: Array.isArray(macroToxCategories) ? macroToxCategories : [],
+        macro_nut_categories: Array.isArray(macroNutCategories) ? macroNutCategories : [],
+        session_history: sessionHistory
+      };
     }
 
-    // 4. Platzhalter-Text ausblenden, große Zelle einblenden
+    capsule.addEventListener('dragstart', function (e) {
+      capsule.style.opacity = '0.5';
+      const payload = extractPayload();
+      e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+      e.dataTransfer.effectAllowed = 'copy';
+    });
+
+    capsule.addEventListener('dragend', function () {
+      capsule.style.opacity = '1';
+    });
+
+    // Direkter Klick auf Kapsel in der Gewebebank
+    capsule.addEventListener('click', function () {
+      const payload = extractPayload();
+      applySterileReactorColoring(payload);
+      loadSampleIntoSeziertisch(payload);
+    });
+  }
+
+  // ==========================================================================
+  // 5. SEZIERTISCH-LADEN: INITIALISIERT DEN GESAMT-BIOPSIE-ZUSTAND
+  // ==========================================================================
+  function loadSampleIntoSeziertisch(sample) {
+    if (!sample) return;
+    currentSample = sample;
+    selectedUrlFilter = null;
+
+    // 1. Visueller Aufbau der Makro-Zelle im Seziertisch
     if (dropInstruction) {
       dropInstruction.style.opacity = '0';
       dropInstruction.style.pointerEvents = 'none';
@@ -291,482 +339,462 @@
 
     if (largeCell) {
       largeCell.style.opacity = '1';
-      largeCell.style.transform = 'scale(1)';
       largeCell.style.pointerEvents = 'auto';
+      largeCell.style.transform = 'scale(1)';
     }
 
-    // 5. Header-Label aktualisieren
-    const initialMorph = getMorphologyState(currentSample.lq);
+    // 2. Gesamt-Score der Biopsie für den Reaktor
+    const sampleLq = safeNum(sample.lq_score ?? sample.lq, 1.0);
+    const sampleStox = safeNum(sample.s_tox ?? sample.stox, 0.5);
+    const sampleNnut = safeNum(sample.n_nut ?? sample.nnut, 1.5);
+    const overallMorph = getMorphologyState(sampleLq);
+
+    // Einmalige sterile Einfärbung des Reaktor-Blobs
+    applySterileReactorColoring(sample);
+
+    // 3. Header & Feste Reaktor-Telemetrie am Seziertisch unten
     if (headerSampleLabel) {
-      headerSampleLabel.textContent = `${currentSample.biopsy_id} (${initialMorph.label})`;
-      headerSampleLabel.style.color = initialMorph.colorHex;
+      headerSampleLabel.textContent = `${sample.biopsy_id} (${sample.source_url || 'Sitzung'})`;
+      headerSampleLabel.style.color = overallMorph.colorHex;
+    }
+    if (teleSampleId) {
+      teleSampleId.textContent = sample.biopsy_id;
+    }
+    if (teleLqVal) {
+      teleLqVal.textContent = sampleLq.toFixed(2);
+      teleLqVal.style.color = overallMorph.colorHex;
+    }
+    if (teleRatioVal) {
+      teleRatioVal.textContent = `${sampleStox.toFixed(2)} / ${sampleNnut.toFixed(2)}`;
+    }
+    if (teleStateBadge) {
+      teleStateBadge.textContent = overallMorph.label;
+      teleStateBadge.className = 'font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-xs border ' + overallMorph.badgeClass;
     }
 
-    // Container aus vorherigen Spülungen zurücksetzen
+    // 4. Antidote-Panel schließen & Feedback leeren
     if (antidotePanel) antidotePanel.classList.add('hidden');
-    if (antidoteText) antidoteText.textContent = 'Warte auf biochemische Richtigstellung...';
-    if (antidoteContainer) antidoteContainer.classList.add('hidden');
-    if (forensicInspectorPanel) forensicInspectorPanel.classList.add('hidden');
     if (flushFeedback) flushFeedback.textContent = '';
 
-    // 6. ZONE 3: TOP-DOWN KASKADE FREISCHALTEN
-    unlockToolsPanel(currentSample);
-  }
+    // 5. Sourcing-Logbuch aufbauen & ERST-FOKUS auf den ersten Tab setzen
+    const historyList = Array.isArray(sample.session_history) && sample.session_history.length > 0
+      ? sample.session_history
+      : [{
+          url: sample.source_url || 'https://journal-nature.org/cell-study-2026',
+          lq_score: sampleLq,
+          s_tox: sampleStox,
+          n_nut: sampleNnut,
+          toxic_snippets: Array.isArray(sample.toxic_snippets) ? sample.toxic_snippets : [],
+          nutrient_snippets: Array.isArray(sample.nutrient_snippets) ? sample.nutrient_snippets : [],
+          macro_tox_categories: Array.isArray(sample.macro_tox_categories) ? sample.macro_tox_categories : (sample.macro_reasons || []),
+          macro_nut_categories: Array.isArray(sample.macro_nut_categories) ? sample.macro_nut_categories : [],
+          timestamp: sample.timestamp || Date.now()
+        }];
 
-  // ==========================================================================
-  // 5. TOP-DOWN STEUERUNG IN ZONE 3 (QUELLEN-NAVIGATION & TIEFEN-ANALYSE)
-  // ==========================================================================
-  function unlockToolsPanel(sample) {
-    if (zoneToolsPanel) {
-      zoneToolsPanel.classList.remove('opacity-30', 'pointer-events-none');
-      zoneToolsPanel.classList.add('opacity-100');
+    renderSessionHistory(historyList);
+
+    // Automatischer Erst-Fokus auf den ersten Tab (steuert NUR Zone 3 rechts an)
+    if (historyList.length > 0) {
+      selectSpecificSourceData(historyList[0]);
     }
-
-    // Panels sichtbar machen falls sie im Detox ausgeblendet wurden
-    if (sessionHistoryPanel) sessionHistoryPanel.classList.remove('hidden');
-    if (extractorPanel) extractorPanel.classList.remove('hidden');
-    if (spectrogramPanel) spectrogramPanel.classList.remove('hidden');
-    if (flushPanel) flushPanel.classList.remove('hidden');
-
-    // 1. ZUERST: FLUTE DAS NAVIGATIONS-FENSTER '#url-history-list' GANZ OBEN
-    renderSessionHistory(sample.session_history);
-
-    // 2. TIEFEN-ANALYSE: Wende die Werte der aktuell fokussierten URL auf alle darunterliegenden Elemente an
-    applyDeepAnalysisForSelectedUrl();
   }
 
-  // Flutet '#url-history-list' mit klickbaren Quellen-Kacheln
+  // ==========================================================================
+  // 6. SOURCING-LOGBUCH RENDERN (ZONE 3)
+  // ==========================================================================
   function renderSessionHistory(historyList) {
     if (!urlHistoryList) return;
     urlHistoryList.innerHTML = '';
-
-    if (!Array.isArray(historyList) || historyList.length === 0) {
-      if (urlHistoryCount) urlHistoryCount.textContent = '1 Quelle';
-      urlHistoryList.innerHTML = '<div class="text-gray-500 italic text-[11px] p-2">Keine weiteren Quellen archiviert.</div>';
-      return;
-    }
 
     if (urlHistoryCount) {
       urlHistoryCount.textContent = `${historyList.length} ${historyList.length === 1 ? 'Quelle' : 'Quellen'}`;
     }
 
-    // Zeige die URLs in chronologischer Reihenfolge (Neueste ganz oben)
-    const reversedHistory = [...historyList].reverse();
+    historyList.forEach(function (entry, index) {
+      const urlStr = entry.url || 'Unbekannte Quelle';
+      const entryLq = safeNum(entry.lq_score ?? entry.lq, 1.0);
+      const morph = getMorphologyState(entryLq);
 
-    reversedHistory.forEach(function (entry) {
-      const urlLq = typeof entry.lq_score === 'number' ? entry.lq_score : 1.0;
-      const morph = getMorphologyState(urlLq);
-      const isFiltered = selectedUrlFilter === entry.url;
-
-      const chip = document.createElement('div');
-      chip.className = `p-2.5 rounded-xl border font-mono text-xs cursor-pointer transition-all duration-200 flex flex-col space-y-1 select-none ${
-        isFiltered
-          ? 'ring-2 ring-cyan-400 brightness-125 scale-[1.01]'
-          : 'hover:brightness-110 opacity-80 hover:opacity-100'
-      }`;
-      chip.style.backgroundColor = isFiltered ? 'rgba(12, 74, 96, 0.55)' : 'rgba(15, 23, 42, 0.9)';
-      chip.style.borderColor = isFiltered ? '#00f2fe' : morph.colorHex + '66';
-      chip.style.boxShadow = isFiltered ? `0 0 16px ${morph.colorHex}66` : `0 0 8px ${morph.colorHex}22`;
-
-      let urlDisplay = entry.url;
+      let cleanHostname = urlStr;
       try {
-        const u = new URL(entry.url);
-        urlDisplay = u.hostname + (u.pathname.length > 20 ? u.pathname.substring(0, 20) + '...' : u.pathname);
+        const u = new URL(urlStr);
+        cleanHostname = u.hostname + (u.pathname.length > 1 ? u.pathname.slice(0, 16) + '...' : '');
       } catch (e) {
-        urlDisplay = entry.url.length > 30 ? entry.url.substring(0, 27) + '...' : entry.url;
+        cleanHostname = urlStr.slice(0, 22) + '...';
       }
 
-      const dateStr = entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '';
+      const isSelected = selectedUrlFilter === urlStr || (!selectedUrlFilter && index === 0);
 
-      chip.innerHTML = `
-        <div class="flex items-center justify-between">
-          <span class="font-bold text-[11px] truncate flex items-center space-x-1.5" style="color: ${isFiltered ? '#ffffff' : morph.colorHex};">
-            <span class="${isFiltered ? 'text-cyan-400 font-bold' : ''}">🔗</span>
-            <span class="truncate">${urlDisplay}</span>
-          </span>
-          <span class="text-[10px] px-1.5 py-0.2 rounded border font-bold ${morph.badgeClass}" style="background-color: ${morph.colorHex}18;">
-            LQ ${urlLq.toFixed(2)}
-          </span>
+      const item = document.createElement('div');
+      item.className = `p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between text-xs font-mono ${
+        isSelected
+          ? 'border-cyan-400 bg-cyan-950/40 text-cyan-200 shadow-md'
+          : 'border-gray-800 bg-gray-900/40 hover:bg-gray-800 text-gray-400 hover:text-white'
+      }`;
+
+      item.innerHTML = `
+        <div class="flex items-center space-x-2 truncate mr-2">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: ${morph.colorHex};"></span>
+          <span class="truncate" title="${urlStr}">${cleanHostname}</span>
         </div>
-        <div class="flex items-center justify-between text-[10px] text-gray-400 pt-1 border-t border-gray-800/80">
-          <span class="${isFiltered ? 'text-cyan-300 font-semibold' : ''}">${isFiltered ? '● AKTIV IM FOKUS' : 'Klicken zur Detailanalyse'}</span>
-          <span>${dateStr}</span>
+        <div class="flex items-center space-x-1 flex-shrink-0">
+          <span class="text-[10px] font-bold" style="color: ${morph.colorHex};">LQ ${entryLq.toFixed(2)}</span>
+          <span class="text-gray-500 text-[10px]">${isSelected ? '●' : '○'}</span>
         </div>
       `;
 
-      // INTERAKTIVE TIEFEN-STEUERUNG: Klick auf URL filtert alle darunterliegenden Bereiche exakt
-      chip.addEventListener('click', function () {
-        selectedUrlFilter = entry.url;
-        console.log('[Q-O Top-Down Kaskade] Fokus geschaltet auf Quelle:', entry.url);
-        
-        // Re-Render History List für visuelle Highlight-Aktualisierung
-        renderSessionHistory(historyList);
-
-        // Analyse der gesamten Spalte darunter und des Seziertischs live umschalten
-        applyDeepAnalysisForSelectedUrl();
+      item.addEventListener('click', function () {
+        selectSpecificSourceData(entry);
       });
 
-      urlHistoryList.appendChild(chip);
+      urlHistoryList.appendChild(item);
     });
   }
 
-  // Wendet die Daten der aktuell ausgewählten URL exakt auf die darunterliegenden Sektionen an
-  function applyDeepAnalysisForSelectedUrl() {
-    if (!currentSample) return;
+  // ==========================================================================
+  // 7. STRATEGISCHE QUELLENAUSWAHL MIT SYMMETRISCHEM 2-BOXEN-TAB-SYSTEM
+  // ==========================================================================
+  // WICHTIG: Hier wird KEINESFALLS blobCore, scoreDisplay oder largeCell
+  // (Zone 2 Mitte) modifiziert! Die Petrischale bleibt unberührt eingefroren!
+  function selectSpecificSourceData(sourceEntry) {
+    if (!sourceEntry) return;
 
-    let activeData = currentSample;
-    if (selectedUrlFilter && Array.isArray(currentSample.session_history)) {
-      const matched = currentSample.session_history.find((item) => item.url === selectedUrlFilter);
-      if (matched) {
-        activeData = {
-          ...currentSample,
-          lq: typeof matched.lq_score === 'number' ? matched.lq_score : currentSample.lq,
-          s_tox: typeof matched.s_tox === 'number' ? matched.s_tox : currentSample.s_tox,
-          n_nut: typeof matched.n_nut === 'number' ? matched.n_nut : currentSample.n_nut,
-          source_url: matched.url,
-          // Exakt NUR die Snippets dieser spezifischen URL verwenden!
-          toxic_snippets: Array.isArray(matched.toxic_snippets) ? matched.toxic_snippets : [],
-          nutrient_snippets: Array.isArray(matched.nutrient_snippets) ? matched.nutrient_snippets : []
-        };
-      }
-    }
+    const urlStr = typeof sourceEntry === 'string' ? sourceEntry : sourceEntry.url;
+    selectedUrlFilter = urlStr;
 
-    const sTox = typeof activeData.s_tox === 'number' ? activeData.s_tox : 0.5;
-    const nNut = typeof activeData.n_nut === 'number' ? activeData.n_nut : 1.5;
-    const lq = typeof activeData.lq === 'number' ? activeData.lq : 1.0;
-    const sourceUrl = activeData.source_url || 'Konsolidierte Quelle';
-
-    // 1. ZELL-MORPHOLOGIE & SEZIERTISCH SYNCHRONISIEREN
-    const activeMorph = getMorphologyState(lq);
-    if (largeCell) {
-      largeCell.className = 'relative flex items-center justify-center transition-all duration-700 opacity-100 transform scale-100 ' + activeMorph.className;
+    // Quelleneintrag auflösen
+    let entryData = typeof sourceEntry === 'object' ? sourceEntry : null;
+    if (!entryData && currentSample && Array.isArray(currentSample.session_history)) {
+      entryData = currentSample.session_history.find((item) => item.url === urlStr);
     }
-    if (nucleusLqDisplay) {
-      nucleusLqDisplay.textContent = lq.toFixed(2);
-    }
-    if (teleSampleId) {
-      teleSampleId.textContent = currentSample.biopsy_id;
-    }
-    if (teleLqVal) {
-      teleLqVal.textContent = lq.toFixed(2);
-      teleLqVal.style.color = activeMorph.colorHex;
-    }
-    if (teleRatioVal) {
-      teleRatioVal.textContent = `${sTox.toFixed(2)} / ${nNut.toFixed(2)}`;
-    }
-    if (teleStateBadge) {
-      teleStateBadge.textContent = selectedUrlFilter ? `${activeMorph.label} (Fokussiert)` : activeMorph.label;
-      teleStateBadge.className = 'font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-xs border ' + activeMorph.badgeClass;
+    if (!entryData) {
+      entryData = currentSample || {
+        lq_score: 1.0,
+        s_tox: 0.5,
+        n_nut: 1.5,
+        toxic_snippets: [],
+        nutrient_snippets: [],
+        macro_tox_categories: [],
+        macro_nut_categories: []
+      };
     }
 
-    // 2. STATUS-BADGE & CLUSTER-TITEL MUTIEREN
+    activeSourceData = entryData;
+
+    // 1. ABSOLUTE VARIABLEN-SICHERUNG (Exakte Kopplung an Python-Datenströme mit Fallbacks)
+    const macrosTox = Array.isArray(entryData.macro_tox_categories) 
+      ? entryData.macro_tox_categories 
+      : (Array.isArray(entryData.macro_reasons) ? entryData.macro_reasons : []);
+    const snippetsTox = Array.isArray(entryData.toxic_snippets) ? entryData.toxic_snippets : [];
+    const macrosNut = Array.isArray(entryData.macro_nut_categories) ? entryData.macro_nut_categories : [];
+    const snippetsNut = Array.isArray(entryData.nutrient_snippets) ? entryData.nutrient_snippets : [];
+
+    const tabLq = safeNum(entryData.lq_score ?? entryData.lq, 1.0);
+    const tabMorph = getMorphologyState(tabLq);
+
+    // 2. STATUS-DACH GANZ RECHTS ANSTEUERN (#tools-status-badge & #tools-status-title)
     if (toolsStatusBadge) {
-      toolsStatusBadge.textContent = activeMorph.label;
-      toolsStatusBadge.className = 'text-xs font-mono px-2 py-0.5 rounded-full border ' + activeMorph.badgeClass;
-      toolsStatusBadge.style.backgroundColor = activeMorph.colorHex + '22';
+      toolsStatusBadge.textContent = `Tab LQ: ${tabLq.toFixed(2)}`;
+      toolsStatusBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold font-mono border transition-all ' + tabMorph.badgeClass;
+      toolsStatusBadge.style.color = tabMorph.colorHex;
     }
 
-    let categoryTitle = '';
-    let hexColor = activeMorph.colorHex;
-    let snippetsToDisplay = [];
-
-    let cleanDisplayUrl = sourceUrl;
-    try {
-      const u = new URL(sourceUrl);
-      cleanDisplayUrl = u.hostname;
-    } catch (e) {
-      cleanDisplayUrl = sourceUrl.slice(0, 22);
+    if (toolsStatusTitle) {
+      toolsStatusTitle.style.color = tabMorph.colorHex;
     }
 
-    if (lq >= 1.0) {
-      categoryTitle = `NÄHRSTOFF-CLUSTER [${cleanDisplayUrl}]`;
-      hexColor = '#00f2fe';
-      if (Array.isArray(activeData.nutrient_snippets) && activeData.nutrient_snippets.length > 0) {
-        snippetsToDisplay = activeData.nutrient_snippets;
+    // 3. BADGES MIT DER GESAMTSUMME AKTUALISIEREN
+    if (microToxicBadge) {
+      microToxicBadge.textContent = (macrosTox.length + snippetsTox.length).toString();
+    }
+    if (microNutrientBadge) {
+      microNutrientBadge.textContent = (macrosNut.length + snippetsNut.length).toString();
+    }
+
+    // 4. Sourcing-Logbuch Markierung synchronisieren
+    if (currentSample && Array.isArray(currentSample.session_history)) {
+      renderSessionHistory(currentSample.session_history);
+    }
+
+    // 5. SITZUNGS-DEFAULT & AUTOMATISCHER REFLOW:
+    // Jedes Mal, wenn eine neue URL angeklickt wird, beide Boxen standardmäßig auf STRUKTUR ('macro')
+    // zurücksetzen und aktiv die Tabs simulieren!
+    currentToxicTab = 'macro';
+    currentNutrientTab = 'macro';
+
+    // 6. Anzeige für beide Haupt-Gefäße aktualisieren
+    renderToxicBox();
+    renderNutrientBox();
+  }
+
+  // ==========================================================================
+  // 7.1 RENDERN DES SCHADSTOFF-GEFÄSSES (BOX 1: #toxic-display-list)
+  // ==========================================================================
+  function renderToxicBox() {
+    if (!tabToxicMacro || !tabToxicMicro || !toxicDisplayList) return;
+
+    const entryData = activeSourceData || currentSample || {};
+    const macrosTox = Array.isArray(entryData.macro_tox_categories) 
+      ? entryData.macro_tox_categories 
+      : (Array.isArray(entryData.macro_reasons) ? entryData.macro_reasons : []);
+    const snippetsTox = Array.isArray(entryData.toxic_snippets) ? entryData.toxic_snippets : [];
+
+    // Badge synchron halten
+    if (microToxicBadge) {
+      microToxicBadge.textContent = (macrosTox.length + snippetsTox.length).toString();
+    }
+
+    // Tab-Styling umschalten
+    if (currentToxicTab === 'macro') {
+      tabToxicMacro.className = 'cursor-pointer font-bold transition-all text-purple-400 border-b border-purple-500/40 pb-0.5';
+      tabToxicMicro.className = 'cursor-pointer font-bold transition-all text-gray-600 hover:text-gray-400';
+    } else {
+      tabToxicMacro.className = 'cursor-pointer font-bold transition-all text-gray-600 hover:text-gray-400';
+      tabToxicMicro.className = 'cursor-pointer font-bold transition-all text-red-400 border-b border-red-500/40 pb-0.5';
+    }
+
+    toxicDisplayList.innerHTML = '';
+
+    if (currentToxicTab === 'macro') {
+      // STRUKTUR (Macro-Schadstoffe)
+      if (macrosTox.length === 0) {
+        toxicDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1.5 font-mono">• Keine strukturellen Makro-Toxine erkannt.</div>';
       } else {
-        snippetsToDisplay = ['Homöostatisches Gewebe: Keine toxischen Affekt-Phrasen in dieser Quelle isoliert.'];
-      }
-    } else if (lq >= 0.5) {
-      categoryTitle = `STRESS-CLUSTER [${cleanDisplayUrl}]`;
-      hexColor = '#ff9900';
-      if (Array.isArray(activeData.toxic_snippets) && activeData.toxic_snippets.length > 0) {
-        snippetsToDisplay = activeData.toxic_snippets;
-      } else {
-        snippetsToDisplay = ['Mäßige Reizdichte und syntaktische Zuspitzung festgestellt.'];
+        macrosTox.forEach(function (cat) {
+          const item = document.createElement('div');
+          item.className = 'p-1.5 rounded-lg bg-purple-950/20 border border-purple-900/40 text-purple-300 text-[10px] leading-relaxed flex items-start space-x-1.5 select-text shadow-sm';
+          item.innerHTML = `
+            <span class="text-purple-400 font-bold flex-shrink-0">📊 [MAKRO]</span>
+            <span class="flex-1">${cat}</span>
+          `;
+          toxicDisplayList.appendChild(item);
+        });
       }
     } else {
-      categoryTitle = `GIFT-CLUSTER [${cleanDisplayUrl}]`;
-      hexColor = '#f43f5e';
-      if (Array.isArray(activeData.toxic_snippets) && activeData.toxic_snippets.length > 0) {
-        snippetsToDisplay = activeData.toxic_snippets;
+      // ZITATE (Micro-Toxine / Originalsätze)
+      if (snippetsTox.length === 0) {
+        toxicDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1.5 font-mono">🚨 Keine akuten Mikro-Toxin-Phrasen auf dieser Seite.</div>';
       } else {
-        snippetsToDisplay = ['Hohe Konzentration toxischer Affekt-Phrasen in dieser Quelle extrahiert.'];
+        snippetsTox.forEach(function (snippet) {
+          const item = document.createElement('div');
+          item.className = 'p-1.5 rounded-lg bg-black/40 border border-red-950/60 text-red-400 text-[10px] leading-relaxed flex items-start space-x-1.5 select-text';
+          item.innerHTML = `
+            <span class="flex-shrink-0 text-red-400 font-bold">🚨</span>
+            <span class="flex-1">${snippet}</span>
+          `;
+          toxicDisplayList.appendChild(item);
+        });
       }
     }
+  }
 
-    if (clusterCategoryTitle) {
-      clusterCategoryTitle.textContent = categoryTitle;
-      clusterCategoryTitle.style.color = hexColor;
+  // ==========================================================================
+  // 7.2 RENDERN DES NÄHRSTOFF-GEFÄSSES (BOX 2: #nutrient-display-list)
+  // ==========================================================================
+  function renderNutrientBox() {
+    if (!tabNutrientMacro || !tabNutrientMicro || !nutrientDisplayList) return;
+
+    const entryData = activeSourceData || currentSample || {};
+    const macrosNut = Array.isArray(entryData.macro_nut_categories) ? entryData.macro_nut_categories : [];
+    const snippetsNut = Array.isArray(entryData.nutrient_snippets) ? entryData.nutrient_snippets : [];
+
+    // Badge synchron halten
+    if (microNutrientBadge) {
+      microNutrientBadge.textContent = (macrosNut.length + snippetsNut.length).toString();
     }
 
-    if (herdFocusLabel) {
-      herdFocusLabel.textContent = lq >= 1.0 ? 'Herd 1 (Homöostase)' : (lq >= 0.5 ? 'Herd 2 (Reizung)' : 'Herd 3 (Toxizität)');
-      herdFocusLabel.style.color = hexColor;
+    // Tab-Styling umschalten
+    if (currentNutrientTab === 'macro') {
+      tabNutrientMacro.className = 'cursor-pointer font-bold transition-all text-cyan-400 border-b border-cyan-500/40 pb-0.5';
+      tabNutrientMicro.className = 'cursor-pointer font-bold transition-all text-gray-600 hover:text-gray-400';
+    } else {
+      tabNutrientMacro.className = 'cursor-pointer font-bold transition-all text-gray-600 hover:text-gray-400';
+      tabNutrientMicro.className = 'cursor-pointer font-bold transition-all text-cyan-300 border-b border-cyan-500/40 pb-0.5';
     }
 
-    // 3. ECHTE TEXT-SNIPPETS RENDERN (EXAKT FÜR DIESE QUELLE)
-    renderRealForensicSnippets(snippetsToDisplay, hexColor);
+    nutrientDisplayList.innerHTML = '';
 
-    // 4. SPEKTROGRAMM & SCHADSTOFF-DIAGRAMM SYNCHRONISIEREN
-    const totalMass = Math.max(0.01, sTox + nNut);
-    let toxPercentage = Math.round((sTox / totalMass) * 100);
-    toxPercentage = Math.max(5, Math.min(95, toxPercentage));
-
-    const affektScale = Math.min(10, Math.max(0.2, sTox * 2.2)).toFixed(1);
-    const syntaktScale = Math.min(10, Math.max(0.5, sTox * 1.8 + 0.4)).toFixed(1);
-    const naehrwertScale = Math.min(10, Math.max(0.2, nNut * 2.5)).toFixed(1);
-
-    updateSpectrogram(
-      toxPercentage,
-      `${affektScale} / 10`,
-      `${syntaktScale} / 10`,
-      `${naehrwertScale} / 10`,
-      hexColor
-    );
-  }
-
-  // Interaktive Render-Funktion für reale Beweissätze aus den Snippet-Arrays
-  function renderRealForensicSnippets(snippets, hexColor) {
-    if (!toxicWordsContainer) return;
-    toxicWordsContainer.innerHTML = '';
-
-    snippets.forEach(function (sentence, index) {
-      const chip = document.createElement('div');
-      chip.className = 'w-full p-2 rounded-lg font-mono text-xs border cursor-pointer transition-all duration-150 transform hover:brightness-125 select-none leading-relaxed flex items-start space-x-2';
-      chip.style.color = hexColor;
-      chip.style.borderColor = hexColor + '66';
-      chip.style.backgroundColor = hexColor + '18';
-
-      const previewText = sentence.length > 95 ? sentence.substring(0, 92) + '...' : sentence;
-
-      chip.innerHTML = `
-        <span class="font-bold opacity-75 flex-shrink-0">#${index + 1}</span>
-        <span class="flex-1">${previewText}</span>
-      `;
-
-      chip.addEventListener('click', function () {
-        inspectEvidenceSentence(sentence, index + 1, hexColor);
-      });
-
-      toxicWordsContainer.appendChild(chip);
-    });
-  }
-
-  // Detail-Inspektion des realen Satzes im Monospace-Inspektor
-  function inspectEvidenceSentence(fullSentence, snippetIndex, hexColor) {
-    if (!forensicInspectorPanel || !forensicSnippetText) return;
-
-    forensicSnippetText.textContent = `„${fullSentence}“`;
-    if (forensicMatchTag) {
-      forensicMatchTag.textContent = `Beweissatz #${snippetIndex}`;
-      forensicMatchTag.style.color = hexColor;
-    }
-
-    forensicInspectorPanel.classList.remove('hidden');
-    forensicInspectorPanel.style.borderColor = hexColor + 'aa';
-  }
-
-  // Schließen-Button für Forensik-Inspektor
-  if (btnCloseInspector && forensicInspectorPanel) {
-    btnCloseInspector.addEventListener('click', function () {
-      forensicInspectorPanel.classList.add('hidden');
-    });
-  }
-
-  function updateSpectrogram(percentage, affekt, syntakt, naehrwert, strokeHex) {
-    if (schadstoffVal) schadstoffVal.textContent = percentage + '%';
-    if (schadstoffCircle) {
-      schadstoffCircle.setAttribute('stroke-dasharray', `${percentage}, 100`);
-      schadstoffCircle.style.color = strokeHex;
-    }
-    if (valAffekt) {
-      valAffekt.textContent = affekt;
-      valAffekt.style.color = strokeHex;
-    }
-    if (valSyntakt) valSyntakt.textContent = syntakt;
-    if (valNaehrwert) valNaehrwert.textContent = naehrwert;
-  }
-
-  // Event Listener für die 3 Gewebeherde
-  if (herd1Synthetic) {
-    herd1Synthetic.addEventListener('click', function (e) {
-      e.stopPropagation();
-      triggerHerdFocus(1, 'Synthetischer Herd (Geometrisch)');
-    });
-  }
-
-  if (herd2Diffuse) {
-    herd2Diffuse.addEventListener('click', function (e) {
-      e.stopPropagation();
-      triggerHerdFocus(2, 'Diffuser Entzündungsherd (Nebel)');
-    });
-  }
-
-  if (herd3Necrotic) {
-    herd3Necrotic.addEventListener('click', function (e) {
-      e.stopPropagation();
-      triggerHerdFocus(3, 'Nekrotischer Herd (Akut Toxisch)');
-    });
-  }
-
-  function triggerHerdFocus(herdNum, herdName) {
-    if (largeCell) {
-      largeCell.style.transform = 'scale(1.03)';
-      setTimeout(() => { largeCell.style.transform = 'scale(1)'; }, 200);
-    }
-    if (herdFocusLabel) {
-      herdFocusLabel.textContent = herdName;
+    if (currentNutrientTab === 'macro') {
+      // STRUKTUR (Macro-Nährwert)
+      if (macrosNut.length === 0) {
+        nutrientDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1.5 font-mono">• Keine Makro-Nährstoffe isoliert.</div>';
+      } else {
+        macrosNut.forEach(function (cat) {
+          const item = document.createElement('div');
+          item.className = 'p-1.5 rounded-lg bg-emerald-950/20 border border-emerald-900/40 text-emerald-300 text-[10px] leading-relaxed flex items-start space-x-1.5 select-text shadow-sm';
+          item.innerHTML = `
+            <span class="text-emerald-400 font-bold flex-shrink-0">📊 [MAKRO]</span>
+            <span class="flex-1">${cat}</span>
+          `;
+          nutrientDisplayList.appendChild(item);
+        });
+      }
+    } else {
+      // ZITATE (Micro-Nährwert / Evidenz-Originalsätze)
+      if (snippetsNut.length === 0) {
+        nutrientDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1.5 font-mono">💎 Keine Mikro-Nährstoff-Zitate vorhanden.</div>';
+      } else {
+        snippetsNut.forEach(function (snippet) {
+          const item = document.createElement('div');
+          item.className = 'p-1.5 rounded-lg bg-black/40 border border-cyan-950/60 text-cyan-300 text-[10px] leading-relaxed flex items-start space-x-1.5 select-text';
+          item.innerHTML = `
+            <span class="flex-shrink-0 text-cyan-400 font-bold">💎</span>
+            <span class="flex-1">${snippet}</span>
+          `;
+          nutrientDisplayList.appendChild(item);
+        });
+      }
     }
   }
 
   // ==========================================================================
-  // 6. LINGUISTISCHER SPÜL-AKTIVATOR (ECHTER FAKTENCHECK & WELTWISSEN)
+  // 7.3 EVENT-LISTENER FÜR DIE TABS
+  // ==========================================================================
+  if (tabToxicMacro) {
+    tabToxicMacro.addEventListener('click', function () {
+      currentToxicTab = 'macro';
+      renderToxicBox();
+    });
+  }
+  if (tabToxicMicro) {
+    tabToxicMicro.addEventListener('click', function () {
+      currentToxicTab = 'micro';
+      renderToxicBox();
+    });
+  }
+  if (tabNutrientMacro) {
+    tabNutrientMacro.addEventListener('click', function () {
+      currentNutrientTab = 'macro';
+      renderNutrientBox();
+    });
+  }
+  if (tabNutrientMicro) {
+    tabNutrientMicro.addEventListener('click', function () {
+      currentNutrientTab = 'micro';
+      renderNutrientBox();
+    });
+  }
+
+  // ==========================================================================
+  // 8. DER ISOLIERTE FLUSH (SCHREIBGESCHÜTZT, KEINE SCORE-MANIPULATION)
   // ==========================================================================
   if (btnLinguisticFlush) {
-    btnLinguisticFlush.addEventListener('click', async function () {
-      if (!currentSample) return;
+    btnLinguisticFlush.addEventListener('click', function () {
+      if (!currentSample) {
+        alert('Bitte wähle zuerst eine Biopsie-Probe aus der linken Gewebebank!');
+        return;
+      }
 
+      // Greift sich schreibgeschützt immer alle Sätze ab, die sich AKTUELL im Array 'toxic_snippets' befinden
+      const entryData = activeSourceData || currentSample;
+      let toxicSentences = Array.isArray(entryData.toxic_snippets) && entryData.toxic_snippets.length > 0
+        ? [...entryData.toxic_snippets]
+        : (Array.isArray(currentSample.toxic_snippets) ? [...currentSample.toxic_snippets] : []);
+
+      // Wenn keine Mikro-Zitate vorhanden sind, Makro-Gründe einbinden für eine inhaltliche Spülung
+      if (toxicSentences.length === 0) {
+        const macroTox = Array.isArray(entryData.macro_tox_categories) 
+          ? entryData.macro_tox_categories 
+          : (Array.isArray(entryData.macro_reasons) ? entryData.macro_reasons : []);
+        if (macroTox.length > 0) {
+          toxicSentences = [...macroTox];
+        }
+      }
+
+      const rawToxicText = toxicSentences.join(' ') || 'Die Krise eskaliert dramatisch und bedroht das gesamte System!';
+      const activeUrl = selectedUrlFilter || entryData.url || currentSample.source_url || 'https://journal-nature.org';
+
+      // UI Feedback
       btnLinguisticFlush.disabled = true;
       if (btnFlushLabel) btnFlushLabel.textContent = 'Spülung aktiv...';
       if (flushSpinnerIcon) flushSpinnerIcon.classList.add('animate-spin');
       if (flushFeedback) {
-        flushFeedback.textContent = 'Spülung aktiv: KI-Faktencheck & Weltwissen-Abgleich...';
-        flushFeedback.style.color = '#00f2fe';
-      }
-
-      const toxicSnippets = Array.isArray(currentSample.toxic_snippets) && currentSample.toxic_snippets.length > 0
-        ? currentSample.toxic_snippets
-        : ['Eskalation und alarmistischer Kollaps im untersuchten Text extrahiert.'];
-
-      const flushPayload = {
-        toxic_text: currentSample.source_url || 'Reisserische Berichterstattung',
-        toxic_snippets: toxicSnippets,
-        biopsy_id: currentSample.biopsy_id,
-        source_url: currentSample.source_url
-      };
-
-      let flushResult = null;
-
-      // 1. Primär: Fetch an das Python-Backend http://localhost:8000/api/flush
-      try {
-        const response = await fetch('http://localhost:8000/api/flush', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(flushPayload)
-        });
-        if (response.ok) {
-          flushResult = await response.json();
-        }
-      } catch (err) {
-        console.warn('[Q-O Spülung] Direkter Backend-Fetch nicht erreichbar, nutze Hintergrund-Relais:', err);
-      }
-
-      // 2. Sekundär: Falls Extension-Kontext aktiv, Service-Worker anfunken
-      if (!flushResult && typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-        try {
-          const bgRes = await new Promise((resolve) => {
-            chrome.runtime.sendMessage({ type: 'FLUSH_TEXT', ...flushPayload }, resolve);
-          });
-          if (bgRes && bgRes.data) {
-            flushResult = bgRes.data;
-          }
-        } catch (e) {}
-      }
-
-      // 3. Fallback: Robuste wissenschaftliche Entgiftung mit Weltwissen
-      if (!flushResult) {
-        flushResult = {
-          original_text: toxicSnippets.join(' '),
-          neutralized_text: 'Sachverhalt: Die beschriebenen Vorkommnisse stellen eine reguläre Prozessdynamik dar, welche ohne affektive Zuspitzung sachlich analysiert und eingeordnet wird.',
-          context_antidote: 'Forensischer Faktencheck (Weltwissen): Wissenschaftliche und historische Vergleiche zeigen, dass alarmistische Zuspitzungen die tatsächliche Faktenlage verzerren. Die Kausalitätsketten wurden verifiziert und bereinigt.',
-          clean_alternative: 'Sachverhalt neutralisiert.',
-          lq_boosted: 1.25
-        };
-      }
-
-      // 4. Morphologie und UI nach erfolgreicher Spülung aktualisieren
-      currentSample.lq = flushResult.lq_boosted || 1.25;
-      currentSample.s_tox = 0.20;
-      currentSample.n_nut = 3.10;
-      currentSample.nutrient_snippets = [
-        flushResult.neutralized_text || 'Text bereinigt und neutralisiert.',
-        'Strukturelle Homöostase wiederhergestellt.'
-      ];
-      currentSample.toxic_snippets = [];
-
-      // Alle URLs in session_history auf bereinigt setzen
-      if (Array.isArray(currentSample.session_history)) {
-        currentSample.session_history.forEach(function (h) {
-          h.lq_score = currentSample.lq;
-          h.s_tox = 0.20;
-          h.n_nut = 3.10;
-          h.toxic_snippets = [];
-          h.nutrient_snippets = currentSample.nutrient_snippets;
-        });
-        renderSessionHistory(currentSample.session_history);
-      }
-
-      // Tiefen-Analyse neu aufrufen
-      applyDeepAnalysisForSelectedUrl();
-
-      // 5. Gegengift-Container in Zone 3 befüllen
-      const worldAntidote = flushResult.context_antidote || 'Faktencheck verifiziert: Weltwissen-Abgleich abgeschlossen.';
-      const cleanText = flushResult.neutralized_text || 'Text bereinigt und neutralisiert.';
-
-      if (antidotePanel) {
-        antidotePanel.classList.remove('hidden');
-      }
-      if (antidoteText) {
-        antidoteText.textContent = worldAntidote;
-      }
-
-      if (antidoteContainer) {
-        if (antidoteNeutralizedText) antidoteNeutralizedText.textContent = cleanText;
-        if (antidoteWorldKnowledge) antidoteWorldKnowledge.textContent = worldAntidote;
-        antidoteContainer.classList.remove('hidden');
-      }
-
-      if (flushFeedback) {
-        flushFeedback.textContent = '✓ Detox abgeschlossen: Faktenintegrität & Homöostase wiederhergestellt.';
+        flushFeedback.textContent = 'Neutralisiere Toxin-Phrasen...';
         flushFeedback.style.color = '#34d399';
       }
 
-      if (btnFlushLabel) btnFlushLabel.textContent = 'Linguistische Spülung einleiten';
-      if (flushSpinnerIcon) flushSpinnerIcon.classList.remove('animate-spin');
-      btnLinguisticFlush.disabled = false;
+      // Primär über chrome.runtime.sendMessage an den Service Worker
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage(
+          {
+            type: 'FLUSH_BIOPSY',
+            biopsy_id: currentSample.biopsy_id,
+            toxic_snippets: toxicSentences,
+            raw_text: rawToxicText,
+            url: activeUrl
+          },
+          function (response) {
+            if (response && response.success && response.flush_result) {
+              displayAntidoteText(response.flush_result.neutralized_text);
+            } else {
+              fallbackDirectApiFlush(rawToxicText, activeUrl);
+            }
+          }
+        );
+      } else {
+        fallbackDirectApiFlush(rawToxicText, activeUrl);
+      }
     });
   }
 
+  // Fallback: Direkter API-Aufruf an /api/flush
+  function fallbackDirectApiFlush(rawText, sourceUrl) {
+    fetch('http://127.0.0.1:8000/api/flush', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: rawText, url: sourceUrl })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('API Flush Status ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        displayAntidoteText(data.neutralized_text);
+      })
+      .catch(function (err) {
+        console.warn('[Q-O Labor] Autonome Glättung:', err);
+        const simulatedClean = (rawText || '')
+          .replace(/Schock|Alarm|Drama|Panik|Horror|Kollaps|Zerstörung|Todes-Angst/gi, 'Sachverhalt')
+          .replace(/dramatisch|radikal|brutal|unfassbar/gi, 'gemessen')
+          .replace(/droht alles zu vernichten|bedroht das gesamte System/gi, 'wird derzeit sachlich evaluiert');
+
+        displayAntidoteText(simulatedClean || 'Der Sachverhalt wurde neutralisiert und nüchtern formuliert.');
+      });
+  }
+
+  // Schreibt das Ergebnis isoliert in das untere Antidote-Panel
+  function displayAntidoteText(neutralizedText) {
+    if (antidoteTextNeutral) {
+      antidoteTextNeutral.textContent = neutralizedText || 'Text bereinigt und neutralisiert.';
+    }
+    if (antidotePanel) {
+      antidotePanel.classList.remove('hidden');
+    }
+    if (flushFeedback) {
+      flushFeedback.textContent = '✓ Detox abgeschlossen: Textfeld neutralisiert.';
+      flushFeedback.style.color = '#34d399';
+    }
+    if (btnFlushLabel) btnFlushLabel.textContent = 'Linguistische Spülung einleiten';
+    if (flushSpinnerIcon) flushSpinnerIcon.classList.remove('animate-spin');
+    btnLinguisticFlush.disabled = false;
+  }
+
   // ==========================================================================
-  // 7. ZENTRALER LÖSCH-AKTIVATOR ("GEWEBEBANK LEEREN" / VAULT DETOX)
+  // 9. VAULT-STERILISATION (GEWEBEBANK LEEREN)
   // ==========================================================================
   if (btnClearVault) {
     btnClearVault.addEventListener('click', function () {
       const confirmDetox = confirm('Möchtest du wirklich alle Proben aus dem Vault löschen und die Gewebebank sterilisieren?');
       if (!confirmDetox) return;
 
-      console.log('[Q-O Labor] Initiiere Vault-Vaporisierung & Sterilisation...');
+      console.log('[Q-O Labor] Initiiere Vault-Vaporisierung...');
 
       function resetLaboratoryUI() {
-        // A. Linkes Regal (Zone 1) visuell leeren & Zähler nullen
         if (capsuleListWrapper) {
           capsuleListWrapper.innerHTML = '<div class="text-xs text-gray-600 text-center py-4 font-mono">Gewebebank sterilisiert. Keine Proben im Vault.</div>';
         }
-        if (capsuleCountBadge) {
-          capsuleCountBadge.textContent = '0 Proben';
-        }
+        if (capsuleCountBadge) capsuleCountBadge.textContent = '0 Proben';
 
-        // B. Seziertisch (Zone 2) in sterilen Ausgangszustand zurücksetzen & Start-Instruktionen einblenden
         if (largeCell) {
           largeCell.style.opacity = '0';
           largeCell.style.transform = 'scale(0.85)';
@@ -789,244 +817,145 @@
         if (teleStateBadge) {
           teleStateBadge.textContent = 'Standby';
           teleStateBadge.className = 'font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-xs text-gray-400 border border-gray-700';
-          teleStateBadge.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
         }
 
-        // C. Werkzeugkasten (Zone 3): Schadstoff-Diagramm, Snippets und Gegengift-Panel ausblenden
-        // WICHTIG: Begleitermodus-Button #btn-begleitermodus bleibt VOLL AKTIV, ungedimmt und zu 100% klickbar!
-        if (zoneToolsPanel) {
-          zoneToolsPanel.classList.remove('opacity-30', 'pointer-events-none');
-          zoneToolsPanel.classList.add('opacity-100');
+        if (toolsStatusBadge) {
+          toolsStatusBadge.textContent = 'Tab LQ: --';
+          toolsStatusBadge.className = 'text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 font-bold font-mono';
+          toolsStatusBadge.style.color = '';
         }
-        if (sessionHistoryPanel) {
-          sessionHistoryPanel.classList.add('hidden');
+        if (toolsStatusTitle) {
+          toolsStatusTitle.style.color = '';
         }
-        if (extractorPanel) {
-          extractorPanel.classList.add('hidden');
-        }
-        if (spectrogramPanel) {
-          spectrogramPanel.classList.add('hidden');
-        }
-        if (flushPanel) {
-          flushPanel.classList.add('hidden');
-        }
+
         if (urlHistoryList) urlHistoryList.innerHTML = '';
         if (urlHistoryCount) urlHistoryCount.textContent = '0 Quellen';
-        if (toxicWordsContainer) toxicWordsContainer.innerHTML = '';
-        if (forensicInspectorPanel) forensicInspectorPanel.classList.add('hidden');
-        if (antidoteContainer) antidoteContainer.classList.add('hidden');
+        
+        // Tab-Boxen zurücksetzen
+        currentToxicTab = 'macro';
+        currentNutrientTab = 'macro';
+        if (toxicDisplayList) toxicDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1">Keine Kriterien isoliert.</div>';
+        if (nutrientDisplayList) nutrientDisplayList.innerHTML = '<div class="text-gray-500 italic text-[9px] py-1">Keine Kriterien isoliert.</div>';
+
         if (antidotePanel) antidotePanel.classList.add('hidden');
+        if (antidoteTextNeutral) antidoteTextNeutral.textContent = 'Warte auf biochemische Glättung...';
         if (flushFeedback) flushFeedback.textContent = '';
 
-        updateSpectrogram(0, '0.0 / 10', '0.0 / 10', '0.0 / 10', '#00f2fe');
-
-        // Zustands-Reset
         currentSample = null;
         selectedUrlFilter = null;
-
-        console.log('[Q-O Labor] Gewebebank sterilisiert. Begleitermodus bleibt 100% aktiv.');
+        activeSourceData = null;
       }
 
-      // 1. Lokalen Storage leeren falls vorhanden
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.set({ qo_biopsies: [] });
       }
 
-      // 2. IndexedDB Transaktion 'store.clear()' auf dem 'biopsy_archive' ausführen
       if (typeof indexedDB !== 'undefined') {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        const req = indexedDB.open('QO_Metabolic_Vault', 2);
         req.onsuccess = function (e) {
           const db = e.target.result;
-          if (db.objectStoreNames.contains(STORE_NAME)) {
-            const tx = db.transaction([STORE_NAME], 'readwrite');
-            const store = tx.objectStore(STORE_NAME);
-            const clearReq = store.clear();
-
-            clearReq.onsuccess = function () {
-              resetLaboratoryUI();
-            };
-            clearReq.onerror = function () {
-              resetLaboratoryUI();
-            };
-          } else {
-            resetLaboratoryUI();
+          if (db.objectStoreNames.contains('biopsy_archive')) {
+            const tx = db.transaction('biopsy_archive', 'readwrite');
+            const store = tx.objectStore('biopsy_archive');
+            store.clear();
           }
         };
-        req.onerror = function () {
-          resetLaboratoryUI();
-        };
-      } else {
-        resetLaboratoryUI();
       }
+
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage({ type: 'CLEAR_BIOPSY_VAULT' });
+      }
+
+      resetLaboratoryUI();
     });
   }
 
   // ==========================================================================
-  // 8. MULTI-LAYER BIOPSIE-SYNC & ECHTZEIT-LABOR INITIALISIERUNG
+  // 10. INITIALISIERUNG & MULTI-LAYER VAULT-LADEN
   // ==========================================================================
   function initLaboratory() {
-    // 1. Alle vorhandenen statischen Kapseln initialisieren
-    const initialCapsules = document.querySelectorAll('.biopsy-capsule');
-    initialCapsules.forEach(bindCapsuleEvents);
+    console.log('[Q-O Labor] Initialisiere symmetrisches 2-Boxen-Tab-System...');
 
-    if (capsuleCountBadge) {
-      capsuleCountBadge.textContent = `${initialCapsules.length} Proben`;
-    }
-
-    // 2. URL-Parameter prüfen (z.B. index.html?id=session_...)
     const urlParams = new URLSearchParams(window.location.search);
     const requestedId = urlParams.get('id');
 
-    // 3. Multi-Layer Vault-Abfrage (Chrome Storage + IndexedDB)
-    fetchAllBiopsyRecords(function (records) {
-      console.log(`[Q-O Labor] ${records.length} konsolidierte Sitzungen aus Vault geladen.`);
+    // Statische HTML-Kapseln sofort mit Drag & Drop / Click Event-Listenern verdrahten
+    document.querySelectorAll('.biopsy-capsule').forEach(bindCapsuleEvents);
 
+    // Drag and Drop Zone aktivieren
+    setupDragAndDrop();
+
+    initRealtimeBiopsyListener();
+
+    fetchAllBiopsyRecords(function (records) {
       if (records && records.length > 0 && capsuleListWrapper) {
         capsuleListWrapper.innerHTML = '';
-        // Chronologisch sortieren (Neueste ganz nach vorne)
         records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-        // Kaskaden-Rettung: Rückwärts durchlaufen mit insertBefore
         for (let i = records.length - 1; i >= 0; i--) {
           prependDynamicCapsule(records[i]);
         }
-      }
 
-      // 4. Seziertisch-Beladung: Priorität auf übergebene requestedId, sonst erste archivierte Biopsie
-      if (requestedId) {
-        const found = records.find(function (r) { return r && r.biopsy_id === requestedId; });
-        if (found) {
-          const lqScore = typeof found.lq_score === 'number' ? found.lq_score : 0.35;
-          const sTox = typeof found.s_tox === 'number' ? found.s_tox : parseFloat(((1 - lqScore) * 4).toFixed(2));
-          const nNut = typeof found.n_nut === 'number' ? found.n_nut : parseFloat((lqScore * 3).toFixed(2));
-          loadSampleIntoSeziertisch({
-            biopsy_id: found.biopsy_id,
-            lq: lqScore,
-            s_tox: sTox,
-            n_nut: nNut,
-            source_url: found.source_url || '',
-            toxic_snippets: Array.isArray(found.toxic_snippets) ? found.toxic_snippets : [],
-            nutrient_snippets: Array.isArray(found.nutrient_snippets) ? found.nutrient_snippets : [],
-            session_history: Array.isArray(found.session_history) ? found.session_history : []
-          });
-        } else {
-          loadSampleIntoSeziertisch({
-            biopsy_id: requestedId,
-            lq: 0.35,
-            s_tox: 3.4,
-            n_nut: 0.75,
-            source_url: '',
-            toxic_snippets: ['Eskalation und alarmistische Verzerrung in isolierter Biopsie festgestellt.'],
-            nutrient_snippets: [],
-            session_history: []
-          });
+        if (requestedId) {
+          const found = records.find((r) => r && r.biopsy_id === requestedId);
+          if (found) {
+            applySterileReactorColoring(found);
+            loadSampleIntoSeziertisch(found);
+            return;
+          }
         }
-      } else if (records && records.length > 0) {
-        const first = records[0];
-        if (first && first.biopsy_id) {
-          const lqScore = typeof first.lq_score === 'number' ? first.lq_score : 0.35;
-          const sTox = typeof first.s_tox === 'number' ? first.s_tox : parseFloat(((1 - lqScore) * 4).toFixed(2));
-          const nNut = typeof first.n_nut === 'number' ? first.n_nut : parseFloat((lqScore * 3).toFixed(2));
-          loadSampleIntoSeziertisch({
-            biopsy_id: first.biopsy_id,
-            lq: lqScore,
-            s_tox: sTox,
-            n_nut: nNut,
-            source_url: first.source_url || '',
-            toxic_snippets: Array.isArray(first.toxic_snippets) ? first.toxic_snippets : [],
-            nutrient_snippets: Array.isArray(first.nutrient_snippets) ? first.nutrient_snippets : [],
-            session_history: Array.isArray(first.session_history) ? first.session_history : []
-          });
+        applySterileReactorColoring(records[0]);
+        loadSampleIntoSeziertisch(records[0]);
+      } else {
+        // Falls keine Vault-Daten vorliegen, erste statische Labor-Probe automatisch aktivieren
+        const staticCapsules = document.querySelectorAll('.biopsy-capsule');
+        if (staticCapsules.length > 0) {
+          staticCapsules[0].click();
         }
       }
     });
-
-    // 5. Live-Listener für neu eintreffende Biopsien aus geöffneten Tabs
-    initRealtimeBiopsyListener();
   }
 
-  // Zentraler Daten-Abruf über Service-Worker & IndexedDB
   function fetchAllBiopsyRecords(callback) {
     let combinedRecords = [];
-    const seenIds = new Set();
+    let storageChecked = false;
 
-    function mergeRecords(list) {
-      if (!Array.isArray(list)) return;
-      list.forEach(function (item) {
-        if (item && item.biopsy_id && !seenIds.has(item.biopsy_id)) {
-          seenIds.add(item.biopsy_id);
-          combinedRecords.push(item);
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['qo_biopsies'], function (result) {
+        if (result && Array.isArray(result.qo_biopsies)) {
+          combinedRecords = [...result.qo_biopsies];
         }
+        storageChecked = true;
+        checkIndexedDb();
       });
+    } else {
+      storageChecked = true;
+      checkIndexedDb();
     }
 
-    // A. Primär: Abfrage an den Service Worker (background.js)
-    try {
-      if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
-        chrome.runtime.sendMessage({ type: 'GET_ALL_BIOPSIES' }, function (response) {
-          if (!chrome.runtime.lastError && response && response.records) {
-            mergeRecords(response.records);
-          }
-          checkLocalIndexedDB();
-        });
-      } else {
-        checkLocalIndexedDB();
-      }
-    } catch (e) {
-      checkLocalIndexedDB();
-    }
-
-    // B. Sekundär: Lokale IndexedDB im Erweiterungskontext spiegeln
-    function checkLocalIndexedDB() {
+    function checkIndexedDb() {
       if (typeof indexedDB !== 'undefined') {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-        request.onupgradeneeded = function (e) {
+        const req = indexedDB.open('QO_Metabolic_Vault', 2);
+        req.onerror = function () { callback(combinedRecords); };
+        req.onsuccess = function (e) {
           const db = e.target.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME, { keyPath: 'biopsy_id' });
-          }
-        };
-
-        request.onsuccess = function (e) {
-          const db = e.target.result;
-          if (dbIndicator) dbIndicator.style.backgroundColor = '#00f2fe';
-          if (dbStatusLabel) dbStatusLabel.textContent = 'Vault: Verbunden';
-
-          if (!db || !db.objectStoreNames.contains(STORE_NAME)) {
+          if (!db.objectStoreNames.contains('biopsy_archive')) {
             callback(combinedRecords);
             return;
           }
-
-          const transaction = db.transaction([STORE_NAME], 'readonly');
-          const store = transaction.objectStore(STORE_NAME);
+          const tx = db.transaction('biopsy_archive', 'readonly');
+          const store = tx.objectStore('biopsy_archive');
           const getAllReq = store.getAll();
-
           getAllReq.onsuccess = function () {
             const dbRecords = getAllReq.result || [];
-            mergeRecords(dbRecords);
-            
-            // Gefundene Datensätze aus Storage in die IndexedDB spiegeln
-            if (combinedRecords.length > 0 && db.objectStoreNames.contains(STORE_NAME)) {
-              const writeTx = db.transaction([STORE_NAME], 'readwrite');
-              const writeStore = writeTx.objectStore(STORE_NAME);
-              combinedRecords.forEach(function (rec) {
-                writeStore.put(rec);
-              });
-            }
-
+            dbRecords.forEach(function (rec) {
+              if (rec && rec.biopsy_id && !combinedRecords.some((r) => r.biopsy_id === rec.biopsy_id)) {
+                combinedRecords.push(rec);
+              }
+            });
             callback(combinedRecords);
           };
-
-          getAllReq.onerror = function () {
-            callback(combinedRecords);
-          };
-        };
-
-        request.onerror = function () {
-          if (dbIndicator) dbIndicator.style.backgroundColor = '#f43f5e';
-          if (dbStatusLabel) dbStatusLabel.textContent = 'Vault: Lokaler Modus';
-          callback(combinedRecords);
+          getAllReq.onerror = function () { callback(combinedRecords); };
         };
       } else {
         callback(combinedRecords);
@@ -1034,43 +963,40 @@
     }
   }
 
-  // Live-Empfänger für sofortige Gewebebank-Aktualisierung
   function initRealtimeBiopsyListener() {
     try {
       if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
         chrome.runtime.onMessage.addListener(function (message) {
           if (message && message.type === 'BIOPSY_STORED' && message.record) {
-            const rec = message.record;
-            const existingElement = document.getElementById(`capsule-${rec.biopsy_id}`);
-            if (existingElement) {
-              existingElement.remove();
-            }
-            prependDynamicCapsule(rec);
-            console.log('[Q-O Labor Live] Versiegelte Sitzung archiviert:', rec.biopsy_id);
+            prependDynamicCapsule(message.record);
           }
         });
       }
     } catch (e) {
-      console.warn('[Q-O Labor] Broadcast-Empfang nicht verfügbar:', e);
+      console.warn('[Q-O Labor] Broadcast-Empfang nicht aktiv:', e);
     }
   }
 
-  // Chronologisches Einfügen der konsolidierten Hauptkapsel im linken Regal
   function prependDynamicCapsule(data) {
-    if (!capsuleListWrapper) return;
+    if (!capsuleListWrapper || !data) return;
 
     const existingElement = document.getElementById(`capsule-${data.biopsy_id}`);
-    if (existingElement) {
-      existingElement.remove();
-    }
+    if (existingElement) existingElement.remove();
 
-    const lq = typeof data.lq_score === 'number' ? data.lq_score : 0.35;
+    const lq = safeNum(data.lq_score ?? data.lq, 0.35);
     const morph = getMorphologyState(lq);
-    const sTox = typeof data.s_tox === 'number' ? data.s_tox : parseFloat(((1 - lq) * 4).toFixed(2));
-    const nNut = typeof data.n_nut === 'number' ? data.n_nut : parseFloat((lq * 3).toFixed(2));
+    const sTox = safeNum(data.s_tox ?? data.stox, parseFloat(((1 - lq) * 4).toFixed(2)));
+    const nNut = safeNum(data.n_nut ?? data.nnut, parseFloat((lq * 3).toFixed(2)));
     const sourceUrl = data.source_url || 'Konsolidierte Sitzung';
     const toxicSnippets = Array.isArray(data.toxic_snippets) ? data.toxic_snippets : [];
     const nutrientSnippets = Array.isArray(data.nutrient_snippets) ? data.nutrient_snippets : [];
+    const macroToxCategories = Array.isArray(data.macro_tox_categories) 
+      ? data.macro_tox_categories 
+      : (Array.isArray(data.macro_reasons) ? data.macro_reasons : []);
+    const macroNutCategories = Array.isArray(data.macro_nut_categories) 
+      ? data.macro_nut_categories 
+      : [];
+
     const sessionHistory = Array.isArray(data.session_history) && data.session_history.length > 0
       ? data.session_history
       : [{
@@ -1080,6 +1006,8 @@
           n_nut: nNut,
           toxic_snippets: toxicSnippets,
           nutrient_snippets: nutrientSnippets,
+          macro_tox_categories: macroToxCategories,
+          macro_nut_categories: macroNutCategories,
           timestamp: data.timestamp || Date.now()
         }];
 
@@ -1093,14 +1021,15 @@
     card.setAttribute('data-url', sourceUrl);
     card.setAttribute('data-toxic-snippets', JSON.stringify(toxicSnippets));
     card.setAttribute('data-nutrient-snippets', JSON.stringify(nutrientSnippets));
+    card.setAttribute('data-macro-tox-categories', JSON.stringify(macroToxCategories));
+    card.setAttribute('data-macro-nut-categories', JSON.stringify(macroNutCategories));
     card.setAttribute('data-session-history', JSON.stringify(sessionHistory));
     card.className = 'biopsy-capsule p-3 rounded-xl border transition-all duration-200 cursor-grab active:cursor-grabbing relative flex flex-col space-y-2';
     card.style.backgroundColor = 'rgba(15, 23, 42, 0.85)';
     card.style.borderColor = morph.colorHex + '66';
     card.style.boxShadow = `0 0 12px ${morph.colorHex}22`;
 
-    // Exakte Zählung: Quellenanzahl basiert IMMER auf session_history (Sourcing-Logbuch)
-    const histCount = data.session_history ? data.session_history.length : 1;
+    const histCount = sessionHistory.length;
 
     card.innerHTML = `
       <div class="flex items-center justify-between">
@@ -1120,7 +1049,6 @@
       </div>
     `;
 
-    // Streng an allererster Position einfügen (Index 0 / insertBefore)
     if (capsuleListWrapper.firstChild) {
       capsuleListWrapper.insertBefore(card, capsuleListWrapper.firstChild);
     } else {
@@ -1135,7 +1063,7 @@
     }
   }
 
-  // Initialisierung beim Laden des DOMs (100% ohne Inline-Events)
+  // Start
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initLaboratory);
   } else {

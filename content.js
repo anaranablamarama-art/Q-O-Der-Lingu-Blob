@@ -1,5 +1,10 @@
 // ============================================================================
-// LINGU-BLOB ERWEITERUNG — GLOBALE SYNC-HOMÖOSTASE & SITZUNGS-LOGBUCH (CONTENT.JS)
+// LINGU-BLOB ERWEITERUNG — REAKTIVE MIKRO-GEOMETRIE & KINETIK (CONTENT.JS)
+// ============================================================================
+// Stummer, unaufdringlicher Lese-Begleiter mit non-disruptiver peripherer
+// Kinetik, 3 Mikro-Organellen, Zell-Blitz bei LQ-Grenzübertritt, metabolischem
+// Atmen und asymmetrischem kinetischen Anker.
+// Vollständig integriert mit dem privilegierten background.js Tunnel & Vault.
 // ============================================================================
 
 (function () {
@@ -14,23 +19,25 @@
     s_tox: 0.5,
     n_nut: 1.5,
     source_url: window.location.href,
-    morphology_class: 'q-o-hud-kryo', // Beim allerersten Laden standardmäßig Kryo
+    morphology_class: 'q-o-hud-kryo',
     toxic_snippets: [],
     nutrient_snippets: []
   };
 
   let globalMetabolismState = 'kryo'; // Standardmäßig matt-grau und leblos
+  let currentThresholdCategory = null; // 'stable' (>=1.0), 'deformed' (<1.0), 'toxic' (<0.5), 'kryo'
+  let flashTimeout = null;
   let hoverTimer = null;
   let isDragging = false;
 
-  // 2. DOM-INJEKTION (Der unzerstörbare biologische Bauplan)
+  // 2. DOM-INJEKTION (Reaktiver Zellkörper mit 3 Mikro-Organellen)
   function injectLinguBlob() {
     if (document.getElementById('q-o-symbiont-wrapper')) return;
 
     // Erschaffung des gemeinsamen übergeordneten Wrappers (Container-Trick)
     const wrapper = document.createElement('div');
     wrapper.id = 'q-o-symbiont-wrapper';
-    
+
     // Position aus dem localStorage laden oder Standard unten rechts setzen
     const savedX = localStorage.getItem('q-o-pos-x') || (window.innerWidth - 120) + 'px';
     const savedY = localStorage.getItem('q-o-pos-y') || (window.innerHeight - 120) + 'px';
@@ -38,9 +45,19 @@
     wrapper.style.top = savedY;
 
     wrapper.innerHTML = `
-      <!-- Der gläserne Tiefsee-Zellkörper (Initial im Schock-Frost Zustand) -->
+      <!-- Der gläserne Tiefsee-Zellkörper (Initial im Kryo-Zustand) -->
       <div id="q-o-blob-container" class="q-o-hud-kryo">
         <div class="large-membrane">
+          <!-- Dreiecks-Konstellation der 3px Mikro-Organellen -->
+          <div class="q-o-organelles-constellation">
+            <!-- 1. Cyan Mikro-Kreis (border-radius: 50%) -->
+            <div class="q-o-organelle q-o-dot-cyan" title="LQ Symmetrie-Punkt (Cyan)"></div>
+            <!-- 2. Orange Mikro-Oval (border-radius: 40% 60% 40% 60%) -->
+            <div class="q-o-organelle q-o-dot-orange" title="LQ Deformations-Punkt (Orange)"></div>
+            <!-- 3. Rotes Mikro-Fragment (unregelmäßiger Splitter) -->
+            <div class="q-o-organelle q-o-dot-red" title="LQ Toxizitäts-Fragment (Rot)"></div>
+          </div>
+
           <!-- Zytoplasma Nervenbahnen (SVG) -->
           <svg class="large-cytoplasm-svg" viewBox="0 0 200 200">
             <path class="large-neural-path" d="M 40,100 Q 70,70 100,100 T 160,100" />
@@ -48,11 +65,11 @@
             <circle class="large-neural-node" cx="70" cy="85" r="4" />
             <circle class="large-neural-node" cx="130" cy="115" r="4" />
           </svg>
+
           <!-- Der leuchtende Sichel-Kern (Nucleus) -->
           <div class="large-nucleus-wrapper">
             <div class="large-crescent"></div>
             <div class="large-nucleus-body"></div>
-            <div class="large-nucleolus"></div>
           </div>
         </div>
       </div>
@@ -71,7 +88,56 @@
     initGlobalBroadcastListener();
   }
 
-  // 3. GLOBALE ZUSTANDS-SYNCHRONISATION (ÜBER ALLE TABS)
+  // 3. NON-DISRUPTIVE KONTRAKTION & ZUSTANDS-UMSCHALTUNG
+  // Berechnet die diskrete Schwellenwert-Kategorie anhand des LQ-Scores
+  function calculateThresholdCategory(lqScore) {
+    if (typeof lqScore !== 'number' || isNaN(lqScore)) return 'stable';
+    if (lqScore >= 1.0) return 'stable';      // Tiefsee-Cyan
+    if (lqScore >= 0.5) return 'deformed';    // Neon-Orange
+    return 'toxic';                           // Metabolismus-Rot
+  }
+
+  // Führt die sanfte periphere Zustands-Umschaltung durch
+  function updateWidgetState(lqScore, explicitMorphClass) {
+    const blob = document.getElementById('q-o-blob-container');
+    if (!blob) return;
+
+    if (globalMetabolismState === 'kryo') {
+      blob.className = 'q-o-hud-kryo';
+      currentThresholdCategory = 'kryo';
+      return;
+    }
+
+    const newCategory = calculateThresholdCategory(lqScore);
+    const targetClass = explicitMorphClass || `q-o-hud-${newCategory}`;
+
+    // 1. ZELL-BLITZ: Nur bei echtem Wechsel der Grenzwert-Kategorie für 600ms zünden
+    if (currentThresholdCategory !== null && currentThresholdCategory !== 'kryo' && currentThresholdCategory !== newCategory) {
+      triggerCellFlash(blob);
+    }
+
+    currentThresholdCategory = newCategory;
+    blob.className = targetClass;
+  }
+
+  // Sanfter Zell-Blitz (600ms weicher radialer Glow, der sich im Glaskörper auflöst)
+  function triggerCellFlash(blobElement) {
+    const membrane = blobElement.querySelector('.large-membrane');
+    if (!membrane) return;
+
+    if (flashTimeout) {
+      clearTimeout(flashTimeout);
+      membrane.classList.remove('q-o-cell-flash');
+    }
+
+    membrane.classList.add('q-o-cell-flash');
+    flashTimeout = setTimeout(() => {
+      membrane.classList.remove('q-o-cell-flash');
+      flashTimeout = null;
+    }, 600);
+  }
+
+  // 4. GLOBALE ZUSTANDS-SYNCHRONISATION (ÜBER ALLE TABS)
   function applyGlobalState(state) {
     globalMetabolismState = state;
     const blob = document.getElementById('q-o-blob-container');
@@ -79,13 +145,11 @@
 
     if (state === 'kryo') {
       blob.className = 'q-o-hud-kryo';
+      currentThresholdCategory = 'kryo';
       console.log('[Q-O Homöostase] Globaler Zustand: KRYO (Schlaf)');
     } else {
-      const targetClass = (latestMetabolicData.morphology_class && latestMetabolicData.morphology_class !== 'q-o-hud-kryo')
-        ? latestMetabolicData.morphology_class
-        : 'q-o-hud-stable';
-      blob.className = targetClass;
-      console.log('[Q-O Homöostase] Globaler Zustand: STABIL (Aktiv)');
+      console.log('[Q-O Homöostase] Globaler Zustand: AKTIV');
+      updateWidgetState(latestMetabolicData.lq_score, latestMetabolicData.morphology_class);
       syncMetabolismWithBackend(); // Analyse-Schleife auf aktivem Tab sofort zünden
     }
   }
@@ -101,7 +165,7 @@
             applyGlobalState(message.state);
           }
 
-          // ERGÄNZUNGS-DIREKTIVE: Session wurde nach Biopsie rotiert
+          // Session wurde nach Biopsie rotiert
           if (message.type === 'SESSION_ROTATED' && message.newSessionId) {
             console.log('[Q-O] Neue Browsing-Session initialisiert:', message.newSessionId);
             currentSessionId = message.newSessionId;
@@ -123,7 +187,7 @@
     }
   }
 
-  // 4. HAPTISCHE INTERAKTIONEN (Drag, Hover-Latenz & Klicks)
+  // 5. HAPTISCHE INTERAKTIONEN (Drag, Hover-Latenz & Klicks)
   function setupInteractions(wrapper) {
     const blob = document.getElementById('q-o-blob-container');
     const hud = document.getElementById('q-o-control-hud');
@@ -138,7 +202,6 @@
 
     wrapper.addEventListener('mouseleave', () => {
       clearTimeout(hoverTimer);
-      // Wartet 200 Millisekunden, bevor es schließt – das fängt schnelles Hochwischen ab
       setTimeout(() => {
         if (!wrapper.matches(':hover')) {
           hud.classList.remove('visible');
@@ -161,7 +224,7 @@
       function onMouseMove(moveEvent) {
         let x = moveEvent.clientX - offsetX;
         let y = moveEvent.clientY - offsetY;
-        
+
         // Grenzen des Viewports abfangen
         x = Math.max(0, Math.min(window.innerWidth - 100, x));
         y = Math.max(0, Math.min(window.innerHeight - 100, y));
@@ -215,17 +278,17 @@
     });
   }
 
-  // 5. SCHMUGGLER-ANBINDUNG & SITZUNGS-LOGBUCH (Live-Sync via background.js)
+  // 6. SCHMUGGLER-ANBINDUNG & SITZUNGS-LOGBUCH (Live-Sync via background.js)
   async function syncMetabolismWithBackend() {
     const blobElement = document.getElementById('q-o-blob-container');
     if (!blobElement || isDragging) return;
 
-    // Rigoroser Block solange der globale Zustand auf 'kryo' steht
+    // Block solange der globale Zustand auf 'kryo' steht
     if (globalMetabolismState === 'kryo') {
       return;
     }
-    
-    // 1. ABSOLUTE TYP-VALIDIERUNG
+
+    // Typ-Validierung
     try {
       if (typeof chrome === 'undefined' || !chrome || !chrome.runtime || !chrome.runtime.id) {
         if (window.qoLinguBlobInterval) {
@@ -237,46 +300,48 @@
       return;
     }
 
-    // 2. FUNK-TUNNEL AN BACKGROUND.JS
+    // Funk-Tunnel an background.js
     const currentUrl = window.location.href;
     chrome.runtime.sendMessage(
-      { 
-        type: 'ANALYZE_TEXT', 
-        text: document.body.innerText.slice(0, 4000), 
-        url: currentUrl 
-      }, 
+      {
+        type: 'ANALYZE_TEXT',
+        text: document.body.innerText.slice(0, 4000),
+        url: currentUrl
+      },
       function (response) {
         if (chrome.runtime.lastError) return;
         if (response && response.success && response.data) {
           const data = response.data;
           if (response.sessionId) currentSessionId = response.sessionId;
 
+          const lqScore = typeof data.lq_score === 'number' ? data.lq_score : 1.0;
           const sTox = (data.details && typeof data.details.s_tox_final === 'number')
             ? data.details.s_tox_final
-            : parseFloat(((1 - data.lq_score) * 4).toFixed(2));
+            : parseFloat(((1 - lqScore) * 4).toFixed(2));
           const nNut = (data.details && typeof data.details.n_nut_final === 'number')
             ? data.details.n_nut_final
-            : parseFloat((data.lq_score * 3).toFixed(2));
+            : parseFloat((lqScore * 3).toFixed(2));
 
           const toxSnippets = Array.isArray(data.toxic_snippets) ? data.toxic_snippets : [];
           const nutSnippets = Array.isArray(data.nutrient_snippets) ? data.nutrient_snippets : [];
+          const morphClass = data.morphology_state ? data.morphology_state.class : null;
 
           latestMetabolicData = {
             biopsy_id: currentSessionId || data.biopsy_id || 'session_' + Date.now(),
             session_id: currentSessionId,
-            lq_score: data.lq_score,
+            lq_score: lqScore,
             s_tox: sTox,
             n_nut: nNut,
             source_url: data.source_url || currentUrl,
-            morphology_class: data.morphology_state ? data.morphology_state.class : 'q-o-hud-stable',
+            morphology_class: morphClass || 'q-o-hud-stable',
             toxic_snippets: toxSnippets,
             nutrient_snippets: nutSnippets
           };
 
-          // DIREKTIVE 1: Sitzungs-Logbuch führen (Duplikate aktualisieren, neue URLs pushen)
+          // Sitzungs-Logbuch führen (Duplikate aktualisieren, neue URLs pushen)
           const historyEntry = {
             url: currentUrl,
-            lq_score: data.lq_score,
+            lq_score: lqScore,
             s_tox: sTox,
             n_nut: nNut,
             toxic_snippets: toxSnippets,
@@ -291,16 +356,16 @@
             session_history.push(historyEntry);
           }
 
-          // Nur anwenden wenn nicht zwischenzeitlich in Kryo versetzt
-          if (globalMetabolismState !== 'kryo' && data.morphology_state) {
-            blobElement.className = data.morphology_state.class;
+          // Periphere Zustandsaktualisierung mit reaktivem Zell-Blitz & Kinetik
+          if (globalMetabolismState !== 'kryo') {
+            updateWidgetState(lqScore, morphClass);
           }
         }
       }
     );
   }
 
-  // 6. INTERAKTIVE BIOPSIE MIT MULTIQUELLEN-HISTORIE (ÜBERTRAGUNG AN SERVICE-WORKER)
+  // 7. INTERAKTIVE BIOPSIE MIT MULTIQUELLEN-HISTORIE (ÜBERTRAGUNG AN SERVICE-WORKER)
   function executeBiopsyExtraction(blobElement) {
     const sealedSessionId = currentSessionId || latestMetabolicData.session_id || 'session_' + Date.now();
     latestMetabolicData.biopsy_id = sealedSessionId;
@@ -322,7 +387,7 @@
     }
 
     const biopsyPayload = {
-      biopsy_id: sealedSessionId, // Eindeutiger Primärschlüssel für die versiegelte Sitzung
+      biopsy_id: sealedSessionId,
       session_id: sealedSessionId,
       lq_score: typeof latestMetabolicData.lq_score === 'number' ? latestMetabolicData.lq_score : 1.0,
       s_tox: typeof latestMetabolicData.s_tox === 'number' ? latestMetabolicData.s_tox : 0.5,
@@ -330,11 +395,11 @@
       source_url: latestMetabolicData.source_url || window.location.href,
       toxic_snippets: latestMetabolicData.toxic_snippets || [],
       nutrient_snippets: latestMetabolicData.nutrient_snippets || [],
-      session_history: [...session_history], // Komplettes unverkürztes Sitzungs-Logbuch
+      session_history: [...session_history],
       timestamp: Date.now()
     };
 
-    // Lokale Historie nach Biopsie-Extraktion sofort leeren für die nächste Sitzung
+    // Lokale Historie nach Biopsie-Extraktion leeren
     session_history = [];
 
     let portalOpened = false;
@@ -345,7 +410,7 @@
       }
     };
 
-    // 1. Primär: Zentrale Speicherung über den privilegierten Service Worker (background.js)
+    // Zentrale Speicherung über den privilegierten Service Worker (background.js)
     try {
       if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
         chrome.runtime.sendMessage(
@@ -369,15 +434,15 @@
       triggerPortalOnce();
     }
 
-    // 2. Sicherheits-Timeout falls der Service Worker verzögert antwortet
+    // Sicherheits-Timeout falls der Service Worker verzögert antwortet
     setTimeout(triggerPortalOnce, 350);
   }
 
-  // 7. BLOCKADESICHERER PORTAL-SPRUNG (ABSOLUTER CHROME-PFAD MIT TRY/CATCH-SICHERHEITSGURT)
+  // 8. BLOCKADESICHERER PORTAL-SPRUNG
   function openLaboratoryPortal(actionContext, targetBiopsyId) {
     console.log('[Q-O Portal] Sprung ins Labor (' + actionContext + ')');
     const path = targetBiopsyId ? 'index.html?id=' + encodeURIComponent(targetBiopsyId) : 'index.html';
-    
+
     let portalUrl = path;
     try {
       if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.getURL === 'function') {
@@ -387,17 +452,17 @@
       console.warn('[Q-O Portal] Extension-Kontext ungültig, nutze direkten Pfad:', err);
       portalUrl = path;
     }
-    
+
     window.open(portalUrl, '_blank');
   }
 
   // Initialer Start & Event-Schleifen
   window.addEventListener('DOMContentLoaded', injectLinguBlob);
   window.addEventListener('load', () => {
-    setTimeout(injectLinguBlob, 500); // Sicherheits-Injektion
+    setTimeout(injectLinguBlob, 500);
     if (window.qoLinguBlobInterval) {
       clearInterval(window.qoLinguBlobInterval);
     }
-    window.qoLinguBlobInterval = setInterval(syncMetabolismWithBackend, 4000); // Alarmiert alle 4 Sekunden frisch
+    window.qoLinguBlobInterval = setInterval(syncMetabolismWithBackend, 4000);
   });
 })();
