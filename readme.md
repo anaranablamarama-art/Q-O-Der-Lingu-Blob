@@ -54,7 +54,7 @@ Das Cyber-Labor ist deine forensische Einsatzzentrale. Es ist als gläsernes 3-Z
 *   **Zone 2 (Mitte):** Die biologische Petrischale. Ein nacktes, textfreies Licht-Organ, das rein über Kinetik, Atemfrequenz und Farb-Morphing den Zustand des Gewebes spiegelt.
 *   **Zone 3 (Rechts):** Der Seziertisch. Ein perfekt symmetrisches 2-Boxen-Tab-System, das Schadstoffe und Nährstoffe strikt trennt.
 
-### 📸 SYSTEM-INSIDERSICHT: DAS MEISTERWERK IN AKTION
+### 📸 SYSTEM-INSIDERSICHT
 ![Q-O Cyber-Labor Cockpit](assets/dashboard-preview.png)
 
 *Befund im Feldtest: Der äußere Halo-Aura-Ring der Petrischale wahrt unerschütterlich das globale Sitzungs-Gedächtnis (Cyan), während der innere Zellkern reaktiv auf den Zustand der ausgewählten URL anspringt. Rechts schalten die Tabs blitzschnell zwischen Makro-Strukturen und Mikro-Zitaten um.*
