@@ -21,6 +21,8 @@ Q-O transformiert unstrukturierte Textmassen in eine lebendige metabolische Sign
 
 Das Widget lebt als unaufdringliches, schwebendes Bio-Organell direkt im aktiven Browser-Tab. Es integriert sich nahtlos in das periphere Gesichtsfeld des Lesers, ohne den Textfluss oder das Layout der Zielseite zu unterbrechen.
 
+(assets/widget-preview.png)
+
 ```
 +-------------------------------------------------------------+
 |  Äußere Membran (Weich gerundetes Bio-Fluidum, HSB-Glow)    |
