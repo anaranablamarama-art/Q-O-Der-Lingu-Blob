@@ -1,11 +1,9 @@
 # 🧬 PROJEKT Q-O // Lingu-Blob 
 #  Großäugig -  Sensibel  - Diskret
 
-> **Assistiver, peripherer Biosensor & forensisches Cyber-Cockpit zur Echtzeit-Messung reizabhängiger Informations-Ökologie**
-
 ---
 
-## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR INFORMATIONS-HOMÖOSTASE
+## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR DEINE INFORMATIONS-HOMÖOSTASE
 
 Das Projekt **Q-O** ist ein nicht-invasiver, assistiver Biosensor für das offene Textfeld des Internets. Das System fungiert als kognitive Membran zwischen digitaler Reizüberflutung und menschlicher Informationsaufnahme. 
 
