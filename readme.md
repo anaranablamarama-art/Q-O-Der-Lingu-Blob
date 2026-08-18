@@ -47,35 +47,17 @@ Im gläsernen Kern des Widgets schweben drei geometrisch distinkte Organellen, d
 
 ---
 
-## 3. 🧪 LABOR: DAS CYBER-COCKPIT (DAS ENTSCHLACKTE 3-ZONEN-LAYOUT)
+## 🧪 3. LABOR (Das Cyber-Cockpit)
 
-Ein Klick auf das Widget oder die Tastatur-Geste öffnet das Singleton-Labor (`index.html`) – ein schreibgeschütztes forensisches Cockpit, aufgeteilt in drei funktionale Säulen:
+Das Cyber-Labor ist deine forensische Einsatzzentrale. Es ist als gläsernes 3-Zonen-Layout konzipiert:
+*   **Zone 1 (Links):** Die Gewebebank mitsamt der Kapsel-Chronologie und dem sterilen "Vault Detox"-Hebel.
+*   **Zone 2 (Mitte):** Die biologische Petrischale. Ein nacktes, textfreies Licht-Organ, das rein über Kinetik, Atemfrequenz und Farb-Morphing den Zustand des Gewebes spiegelt.
+*   **Zone 3 (Rechts):** Der Seziertisch. Ein perfekt symmetrisches 2-Boxen-Tab-System, das Schadstoffe und Nährstoffe strikt trennt.
 
-```
-+----------------------------------------------------------------------------------------------------+
-|                                    Q-O FORENSIC COCKPIT                                            |
-+------------------------------------+--------------------------------+------------------------------+
-| ZONE 1: GEWEBEBANK (Vault)         | ZONE 2: PETRISCHALE (Reaktor)  | ZONE 3: SEZIERTISCH (Matrix) |
-|                                    |                                |                              |
-| [ 🧪 PROBE A: Wikipedia ] (LQ 1.4) |   +------------------------+   | +--------------------------+ |
-| [ 🧪 PROBE B: TechCrunch ](LQ 0.8) |   |  Eingefrorener         |   | | 🚨 SCHADSTOFF-ZENTRALE   | |
-| [ 🧪 PROBE C: Bild.de ]   (LQ 0.2) |   |  Sitzungs-Blob         |   | | [STRUKTUR] | [ZITATE]   | |
-|                                    |   |  (Unerschütterliches   |   | | > 📊 [MAKRO] Clickbait   | |
-| [ ⚡ VAULT DETOX (Sterilisieren) ]  |   |   Denkmal der Phase)   |   | +--------------------------+ |
-|                                    |   +------------------------+   | +--------------------------+ |
-|                                    |   LQ-Score: 0.24 | Sym: 38%    | | 💎 NÄHRSTOFF-ZENTRALE    | |
-|                                    |   s_tox: 3.80   | n_nut: 0.30  | | [STRUKTUR] | [ZITATE]   | |
-|                                    |   [ 🧪 FLUSH-ANTIDOT ]         | | > • Keine Zitate isoliert| |
-|                                    |                                | +--------------------------+ |
-+------------------------------------+--------------------------------+------------------------------+
-```
+### 📸 SYSTEM-INSIDERSICHT: DAS MEISTERWERK IN AKTION
+![Q-O Cyber-Labor Cockpit](assets/dashboard-preview.png)
 
-1. **Zone 1: Linke Gewebebank (Biopsy Vault):**
-   Chronologisches Probenregal aller versiegelten Sitzungen aus der IndexedDB (`QO_Metabolic_Vault`). Ermöglicht das Umschalten zwischen verschiedenen Web-Biopsien sowie die vollständige Vault-Sterilisation (**Vault Detox**).
-2. **Zone 2: Petrischale (Zentrales Reaktions-Denkmal):**
-   Isolierter, kryo-konservierter Organismus-Zustand der ausgewählten Biopsie. Zeigt das mathematische Gleichgewicht, Gesamt-LQ, Delta-Werte und ermöglicht das Auslösen der linguistischen Spülung (**Flush-Antidot**).
-3. **Zone 3: Rechter Seziertisch (Symmetrische 2-Boxen-Zentrale):**
-   Dualer Inspektionstisch, aufgeteilt in **Schadstoff-Zentrale** (Toxizität) und **Nährstoff-Zentrale** (Substanz). Jede Box besitzt ein Tab-System zur Umschaltung zwischen **STRUKTUR** (Makro-Kategorien) und **ZITATE** (Wortwörtliche Evidenz-Fragmente).
+*Befund im Feldtest: Der äußere Halo-Aura-Ring der Petrischale wahrt unerschütterlich das globale Sitzungs-Gedächtnis (Cyan), während der innere Zellkern reaktiv auf den Zustand der ausgewählten URL anspringt. Rechts schalten die Tabs blitzschnell zwischen Makro-Strukturen und Mikro-Zitaten um.*
 
 ---
 
