@@ -70,9 +70,9 @@ Der **Linguistic Quality Index ($LQ$)** berechnet sich aus dem exponentiellen Sp
 
 $$LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}$$
 
-* Wenn $$\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}$$, ist $LQ = e^0 = 1.0$ (Neutraler Gleichgewichtszustand).
-* Wenn $$\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}$$, wächst $LQ > 1.0$ (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
-* Wenn $$\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}$$, fällt $LQ \to 0$ (Hohe Toxizität, kognitive Überlastung).
+* Wenn $\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}$, ist $LQ = e^0 = 1.0$ (Neutraler Gleichgewichtszustand).
+* Wenn $\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}$, wächst $LQ > 1.0$ (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
+* Wenn $\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}$, fällt $LQ \to 0$ (Hohe Toxizität, kognitive Überlastung).
 
 ### Das duale Berechnungs-Gesetz (Mikro- und Makro-Fusion)
 Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster lückenlos zu erfassen, fusioniert Q-O auf einer Skala von $0.0$ bis $5.0$ zwei Beobachtungsebenen:
