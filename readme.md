@@ -1,6 +1,8 @@
 # 🧬 PROJEKT Q-O // Lingu-Blob 
 #  Großäugig -  Sensibel  - Diskret
 
+![Q-O Biosensor Core](cover.png)
+
 ---
 
 ## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR DEINE INFORMATIONS-UMWELT
@@ -19,7 +21,7 @@ Q-O transformiert unstrukturierte Textmassen in eine lebendige metabolische Sign
 
 Das Widget lebt als unaufdringliches, schwebendes Bio-Organell direkt im aktiven Browser-Tab. Es integriert sich nahtlos in das periphere Gesichtsfeld des Lesers, ohne den Textfluss oder das Layout der Zielseite zu unterbrechen.
 
-![Q-O Biosensor Core](cover.png)
+
 
 
 
