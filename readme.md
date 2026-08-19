@@ -62,7 +62,7 @@ Das Cyber-Labor ist deine forensische Einsatzzentrale. Es ist als gläsernes 3-Z
 
 ## 4. 🧠 FUNKTIONSWEISE ANALYSE: SPRACHMODELLE & MATHEMATISCHE FORMEL
 
-### Die kinetische Homöostase-Formel
+### Die dynamische Homöostase-Formel
 Der **Linguistic Quality Index ($LQ$)** berechnet sich aus dem exponentiellen Spannungsfeld zwischen manipulativen Toxinen und informationellem Nährwert:
 
 $$LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}$$
