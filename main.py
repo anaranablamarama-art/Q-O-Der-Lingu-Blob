@@ -78,6 +78,7 @@ class AnalyzeRequest(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     text: str = Field(..., description="Zu analysierender Textabsatz des Viewports")
     url: str = Field(default="about:blank", description="Quell-URL der analysierten Website")
+    sociological_mode: Optional[bool] = Field(default=False, description="Wissenschaftlich soziologische Filter-Option")
 
 class MorphologyState(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
@@ -93,6 +94,10 @@ class AnalyzeResponse(BaseModel):
     t_makro: float = 0.0
     n_mikro: float = 0.0
     n_makro: float = 0.0
+    t_norm: Optional[float] = 0.0
+    n_disk: Optional[float] = 0.0
+    habitus_distortion: Optional[float] = 1.0
+    sociological_mode: bool = False
     toxic_snippets: List[str] = Field(default_factory=list)
     nutrient_snippets: List[str] = Field(default_factory=list)
     macro_tox_categories: List[str] = Field(default_factory=list)
@@ -233,10 +238,12 @@ def prepare_dual_tissue_input(text: str) -> tuple[str, List[str]]:
 # =============================================================================
 # 5. ROBUSTER LEICHTBAU-FALLBACK (FALLS KEIN GROQ_API_KEY VORHANDEN ODER OFFLINE)
 # =============================================================================
-def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> Dict[str, Any]:
+def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str], sociological_mode: bool = False) -> Dict[str, Any]:
     lower = raw_context.lower()
     toxic_markers = ["schock", "katastrophe", "skandal", "panik", "eskalation", "kollaps", "wut", "drama", "luegen", "eliten", "verrat", "horror", "angst", "droht", "alarm", "krise"]
     nutrient_markers = ["studie", "analyse", "prozent", "daten", "forschung", "ergebnis", "weil", "daher", "infolgedessen", "evidenz", "belegt", "messung", "wissenschaft", "statistik"]
+    norm_markers = ["moral", "schuld", "verbieten", "pflicht", "schande", "anstand", "empoerung", "suende", "tabu", "norm"]
+    disk_markers = ["diskurs", "dialektik", "argument", "begruendung", "perspektive", "reflexion", "oeffentlichkeit", "rational", "konsens"]
     pro_markers = ["vorteil", "chance", "gewinn", "positiv", "erfolg", "unterstuetzt", "befuerwortet"]
     contra_markers = ["risiko", "nachteil", "gefahr", "kritik", "verlust", "problem", "hindernis"]
 
@@ -284,6 +291,11 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
     t_makro = min(5.0, round(max(arg_diff * 1.0, toxic_word_density * 0.4), 2))
     n_makro = min(5.0, round(min(len(pro_arguments), len(contra_arguments)) * 1.5, 2))
 
+    # Soziologische Indikatoren kalkulieren
+    t_norm = min(5.0, round(sum(lower.count(m) for m in norm_markers) * 0.8, 2)) if sociological_mode else 0.0
+    n_disk = min(5.0, round(sum(lower.count(m) for m in disk_markers) * 0.8, 2)) if (sociological_mode and len(nutrient_snippets) > 0) else 0.0
+    habitus_distortion = min(1.5, round(1.0 + (sum(lower.count(m) for m in toxic_markers) * 0.05), 2)) if sociological_mode else 1.0
+
     # Makro-Kategorien dynamisch isolieren
     if toxic_word_density >= 3:
         macro_tox_categories.append("Aggressive Schlagzeilen-Dichte")
@@ -292,6 +304,9 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
         if arg_diff >= 2:
             macro_tox_categories.append("Argumentative Asymmetrie (Echokammer)")
         macro_tox_categories.append("Emotionales Framing")
+
+    if sociological_mode and t_norm >= 1.0:
+        macro_tox_categories.append("Moralische Normierung (Bourdieu/Luhmann)")
     
     # Fallback bei dichter News-Seite
     if not macro_tox_categories and len(sanitized_sentences) > 5 and any(m in lower for m in ["krise", "angst", "droht", "alarm", "schock"]):
@@ -302,11 +317,17 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
         if len(pro_arguments) >= 2 and len(contra_arguments) >= 2:
             macro_nut_categories.append("Ausgewogene Multiperspektive")
 
+    if sociological_mode and n_disk >= 1.0:
+        macro_nut_categories.append("Herrschaftsfreier Diskurs (Habermas)")
+
     return {
         "t_mikro": t_mikro,
         "t_makro": t_makro,
+        "t_norm": t_norm,
+        "habitus_distortion": habitus_distortion,
         "n_mikro": n_mikro,
         "n_makro": n_makro,
+        "n_disk": n_disk,
         "toxic_snippets": toxic_snippets,
         "nutrient_snippets": nutrient_snippets,
         "macro_tox_categories": macro_tox_categories,
@@ -323,11 +344,12 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
 async def analyze_viewport_text(payload: AnalyzeRequest):
     text = payload.text
     url = payload.url
+    sociological_mode = bool(payload.sociological_mode)
 
     # 1. ALGORITHMISCHER MD5-HASH-FILTER GEGEN GROQ-LIMIT-SPERREN
-    # Berechne schnellen MD5-Hash aus dem eintreffenden rohen Text
-    text_hash = hashlib.md5(text.strip().encode("utf-8")).hexdigest()
-    cache_key = url.strip() or "default_session"
+    # Berechne schnellen MD5-Hash aus dem eintreffenden rohen Text und Modus
+    text_hash = hashlib.md5(f"{text.strip()}_{sociological_mode}".encode("utf-8")).hexdigest()
+    cache_key = f"{url.strip() or 'default_session'}_{sociological_mode}"
 
     # PRÜFUNG IM REAKTOR:
     # Wenn der berechnete Hash identisch ist mit der vorherigen Anfrage: Groq-Aufruf blockieren!
@@ -348,40 +370,82 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     # 3. DIE ZWEI GETRENNTEN KI-AGENTEN-PROMPTS (TRENNUNG DER GEWALTEN)
 
     # AGENT 1: DER ANKLÄGER (Schadstoff-Fokus)
-    system_prompt_accuser = (
-        "Du bist AGENT 1 (DER ANKLÄGER) des Q-O Cyber-Systems.\n"
-        "Deine einzige Aufgabe ist die gnadenlose Detektion von Manipulation, Erregung, Clickbait und Framing im 'raw_context' und den 'sanitized_sentences'. Ignoriere jegliche positiven Aspekte.\n\n"
-        "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
-        "{\n"
-        '  "t_mikro": 0.0,\n'
-        '  "t_makro": 0.0,\n'
-        '  "toxic_snippets": [],\n'
-        '  "macro_tox_categories": []\n'
-        "}\n\n"
-        "GEWICHTUNGS-GESETZE FÜR DEN ANKLÄGER (Skala 0.0 bis 5.0):\n"
-        "1. 't_mikro' / 'toxic_snippets': Akute Mikro-Toxin-Sätze (Clickbait, reißerischer Sprachstil, emotionale Erregung, unfaire Klauseln). Mikro-Zitate dürfen nur echte Toxine sein. Sätze mit reißerischen, emotionalen Phrasen (wie 'Stütze weg!') gehören zwingend hierher. Jeder Eintrag MUSS ein einzelner, kurzer Satz aus den gelieferten 'sanitized_sentences' sein.\n"
-        "2. 't_makro' / 'macro_tox_categories': Struktureller Makro-Schadstoff. Wenn das Gesamtklima Boulevard-Stil ist, logge es zwingend in das Makro-Array 'macro_tox_categories' (z.B. 'Aggressive Schlagzeilen-Dichte', 'Boulevard-Framing', 'Informations-Überladung', 'Argumentative Asymmetrie').\n"
-        "3. Filter reine Eigennamen, Gaming-Begriffe ('Path of Exile', 'PoE', Games) und belanglosen Web-Smalltalk als NEUTRAL heraus."
-    )
+    if sociological_mode:
+        system_prompt_accuser = (
+            "Du bist ein unbestechlicher Forensiker der kritischen Gesellschaftstheorie (nach Pierre Bourdieu, Niklas Luhmann und Noam Chomsky) des Q-O Cyber-Systems.\n"
+            "Deine oberste Norm ist das unerbittliche Aufdecken von struktureller Gewalt, Manipulation, 'Manufacturing Consent' und manipulativen Kampagnen in der Sprachumwelt. Analysiere das Gewebe im 'raw_context' und den 'sanitized_sentences' rücksichtslos auf Schadstoffe. Ignoriere jegliche positiven Aspekte.\n\n"
+            "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+            "{\n"
+            '  "t_mikro": 0.0,\n'
+            '  "t_makro": 0.0,\n'
+            '  "t_norm": 0.0,\n'
+            '  "habitus_distortion": 1.0,\n'
+            '  "toxic_snippets": [],\n'
+            '  "macro_tox_categories": []\n'
+            "}\n\n"
+            "SOZIOLOGISCHE NORMGEBUNGS-GESETZE FÜR DEN ANKLÄGER:\n"
+            "1. 't_mikro' / 'toxic_snippets': Akute Mikro-Toxin-Sätze (Clickbait, reißerischer Sprachstil, emotionale Erregung, unfaire Klauseln, verbale Gewalt). Mikro-Zitate dürfen nur echte Toxine sein. Sätze mit reißerischen, emotionalen Phrasen (wie 'Stütze weg!') gehören zwingend hierher. Jeder Eintrag MUSS ein einzelner, kurzer Satz aus den gelieferten 'sanitized_sentences' sein.\n"
+            "2. 't_makro' / 'macro_tox_categories': Struktureller Makro-Schadstoff. Wenn das Gesamtklima Boulevard-Stil, Desinformation oder Framing ist, logge es zwingend in 'macro_tox_categories' (z.B. 'Aggressive Schlagzeilen-Dichte', 'Boulevard-Framing', 'Informations-Überladung', 'Argumentative Asymmetrie', 'Manufacturing Consent').\n"
+            "3. 't_norm' (SOZIOLOGISCHER KONFORMITÄTSDRUCK): Die Wucht der künstlichen moralischen Normierung, Erzeugung von Konformitätsdruck (Flak) oder sozialer Spaltung ('Moral Panic') nach Bourdieu und Luhmann. Skala 0.0 bis 5.0 als numerischer Float.\n"
+            "4. 'habitus_distortion' (SPRACHHABITUS-MANIPULATION): Der Grad der bewussten populistisch-emotionalen Verzerrung des Sprachhabitus (Sensationstransfer im News-Feed, Ticker-Trick nach Bourdieu), um kognitive Autonomie zu untergraben. Skala 1.0 bis 1.5 als numerischer Float.\n"
+            "5. Filter reine Eigennamen, Gaming-Begriffe ('Path of Exile', 'PoE', Games) und belanglosen Web-Smalltalk als NEUTRAL heraus."
+        )
+    else:
+        system_prompt_accuser = (
+            "Du bist AGENT 1 (DER ANKLÄGER) des Q-O Cyber-Systems.\n"
+            "Deine einzige Aufgabe ist die gnadenlose Detektion von Manipulation, Erregung, Clickbait und Framing im 'raw_context' und den 'sanitized_sentences'. Ignoriere jegliche positiven Aspekte.\n\n"
+            "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+            "{\n"
+            '  "t_mikro": 0.0,\n'
+            '  "t_makro": 0.0,\n'
+            '  "toxic_snippets": [],\n'
+            '  "macro_tox_categories": []\n'
+            "}\n\n"
+            "GEWICHTUNGS-GESETZE FÜR DEN ANKLÄGER (Skala 0.0 bis 5.0):\n"
+            "1. 't_mikro' / 'toxic_snippets': Akute Mikro-Toxin-Sätze (Clickbait, reißerischer Sprachstil, emotionale Erregung, unfaire Klauseln). Mikro-Zitate dürfen nur echte Toxine sein. Sätze mit reißerischen, emotionalen Phrasen (wie 'Stütze weg!') gehören zwingend hierher. Jeder Eintrag MUSS ein einzelner, kurzer Satz aus den gelieferten 'sanitized_sentences' sein.\n"
+            "2. 't_makro' / 'macro_tox_categories': Struktureller Makro-Schadstoff. Wenn das Gesamtklima Boulevard-Stil ist, logge es zwingend in das Makro-Array 'macro_tox_categories' (z.B. 'Aggressive Schlagzeilen-Dichte', 'Boulevard-Framing', 'Informations-Überladung', 'Argumentative Asymmetrie').\n"
+            "3. Filter reine Eigennamen, Gaming-Begriffe ('Path of Exile', 'PoE', Games) und belanglosen Web-Smalltalk als NEUTRAL heraus."
+        )
 
     # AGENT 2: DER GUTACHTER (Nährstoff-Fokus)
-    system_prompt_evaluator = (
-        "Du bist AGENT 2 (DER GUTACHTER) des Q-O Cyber-Systems.\n"
-        "Deine einzige Aufgabe ist die unvoreingenommene Isolation von harten Fakten, empirischer Evidenz, Dialektik und sachlichem Informationsmehrwert. Ignoriere das manipulative Umfeld.\n\n"
-        "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
-        "{\n"
-        '  "n_mikro": 0.0,\n'
-        '  "n_makro": 0.0,\n'
-        '  "nutrient_snippets": [],\n'
-        '  "macro_nut_categories": [],\n'
-        '  "pro_arguments": [],\n'
-        '  "contra_arguments": []\n'
-        "}\n\n"
-        "GEWICHTUNGS-GESETZE FÜR DEN GUTACHTER (Skala 0.0 bis 5.0):\n"
-        "1. 'n_mikro' / 'nutrient_snippets': Empirische Mikro-Nährstoff-Sätze (Fakten, Zahlen, Daten, verifizierbare Belege, Studien). Ein Satz wird NUR dann zitiert, wenn er trotz Clickbait-Sumpf echte, überprüfbare Substanz besitzt (z.B. exakte Statistiken, offizielle Behördenzitate oder wissenschaftliche Fakten). Reine Meinungen oder emotionale Boulevard-Phrasen fliegen rigoros raus! Jeder Eintrag MUSS ein einzelner, kurzer Satz aus 'sanitized_sentences' sein.\n"
-        "2. 'n_makro' / 'macro_nut_categories': Journalistische Makro-Ausgewogenheit (Dialektische Symmetrie, faire Pro- und Contra-Debattenstruktur, Multiperspektive).\n"
-        "3. 'pro_arguments' und 'contra_arguments': Fasse sachliche Pro- und Kontra-Punkte prägnant zusammen."
-    )
+    if sociological_mode:
+        system_prompt_evaluator = (
+            "Du bist AGENT 2 (DER GUTACHTER) des Q-O Cyber-Systems (SOZIOLOGISCHER MODUS AKTIV).\n"
+            "Deine einzige Norm ist die Isolation des Habermas'schen 'herrschaftsfreien Diskurses'. Du suchst im Text-Sumpf nach klinisch reinen Oasen der Wahrheit. Ignoriere das manipulative Umfeld.\n\n"
+            "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+            "{\n"
+            '  "n_mikro": 0.0,\n'
+            '  "n_makro": 0.0,\n'
+            '  "n_disk": 0.0,\n'
+            '  "nutrient_snippets": [],\n'
+            '  "macro_nut_categories": [],\n'
+            '  "pro_arguments": [],\n'
+            '  "contra_arguments": []\n'
+            "}\n\n"
+            "SOZIOLOGISCHE NORMGEBUNGS-GESETZE FÜR DEN GUTACHTER:\n"
+            "1. 'n_mikro' / 'nutrient_snippets': Ein Satz darf NUR dann als Nährstoff zitiert werden, wenn er trotz eines toxischen Umfelds einen unbestechlichen, rationalen Mehrwert liefert (empirische Evidenz, Primärquellen, dialektische Offenheit, wissenschaftliche Daten). Ist ein Satz durch manipulative Framing-Teilstrings infiziert, ignoriere ihn! Jeder Eintrag MUSS ein einzelner, kurzer Satz aus 'sanitized_sentences' sein.\n"
+            "2. 'n_makro' / 'macro_nut_categories': Journalistische Makro-Ausgewogenheit (Dialektische Symmetrie, faire Pro- und Contra-Debattenstruktur, Multiperspektive).\n"
+            "3. 'n_disk' (HERRSCHAFTSFREIER DISKURS): Grad der diskursiven Symmetrie, sachlichen Validität, empirischen Evidenz und dialektischen Offenheit von 0.0 bis 5.0 nach Jürgen Habermas. Liefere 'n_disk' als numerischen Float-Wert im JSON-Output.\n"
+            "4. 'pro_arguments' und 'contra_arguments': Fasse sachliche Pro- und Kontra-Punkte prägnant zusammen."
+        )
+    else:
+        system_prompt_evaluator = (
+            "Du bist AGENT 2 (DER GUTACHTER) des Q-O Cyber-Systems.\n"
+            "Deine einzige Aufgabe ist die unvoreingenommene Isolation von harten Fakten, empirischer Evidenz, Dialektik und sachlichem Informationsmehrwert. Ignoriere das manipulative Umfeld.\n\n"
+            "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+            "{\n"
+            '  "n_mikro": 0.0,\n'
+            '  "n_makro": 0.0,\n'
+            '  "nutrient_snippets": [],\n'
+            '  "macro_nut_categories": [],\n'
+            '  "pro_arguments": [],\n'
+            '  "contra_arguments": []\n'
+            "}\n\n"
+            "GEWICHTUNGS-GESETZE FÜR DEN GUTACHTER (Skala 0.0 bis 5.0):\n"
+            "1. 'n_mikro' / 'nutrient_snippets': Empirische Mikro-Nährstoff-Sätze (Fakten, Zahlen, Daten, verifizierbare Belege, Studien). Ein Satz wird NUR dann zitiert, wenn er trotz Clickbait-Sumpf echte, überprüfbare Substanz besitzt (z.B. exakte Statistiken, offizielle Behördenzitate oder wissenschaftliche Fakten). Reine Meinungen oder emotionale Boulevard-Phrasen fliegen rigoros raus! Jeder Eintrag MUSS ein einzelner, kurzer Satz aus 'sanitized_sentences' sein.\n"
+            "2. 'n_makro' / 'macro_nut_categories': Journalistische Makro-Ausgewogenheit (Dialektische Symmetrie, faire Pro- und Contra-Debattenstruktur, Multiperspektive).\n"
+            "3. 'pro_arguments' und 'contra_arguments': Fasse sachliche Pro- und Kontra-Punkte prägnant zusammen."
+        )
 
     # 4. PARALLELES ABFEUERN BEIDER AGENTEN VIA ASYNCIO.GATHER
     accuser_task = async_call_groq_api(
@@ -403,12 +467,13 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     groq_accuser_res, groq_evaluator_res = await asyncio.gather(accuser_task, evaluator_task)
 
     # 5. ROBUSTER FALLBACK BEI FEHLENDER ANTWORT
-    fallback_res = local_fallback_analyze(raw_context, sanitized_sentences)
+    fallback_res = local_fallback_analyze(raw_context, sanitized_sentences, sociological_mode=sociological_mode)
 
     if not groq_accuser_res or ("t_mikro" not in groq_accuser_res and "t_makro" not in groq_accuser_res):
         groq_accuser_res = {
             "t_mikro": fallback_res["t_mikro"],
             "t_makro": fallback_res["t_makro"],
+            "t_norm": fallback_res.get("t_norm", 0.0),
             "toxic_snippets": fallback_res["toxic_snippets"],
             "macro_tox_categories": fallback_res["macro_tox_categories"]
         }
@@ -417,6 +482,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         groq_evaluator_res = {
             "n_mikro": fallback_res["n_mikro"],
             "n_makro": fallback_res["n_makro"],
+            "n_disk": fallback_res.get("n_disk", 0.0),
             "nutrient_snippets": fallback_res["nutrient_snippets"],
             "macro_nut_categories": fallback_res["macro_nut_categories"],
             "pro_arguments": fallback_res["pro_arguments"],
@@ -426,8 +492,14 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     # 6. FUSION DER GETRENNTEN AGENTEN-DATENSTRÖME
     t_mikro = float(groq_accuser_res.get("t_mikro", 0.0))
     t_makro = float(groq_accuser_res.get("t_makro", 0.0))
+    t_norm = float(groq_accuser_res.get("t_norm", 0.0)) if sociological_mode else 0.0
+    habitus_distortion = float(groq_accuser_res.get("habitus_distortion", 1.0)) if sociological_mode else 1.0
+    # Clamping habitus_distortion between 1.0 and 1.5
+    habitus_distortion = max(1.0, min(1.5, habitus_distortion))
+
     n_mikro = float(groq_evaluator_res.get("n_mikro", 1.0))
     n_makro = float(groq_evaluator_res.get("n_makro", 1.0))
+    n_disk = float(groq_evaluator_res.get("n_disk", 1.0)) if sociological_mode else 0.0
 
     raw_toxic_snippets = groq_accuser_res.get("toxic_snippets", [])
     raw_nutrient_snippets = groq_evaluator_res.get("nutrient_snippets", [])
@@ -481,9 +553,11 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
                     nutrient_snippets.remove(nut_sentence) # Physisch im Backend ertränken!
                 break # Schleife abbrechen, nächster Satz
 
-    # Wenn durch diese Reinigung das gesamte Nährstoff-Array leer wird, setze den Wert 'n_mikro' konsequent auf 0.0 zurück
+    # Wenn durch diese Reinigung das gesamte Nährstoff-Array leer wird, setze den Wert 'n_mikro' und 'n_disk' konsequent auf 0.0 zurück
     if len(nutrient_snippets) == 0:
         n_mikro = 0.0
+        if sociological_mode:
+            n_disk = 0.0
 
     # Fallback-Kategorien absichern bei struktureller Makro-Toxizität
     if t_makro >= 1.0 and len(macro_tox_categories) == 0:
@@ -494,15 +568,32 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         macro_nut_categories.append("Dialektische Symmetrie")
 
     # =========================================================================
-    # MATHEMATISCHE FUSION (50/50 HYBRID-RECHNUNG) // METABOLISCHE HOMÖOSTASE
+    # MATHEMATISCHE FUSION & AXIOMATISCHE EXPONENTEN-KASKADE (METABOLISCHE HOMÖOSTASE)
     # =========================================================================
-    s_tox = (t_mikro + t_makro) / 2.0
-    n_nut = (n_mikro + n_makro) / 2.0
+    if sociological_mode:
+        # Verschärfte Formel mit Habitus-Katalysator (t_makro * habitus_distortion) und Norm-Druck (t_norm * 1.5)
+        s_tox = (t_mikro + (t_makro * habitus_distortion) + (t_norm * 1.5)) / 3.0
+        n_nut = (n_mikro + n_makro + n_disk) / 3.0
+    else:
+        # Standardmäßiges mathematisches Dual-Gesetz
+        s_tox = (t_mikro + t_makro) / 2.0
+        n_nut = (n_mikro + n_makro) / 2.0
 
-    # E-Funktions-Modell: LQ = e^(-(s_tox - n_nut))
-    diff = s_tox - n_nut
-    clamped_diff = max(-10.0, min(10.0, diff))
-    lq_score = round(math.exp(-clamped_diff), 2)
+    # Netto-Gefälle (Delta) ermitteln
+    delta = s_tox - n_nut
+
+    # Dreistufige axiomatische Exponenten-Kaskade
+    if delta <= 0:
+        # AXIOM I (Cyan - Gleichgewicht)
+        raw_lq = math.exp(-delta)
+    elif 0 < delta <= 2.0:
+        # AXIOM II (Orange - Kompression)
+        raw_lq = math.exp(-delta * 1.2)
+    else:
+        # AXIOM III (Rot - Implosion: Exponentielle Quadrierung für den totalen Kollaps)
+        raw_lq = math.exp(-(delta ** 2))
+
+    lq_score = round(raw_lq, 2)
 
     # Symmetrie-Score: 100 - (|t_makro - n_makro| * 20)
     raw_symmetry = 100.0 - (abs(t_makro - n_makro) * 20.0)
@@ -530,6 +621,10 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         t_makro=round(t_makro, 2),
         n_mikro=round(n_mikro, 2),
         n_makro=round(n_makro, 2),
+        t_norm=round(t_norm, 2) if sociological_mode else 0.0,
+        n_disk=round(n_disk, 2) if sociological_mode else 0.0,
+        habitus_distortion=round(habitus_distortion, 2) if sociological_mode else 1.0,
+        sociological_mode=sociological_mode,
         toxic_snippets=toxic_snippets,
         nutrient_snippets=nutrient_snippets,
         macro_tox_categories=macro_tox_categories,
@@ -543,14 +638,19 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         details={
             "t_mikro": round(t_mikro, 2),
             "t_makro": round(t_makro, 2),
+            "t_norm": round(t_norm, 2) if sociological_mode else 0.0,
+            "habitus_distortion": round(habitus_distortion, 2) if sociological_mode else 1.0,
             "n_mikro": round(n_mikro, 2),
             "n_makro": round(n_makro, 2),
+            "n_disk": round(n_disk, 2) if sociological_mode else 0.0,
+            "sociological_mode": sociological_mode,
+            "delta": round(delta, 2),
             "s_tox_final": round(s_tox, 2),
             "n_nut_final": round(n_nut, 2),
             "symmetry_score": symmetry_score,
             "macro_tox_categories": macro_tox_categories,
             "macro_nut_categories": macro_nut_categories,
-            "pipeline": "Async Dual Multi-Agent (Accuser + Evaluator) + Asymmetric Substring Veto",
+            "pipeline": "Async Dual Multi-Agent (Accuser + Evaluator) + Asymmetric Substring Veto + Axiomatic Stage-Coupling" + (" + Sociological Habitus Mode" if sociological_mode else ""),
             "model_used": MODEL_ANALYZE,
             "engine": "Groq Cloud" if GROQ_API_KEY != "DEIN_KEY_HIER" else "Local Heuristic Engine",
             "cached": False
