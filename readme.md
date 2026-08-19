@@ -3,7 +3,7 @@
 
 ---
 
-## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR DEINE INFORMATIONS-HOMÖOSTASE
+## 1. 🟢 GRUNDFUNKTION: DER DIGITALE BIOSENSOR FÜR DEINE INFORMATIONS-UMWELT
 
 Das Projekt **Q-O** ist ein nicht-invasiver, assistiver Biosensor für das offene Textfeld des Internets. Das System fungiert als kognitive Membran zwischen digitaler Reizüberflutung und menschlicher Informationsaufnahme. 
 
