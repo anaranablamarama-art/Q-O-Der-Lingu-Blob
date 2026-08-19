@@ -187,38 +187,7 @@ Q-O bricht radikal mit traditionellen Warn-Popups, aggressiven Banner-Einblendun
 
 ---
 
-## 7. 🌋 TIEFE SYSTEMFUNKTION: DIE FORENSIK-GARANTIE
-
-Ein häufiges Versagen herkömmlicher Fakten-Checker ist das Ausbleiben konkreter Belege, wenn Texte nicht aus sauberen Hauptsätzen bestehen (z. B. auf News-Aggregatoren, Kacheln oder Social-Media-Feeds).
-
-```
-                      +---------------------------------------+
-                      |   ANALYSE-ERGEBNIS VOM BACKEND        |
-                      +---------------------------------------+
-                                          |
-                        Gibt es Mikro-Zitate im Text?
-                                          |
-                      +-------------------+-------------------+
-                      |                                       |
-                   [ JA ]                                  [ NEIN ]
-                      |                                       |
-             Zitate in Liste rendern              Automatische Weichen-Schaltung
-             (🚨 / 💎 Originalsätze)               auf STRUKTUR (Makro-Kategorien)
-                                                              |
-                                                  ┌───────────────────────────────┐
-                                                  │ 📊 [MAKRO] Reißerische Dichte │
-                                                  │ 📊 [MAKRO] Fehlende Quellen   │
-                                                  └───────────────────────────────┘
-```
-
-### Die automatische Weichen-Umschaltung
-* Liefert das Sprachmodell keine wörtlichen Zitate (`toxic_snippets: []`), bleibt das Dashboard niemals weiß oder leer.
-* Der Seziertisch aktiviert automatisch den Tab **STRUKTUR** und visualisiert die forensischen Makro-Gründe als hochauflösende Chips.
-* Die Beweiskette bleibt mathematisch und visuell zu 100% nachvollziehbar.
-
----
-
-## 8. 🌊 SIGNALFLUSS: DIE DATEN-AUTOBAHN (END-TO-END)
+## 7. 🌊 SIGNALFLUSS: DIE DATEN-AUTOBAHN (END-TO-END)
 
 ```
 [ 1. Webseiten DOM (Ziel-Tab) ]
@@ -270,7 +239,7 @@ Ein häufiges Versagen herkömmlicher Fakten-Checker ist das Ausbleiben konkrete
 
 ---
 
-## 9. ⚠️ FORENSISCHER DISCLAIMER / JURISTISCHES PROTOKOLL
+## 8. ⚠️ FORENSISCHER DISCLAIMER / JURISTISCHES PROTOKOLL
 
 ### 1. Experimenteller Prototypen-Status
 Das Projekt **Q-O** ist ein experimentelles Forschungswerkzeug, ein kognitiver Assistenz-Begleiter und ein peripherer Biosensor im aktiven Prototypen-Stadium. Es wurde entwickelt, um die Wahrnehmung digitaler Textstrukturen zu erforschen und die subjektive Reizbelastung im offenen Web zu visualisieren.
