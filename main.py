@@ -3,6 +3,7 @@
 PROJEKT "Q-O" // METABOLISCHES GEHIRN & ANALYSE-PIPELINE (MAIN.PY)
 =============================================================================
 Schlankes FastAPI-Backend mit nativer Groq-Cloud-API Anbindung.
+- Intelligenter MD5-Hash-Schutzschirm gegen Groq-Limit-Sperren (Rate Limits)
 - Duale Gewebe-Zufuhr: 'raw_context' (Makro-Analyse) & 'sanitized_sentences' (Mikro-Zitate)
 - HTML/Script/Style-Bereinigung für unfehlbare, dichte Makro-Struktur-Analyse
 - Reiner Semantik-Filter & Vektor-Kontextanalyse via 'llama-3.1-8b-instant'
@@ -20,6 +21,7 @@ import re
 import math
 import time
 import json
+import hashlib
 import datetime
 import urllib.request
 import urllib.error
@@ -38,6 +40,13 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 # Modelle
 MODEL_ANALYZE = "llama-3.1-8b-instant"      # Ultraschneller Echtzeit-Semantik-Filter
 MODEL_FLUSH = "llama-3.3-70b-versatile"     # High-End Weltwissen & Forensik-Spuelung
+
+
+# =============================================================================
+# GLOBALER IN-MEMORY HASH-CACHE (GROQ-LIMIT-SCHUTZSCHIRM)
+# =============================================================================
+# Speichert die letzten Text-Hashes und fertigen Analyseergebnisse pro Session/URL
+ANALYSIS_CACHE: Dict[str, Dict[str, Any]] = {}
 
 
 # =============================================================================
@@ -279,14 +288,25 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
 
 
 # =============================================================================
-# 6. REST-ENDPUNKT: /api/analyze (DUALE GEWEBE-ZUFUHR VIA LLAMA 3.1 8B)
+# 6. REST-ENDPUNKT: /api/analyze (DUALE GEWEBE-ZUFUHR MIT MD5-HASH-SCHUTZFILTER)
 # =============================================================================
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_viewport_text(payload: AnalyzeRequest):
     text = payload.text
     url = payload.url
 
-    # Duale Gewebe-Zufuhr vorbereiten: Gereinigter raw_context & sanitized_sentences
+    # 1. ALGORITHMISCHER MD5-HASH-FILTER GEGEN GROQ-LIMIT-SPERREN
+    # Berechne schnellen MD5-Hash aus dem eintreffenden rohen Text
+    text_hash = hashlib.md5(text.strip().encode("utf-8")).hexdigest()
+    cache_key = url.strip() or "default_session"
+
+    # PRÜFUNG IM REAKTOR:
+    # Wenn der berechnete Hash identisch ist mit der vorherigen Anfrage: Groq-Aufruf blockieren!
+    if cache_key in ANALYSIS_CACHE and ANALYSIS_CACHE[cache_key].get("hash") == text_hash:
+        cached_response: AnalyzeResponse = ANALYSIS_CACHE[cache_key]["response"]
+        return cached_response
+
+    # 2. Duale Gewebe-Zufuhr vorbereiten: Gereinigter raw_context & sanitized_sentences
     raw_context, sanitized_sentences = prepare_dual_tissue_input(text)
 
     # Integrales Ausgabe-Schema & Geschärfte Direktive fuer Llama 3.1 (8B) mit geöffneter Makro-Struktur-Analyse
@@ -420,7 +440,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     biopsy_id = f"bio_{timestamp_str}"
 
-    return AnalyzeResponse(
+    response_obj = AnalyzeResponse(
         biopsy_id=biopsy_id,
         lq_score=lq_score,
         source_url=url,
@@ -449,9 +469,18 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
             "macro_tox_categories": macro_tox_categories,
             "macro_nut_categories": macro_nut_categories,
             "model_used": MODEL_ANALYZE,
-            "engine": "Groq Cloud" if GROQ_API_KEY != "DEIN_KEY_HIER" else "Local Heuristic Engine"
+            "engine": "Groq Cloud" if GROQ_API_KEY != "DEIN_KEY_HIER" else "Local Heuristic Engine",
+            "cached": False
         }
     )
+
+    # Aktualisiere den Hash-Cache fuer diese Session/URL
+    ANALYSIS_CACHE[cache_key] = {
+        "hash": text_hash,
+        "response": response_obj
+    }
+
+    return response_obj
 
 
 # =============================================================================
@@ -537,6 +566,7 @@ async def health_check():
         "model_analyze": MODEL_ANALYZE,
         "model_flush": MODEL_FLUSH,
         "version": "3.1.0",
+        "cached_sessions_count": len(ANALYSIS_CACHE),
         "time": time.time()
     }
 
@@ -553,5 +583,5 @@ if __name__ == "__main__":
         uvicorn.run(app, host="127.0.0.1", port=8000, log_config=None)
     else:
         # Im Entwickler-Terminal: Volles Logging AN, damit wir jeden Live-Funkspruch der Analyse sehen!
-        print("🪐 [Q-O Core] Entwickler-Modus aktiv. Zünde semantisches Groq-Radar...")
+        print("🪐 [Q-O Core] Entwickler-Modus aktiv. Zünde semantisches Groq-Radar mit MD5-Schutzschirm...")
         uvicorn.run(app, host="127.0.0.1", port=8000)
