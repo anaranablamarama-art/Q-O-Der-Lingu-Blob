@@ -19,33 +19,9 @@ Q-O transformiert unstrukturierte Textmassen in eine lebendige metabolische Sign
 
 Das Widget lebt als unaufdringliches, schwebendes Bio-Organell direkt im aktiven Browser-Tab. Es integriert sich nahtlos in das periphere Gesichtsfeld des Lesers, ohne den Textfluss oder das Layout der Zielseite zu unterbrechen.
 
-(assets/widget-preview.png)
+![Q-O Biosensor Core](cover.png)
 
-```
-+-------------------------------------------------------------+
-|  Äußere Membran (Weich gerundetes Bio-Fluidum, HSB-Glow)    |
-|   +-----------------------------------------------------+   |
-|   |  Gläserner Innenkern (Glassmorphism Core)           |   |
-|   |                                                     |   |
-|   |       [ Kreis ]         [ Oval ]      [ Splitter ]  |   |
-|   |       Stabilität         Stress          Toxin      |   |
-|   |       (Homöostase)     (Agitation)    (Affekt-Gift) |   |
-|   |                                                     |   |
-|   |   Zentrierter Puls   Asymmetrie-Zug   Kristall-Gefahr|  |
-|   +-----------------------------------------------------+   |
-+-------------------------------------------------------------+
-```
 
-### Die drei inneren geometrischen Organellen
-Im gläsernen Kern des Widgets schweben drei geometrisch distinkte Organellen, die als permanente Potentialpunkte agieren:
-1. **Der Kreis (Stabilität & Homöostase):** 
-   Ruht perfekt zentriert. Pulsiert in sanftem, tiefem Rhythmus (Cyan/Smaragd). Zeigt an, dass der Text reich an Nährstoffen ist und keine affektiven Verzerrungen aufweist.
-2. **Das Oval (Stress & kognitive Agitation):**
-   Verzieht die Achsen-Symmetrie bei steigendem Bias oder künstlicher Verknappung. Die Frequenz beschleunigt sich, die Färbung wechselt in wärmere Bernstein-/Orange-Töne.
-3. **Der zackige Splitter (Toxin & Affekt-Vergiftung):**
-   Wird bei akuter Toxizität oder massiver Schlagzeilen-Agitation im inneren Kern aktiviert. Er symbolisiert spitze, verletzende Argumentationsmuster und affektive Trigger.
-
----
 
 ## 🧪 3. LABOR (Das Cyber-Cockpit)
 
@@ -53,8 +29,7 @@ Das Cyber-Labor ist deine forensische Einsatzzentrale. Es ist als gläsernes 3-Z
 *   **Zone 1 (Links):** Die Gewebebank mitsamt der Kapsel-Chronologie und dem sterilen "Vault Detox"-Hebel.
 *   **Zone 2 (Mitte):** Die biologische Petrischale. Ein nacktes, textfreies Licht-Organ, das rein über Kinetik, Atemfrequenz und Farb-Morphing den Zustand des Gewebes spiegelt.
 *   **Zone 3 (Rechts):** Der Seziertisch. Ein perfekt symmetrisches 2-Boxen-Tab-System, das Schadstoffe und Nährstoffe strikt trennt.
-
-![Q-O Cyber-Labor Cockpit](assets/dashboard-preview.png)
+  
 
 *Befund im Feldtest: Der äußere Halo-Aura-Ring der Petrischale wahrt unerschütterlich das globale Sitzungs-Gedächtnis (Cyan), während der innere Zellkern reaktiv auf den Zustand der ausgewählten URL anspringt. Rechts schalten die Tabs blitzschnell zwischen Makro-Strukturen und Mikro-Zitaten um.*
 
