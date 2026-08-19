@@ -123,6 +123,7 @@ Direkt nach dem parallelen Empfang beider Agenten-JSON-Streams greift eine unbes
 3. **Deterministischer Nullabgleich:** Wird das Nährstoff-Array durch das Veto vollständig entleert, setzt das System den Wert $N_{\text{mikro}}$ konsequent auf $0.0$ zurück.
 
 Erst auf Basis dieses bereinigten Datenvektors berechnet die exponentielle $LQ$-Homöostase-Gleichung das endgültige Stoffwechsel-Gleichgewicht.
+
 ---
 
 ## 5. 🏄‍♂️ HYPOTHETISCHE SURFERFAHRUNG: DREI FORENSISCHE STATIONEN
