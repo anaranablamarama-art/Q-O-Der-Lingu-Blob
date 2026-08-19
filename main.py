@@ -3,6 +3,8 @@
 PROJEKT "Q-O" // METABOLISCHES GEHIRN & ANALYSE-PIPELINE (MAIN.PY)
 =============================================================================
 Schlankes FastAPI-Backend mit nativer Groq-Cloud-API Anbindung.
+- Parallele Multi-Agenten-Forensik via asyncio.gather (Agent 1: Ankläger / Agent 2: Gutachter)
+- Asymmetrisches Teilstring-Veto-Protokoll (Mengenlehre Substring-Axiom)
 - Intelligenter MD5-Hash-Schutzschirm gegen Groq-Limit-Sperren (Rate Limits)
 - Duale Gewebe-Zufuhr: 'raw_context' (Makro-Analyse) & 'sanitized_sentences' (Mikro-Zitate)
 - HTML/Script/Style-Bereinigung für unfehlbare, dichte Makro-Struktur-Analyse
@@ -22,6 +24,7 @@ import math
 import time
 import json
 import hashlib
+import asyncio
 import datetime
 import urllib.request
 import urllib.error
@@ -55,7 +58,7 @@ ANALYSIS_CACHE: Dict[str, Dict[str, Any]] = {}
 app = FastAPI(
     title="Q-O Metabolic Brain API",
     description="Linguistischer Metabolisierungs- und Sezier-Server fuer Q-O via Groq",
-    version="3.1.0"
+    version="3.4.0"
 )
 
 # CORS fuer nahtlose Kommunikation mit Chrome Extension & Labor-Dashboard
@@ -117,7 +120,7 @@ class FlushResponse(BaseModel):
 
 
 # =============================================================================
-# 3. FEDERLEICHTER NATIV-CLIENT FUER DIE GROQ CLOUD-API (MIT JSON-OBJECT ERZWINGUNG)
+# 3. FEDERLEICHTER NATIV-CLIENT FUER DIE GROQ CLOUD-API (MIT ASYNC-THREAD-POOL)
 # =============================================================================
 def call_groq_api(
     model: str,
@@ -133,7 +136,7 @@ def call_groq_api(
     headers = {
         "Authorization": f"Bearer {apiKey}",
         "Content-Type": "application/json",
-        "User-Agent": "Q-O-Metabolic-Brain/3.1"
+        "User-Agent": "Q-O-Metabolic-Brain/3.4"
     }
 
     body: Dict[str, Any] = {
@@ -165,6 +168,24 @@ def call_groq_api(
         print(f"[Q-O Groq Relais] Verbindungs- oder JSON-Fehler: {err}")
 
     return None
+
+
+async def async_call_groq_api(
+    model: str,
+    system_prompt: str,
+    user_content: str,
+    temperature: float = 0.1,
+    json_mode: bool = True
+) -> Optional[Dict[str, Any]]:
+    # Führt den synchronen HTTP-Aufruf non-blocking in einem Thread-Pool aus
+    return await asyncio.to_thread(
+        call_groq_api,
+        model=model,
+        system_prompt=system_prompt,
+        user_content=user_content,
+        temperature=temperature,
+        json_mode=json_mode
+    )
 
 
 # =============================================================================
@@ -244,8 +265,16 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
         if any(m in s_low for m in contra_markers) and len(contra_arguments) < 3:
             contra_arguments.append(s)
 
+    # ASYMMETRISCHES TEILSTRING-MATCHING (Das unbestechliche Axiom im Fallback)
+    for nut_sentence in list(nutrient_snippets):
+        for tox_sentence in toxic_snippets:
+            if nut_sentence.lower() in tox_sentence.lower() or tox_sentence.lower() in nut_sentence.lower():
+                if nut_sentence in nutrient_snippets:
+                    nutrient_snippets.remove(nut_sentence)
+                break
+
     t_mikro = min(5.0, round(len(toxic_snippets) * 1.2, 2))
-    n_mikro = min(5.0, round(max(0.5, len(nutrient_snippets) * 1.1), 2))
+    n_mikro = min(5.0, round(max(0.0, len(nutrient_snippets) * 1.1), 2)) if len(nutrient_snippets) > 0 else 0.0
 
     # Makro-Ebene über den Gesamtzusammenhang des gereinigten raw_context
     arg_diff = abs(len(pro_arguments) - len(contra_arguments))
@@ -288,7 +317,7 @@ def local_fallback_analyze(raw_context: str, sanitized_sentences: List[str]) -> 
 
 
 # =============================================================================
-# 6. REST-ENDPUNKT: /api/analyze (DUALE GEWEBE-ZUFUHR MIT MD5-HASH-SCHUTZFILTER)
+# 6. REST-ENDPUNKT: /api/analyze (ASYNC MULTI-AGENTEN-PIPELINE MIT TEILSTRING-AXIOM)
 # =============================================================================
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_viewport_text(payload: AnalyzeRequest):
@@ -309,35 +338,6 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     # 2. Duale Gewebe-Zufuhr vorbereiten: Gereinigter raw_context & sanitized_sentences
     raw_context, sanitized_sentences = prepare_dual_tissue_input(text)
 
-    # Integrales Ausgabe-Schema & Geschärfte Direktive fuer Llama 3.1 (8B) mit geöffneter Makro-Struktur-Analyse
-    system_prompt = (
-        "Du bist der strukturelle Debatten-Richter und semantische Echtzeit-Informationsfilter des Q-O Cyber-Systems.\n"
-        "Du erhältst den komprimierten, dichten 'raw_context' und die 'sanitized_sentences'.\n\n"
-        "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
-        "{\n"
-        '  "t_mikro": 0.0,\n'
-        '  "t_makro": 0.0,\n'
-        '  "n_mikro": 0.0,\n'
-        '  "n_makro": 0.0,\n'
-        '  "toxic_snippets": [],\n'
-        '  "nutrient_snippets": [],\n'
-        '  "macro_tox_categories": [],\n'
-        '  "macro_nut_categories": [],\n'
-        '  "pro_arguments": [],\n'
-        '  "contra_arguments": []\n'
-        "}\n\n"
-        "DIE GEWICHTUNGS-GESETZE FÜR DIE KI (Skala jeweils 0.0 bis 5.0):\n"
-        "1. 't_mikro' / 'toxic_snippets': Akute Mikro-Toxin-Sätze (Clickbait, reißerischer Sprachstil, emotionale Erregung, unfaire Klauseln).\n"
-        "2. 't_makro' / 'macro_tox_categories': Struktureller Makro-Schadstoff (Schlagzeilendichte, Boulevard-Framing, Informations-Überladung, Argumentative Asymmetrie, Echokammer-Effekt).\n"
-        "3. 'n_mikro' / 'nutrient_snippets': Empirische Mikro-Nährstoff-Sätze (Fakten, Zahlen, Daten, verifizierbare Belege, Studien).\n"
-        "4. 'n_makro' / 'macro_nut_categories': Journalistische Makro-Ausgewogenheit (Dialektische Symmetrie, faire Pro- und Contra-Debattenstruktur, Multiperspektive).\n\n"
-        "🚨 DIE STRIKTE DIREKTIVE:\n"
-        "1. MAKRO-EBENE: Analysiere den 'raw_context'. Wenn du eine extreme, überladene Schlagzeilen-Dichte, reißerisches Boulevard-Framing oder manipulative Tonalität im Gesamtbild erkennst, MUSST du diesen Befund zwingend als prägnantes Schlagwort in das Array 'macro_tox_categories' (oder 'macro_nut_categories') eintragen! Du bist frei in der Formulierung treffender Kriterien (z.B. 'Aggressive Schlagzeilen-Dichte', 'Boulevard-Framing', 'Informations-Überladung', 'Echokammer-Effekt'). Das Feld darf bei einseitigen oder dichten News-Seiten NIEMALS leer bleiben!\n"
-        "2. MIKRO-EBENE: Isoliere kurze, isolierte Einzelsätze ausschließlich aus den gelieferten 'sanitized_sentences' für 'toxic_snippets' und 'nutrient_snippets'. Wenn kein Satz für sich allein toxisch ist, bleibt das Snippet-Array leer ([]).\n"
-        "3. 'toxic_snippets' und 'nutrient_snippets' dürfen NIEMALS zusammenhängende Textblöcke oder Listen von Überschriften sein. Jeder Eintrag MUSS ein einzelner, kurzer Satz sein.\n"
-        "4. Filter reine Eigennamen, Gaming-Begriffe ('Path of Exile', 'PoE', Games) und belanglosen Web-Smalltalk als NEUTRAL heraus."
-    )
-
     # Konstruktion des dualen User-Payloads
     user_payload_dict = {
         "raw_context": raw_context[:3500],
@@ -345,30 +345,96 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
     }
     user_content = json.dumps(user_payload_dict, ensure_ascii=False)
 
-    groq_res = call_groq_api(
+    # 3. DIE ZWEI GETRENNTEN KI-AGENTEN-PROMPTS (TRENNUNG DER GEWALTEN)
+
+    # AGENT 1: DER ANKLÄGER (Schadstoff-Fokus)
+    system_prompt_accuser = (
+        "Du bist AGENT 1 (DER ANKLÄGER) des Q-O Cyber-Systems.\n"
+        "Deine einzige Aufgabe ist die gnadenlose Detektion von Manipulation, Erregung, Clickbait und Framing im 'raw_context' und den 'sanitized_sentences'. Ignoriere jegliche positiven Aspekte.\n\n"
+        "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+        "{\n"
+        '  "t_mikro": 0.0,\n'
+        '  "t_makro": 0.0,\n'
+        '  "toxic_snippets": [],\n'
+        '  "macro_tox_categories": []\n'
+        "}\n\n"
+        "GEWICHTUNGS-GESETZE FÜR DEN ANKLÄGER (Skala 0.0 bis 5.0):\n"
+        "1. 't_mikro' / 'toxic_snippets': Akute Mikro-Toxin-Sätze (Clickbait, reißerischer Sprachstil, emotionale Erregung, unfaire Klauseln). Mikro-Zitate dürfen nur echte Toxine sein. Sätze mit reißerischen, emotionalen Phrasen (wie 'Stütze weg!') gehören zwingend hierher. Jeder Eintrag MUSS ein einzelner, kurzer Satz aus den gelieferten 'sanitized_sentences' sein.\n"
+        "2. 't_makro' / 'macro_tox_categories': Struktureller Makro-Schadstoff. Wenn das Gesamtklima Boulevard-Stil ist, logge es zwingend in das Makro-Array 'macro_tox_categories' (z.B. 'Aggressive Schlagzeilen-Dichte', 'Boulevard-Framing', 'Informations-Überladung', 'Argumentative Asymmetrie').\n"
+        "3. Filter reine Eigennamen, Gaming-Begriffe ('Path of Exile', 'PoE', Games) und belanglosen Web-Smalltalk als NEUTRAL heraus."
+    )
+
+    # AGENT 2: DER GUTACHTER (Nährstoff-Fokus)
+    system_prompt_evaluator = (
+        "Du bist AGENT 2 (DER GUTACHTER) des Q-O Cyber-Systems.\n"
+        "Deine einzige Aufgabe ist die unvoreingenommene Isolation von harten Fakten, empirischer Evidenz, Dialektik und sachlichem Informationsmehrwert. Ignoriere das manipulative Umfeld.\n\n"
+        "Du musst zwingend als valides JSON-Objekt mit exakt folgendem Schema antworten:\n"
+        "{\n"
+        '  "n_mikro": 0.0,\n'
+        '  "n_makro": 0.0,\n'
+        '  "nutrient_snippets": [],\n'
+        '  "macro_nut_categories": [],\n'
+        '  "pro_arguments": [],\n'
+        '  "contra_arguments": []\n'
+        "}\n\n"
+        "GEWICHTUNGS-GESETZE FÜR DEN GUTACHTER (Skala 0.0 bis 5.0):\n"
+        "1. 'n_mikro' / 'nutrient_snippets': Empirische Mikro-Nährstoff-Sätze (Fakten, Zahlen, Daten, verifizierbare Belege, Studien). Ein Satz wird NUR dann zitiert, wenn er trotz Clickbait-Sumpf echte, überprüfbare Substanz besitzt (z.B. exakte Statistiken, offizielle Behördenzitate oder wissenschaftliche Fakten). Reine Meinungen oder emotionale Boulevard-Phrasen fliegen rigoros raus! Jeder Eintrag MUSS ein einzelner, kurzer Satz aus 'sanitized_sentences' sein.\n"
+        "2. 'n_makro' / 'macro_nut_categories': Journalistische Makro-Ausgewogenheit (Dialektische Symmetrie, faire Pro- und Contra-Debattenstruktur, Multiperspektive).\n"
+        "3. 'pro_arguments' und 'contra_arguments': Fasse sachliche Pro- und Kontra-Punkte prägnant zusammen."
+    )
+
+    # 4. PARALLELES ABFEUERN BEIDER AGENTEN VIA ASYNCIO.GATHER
+    accuser_task = async_call_groq_api(
         model=MODEL_ANALYZE,
-        system_prompt=system_prompt,
+        system_prompt=system_prompt_accuser,
         user_content=user_content,
         temperature=0.1,
         json_mode=True
     )
 
-    if not groq_res or ("t_mikro" not in groq_res and "s_tox" not in groq_res):
-        groq_res = local_fallback_analyze(raw_context, sanitized_sentences)
+    evaluator_task = async_call_groq_api(
+        model=MODEL_ANALYZE,
+        system_prompt=system_prompt_evaluator,
+        user_content=user_content,
+        temperature=0.1,
+        json_mode=True
+    )
 
-    # Extraktion der Mikro- und Makro-Parameter
-    t_mikro = float(groq_res.get("t_mikro", groq_res.get("s_tox", 0.0)))
-    t_makro = float(groq_res.get("t_makro", 0.0))
-    n_mikro = float(groq_res.get("n_mikro", groq_res.get("n_nut", 1.0)))
-    n_makro = float(groq_res.get("n_makro", 1.0))
+    groq_accuser_res, groq_evaluator_res = await asyncio.gather(accuser_task, evaluator_task)
 
-    # Vier getrennte Text- & Kategorie-Arrays
-    raw_toxic_snippets = groq_res.get("toxic_snippets", [])
-    raw_nutrient_snippets = groq_res.get("nutrient_snippets", [])
-    macro_tox_categories = groq_res.get("macro_tox_categories", groq_res.get("macro_reasons", []))
-    macro_nut_categories = groq_res.get("macro_nut_categories", [])
-    pro_arguments = groq_res.get("pro_arguments", [])
-    contra_arguments = groq_res.get("contra_arguments", [])
+    # 5. ROBUSTER FALLBACK BEI FEHLENDER ANTWORT
+    fallback_res = local_fallback_analyze(raw_context, sanitized_sentences)
+
+    if not groq_accuser_res or ("t_mikro" not in groq_accuser_res and "t_makro" not in groq_accuser_res):
+        groq_accuser_res = {
+            "t_mikro": fallback_res["t_mikro"],
+            "t_makro": fallback_res["t_makro"],
+            "toxic_snippets": fallback_res["toxic_snippets"],
+            "macro_tox_categories": fallback_res["macro_tox_categories"]
+        }
+
+    if not groq_evaluator_res or ("n_mikro" not in groq_evaluator_res and "n_makro" not in groq_evaluator_res):
+        groq_evaluator_res = {
+            "n_mikro": fallback_res["n_mikro"],
+            "n_makro": fallback_res["n_makro"],
+            "nutrient_snippets": fallback_res["nutrient_snippets"],
+            "macro_nut_categories": fallback_res["macro_nut_categories"],
+            "pro_arguments": fallback_res["pro_arguments"],
+            "contra_arguments": fallback_res["contra_arguments"]
+        }
+
+    # 6. FUSION DER GETRENNTEN AGENTEN-DATENSTRÖME
+    t_mikro = float(groq_accuser_res.get("t_mikro", 0.0))
+    t_makro = float(groq_accuser_res.get("t_makro", 0.0))
+    n_mikro = float(groq_evaluator_res.get("n_mikro", 1.0))
+    n_makro = float(groq_evaluator_res.get("n_makro", 1.0))
+
+    raw_toxic_snippets = groq_accuser_res.get("toxic_snippets", [])
+    raw_nutrient_snippets = groq_evaluator_res.get("nutrient_snippets", [])
+    macro_tox_categories = groq_accuser_res.get("macro_tox_categories", [])
+    macro_nut_categories = groq_evaluator_res.get("macro_nut_categories", [])
+    pro_arguments = groq_evaluator_res.get("pro_arguments", [])
+    contra_arguments = groq_evaluator_res.get("contra_arguments", [])
 
     if not isinstance(raw_toxic_snippets, list):
         raw_toxic_snippets = []
@@ -403,6 +469,22 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
             if word_count <= 25 and "\n" not in cleaned and cleaned:
                 nutrient_snippets.append(cleaned)
 
+    # =========================================================================
+    # 7. ASYMMETRISCHES TEILSTRING-VETO-PROTOKOLL (DAS UNBESTECHLICHE AXIOM)
+    # =========================================================================
+    for nut_sentence in list(nutrient_snippets):
+        for tox_sentence in toxic_snippets:
+            # ASYMMETRISCHES TEILSTRING-MATCHING (Das unbestechliche Axiom)
+            if nut_sentence.lower() in tox_sentence.lower() or tox_sentence.lower() in nut_sentence.lower():
+                # Wenn ein grüner Satz auch nur zu einem Bruchteil mit der roten Schadstoff-Liste infiziert ist:
+                if nut_sentence in nutrient_snippets:
+                    nutrient_snippets.remove(nut_sentence) # Physisch im Backend ertränken!
+                break # Schleife abbrechen, nächster Satz
+
+    # Wenn durch diese Reinigung das gesamte Nährstoff-Array leer wird, setze den Wert 'n_mikro' konsequent auf 0.0 zurück
+    if len(nutrient_snippets) == 0:
+        n_mikro = 0.0
+
     # Fallback-Kategorien absichern bei struktureller Makro-Toxizität
     if t_makro >= 1.0 and len(macro_tox_categories) == 0:
         macro_tox_categories.append("Aggressive Schlagzeilen-Dichte")
@@ -412,7 +494,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
         macro_nut_categories.append("Dialektische Symmetrie")
 
     # =========================================================================
-    # MATHEMATISCHE FUSION (50/50 HYBRID-RECHNUNG)
+    # MATHEMATISCHE FUSION (50/50 HYBRID-RECHNUNG) // METABOLISCHE HOMÖOSTASE
     # =========================================================================
     s_tox = (t_mikro + t_makro) / 2.0
     n_nut = (n_mikro + n_makro) / 2.0
@@ -468,6 +550,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
             "symmetry_score": symmetry_score,
             "macro_tox_categories": macro_tox_categories,
             "macro_nut_categories": macro_nut_categories,
+            "pipeline": "Async Dual Multi-Agent (Accuser + Evaluator) + Asymmetric Substring Veto",
             "model_used": MODEL_ANALYZE,
             "engine": "Groq Cloud" if GROQ_API_KEY != "DEIN_KEY_HIER" else "Local Heuristic Engine",
             "cached": False
@@ -484,7 +567,7 @@ async def analyze_viewport_text(payload: AnalyzeRequest):
 
 
 # =============================================================================
-# 7. REST-ENDPUNKT: /api/flush (DETOX & WELTWISSEN VIA LLAMA 3.3 70B)
+# 8. REST-ENDPUNKT: /api/flush (DETOX & WELTWISSEN VIA LLAMA 3.3 70B)
 # =============================================================================
 @app.post("/api/flush", response_model=FlushResponse)
 async def linguistic_flush(payload: FlushRequest):
@@ -555,17 +638,18 @@ async def linguistic_flush(payload: FlushRequest):
 
 
 # =============================================================================
-# 8. SYSTEM STATUS & HEALTH CHECK
+# 9. SYSTEM STATUS & HEALTH CHECK
 # =============================================================================
 @app.get("/api/health")
 async def health_check():
     has_key = bool(GROQ_API_KEY and GROQ_API_KEY != "DEIN_KEY_HIER")
     return {
         "status": "metabolic_vault_online",
+        "pipeline": "Async Dual Multi-Agent (Accuser + Evaluator) + Asymmetric Substring Veto",
         "groq_api_configured": has_key,
         "model_analyze": MODEL_ANALYZE,
         "model_flush": MODEL_FLUSH,
-        "version": "3.1.0",
+        "version": "3.4.0",
         "cached_sessions_count": len(ANALYSIS_CACHE),
         "time": time.time()
     }
@@ -583,5 +667,5 @@ if __name__ == "__main__":
         uvicorn.run(app, host="127.0.0.1", port=8000, log_config=None)
     else:
         # Im Entwickler-Terminal: Volles Logging AN, damit wir jeden Live-Funkspruch der Analyse sehen!
-        print("🪐 [Q-O Core] Entwickler-Modus aktiv. Zünde semantisches Groq-Radar mit MD5-Schutzschirm...")
+        print("🪐 [Q-O Core] Entwickler-Modus aktiv. Zünde asynchrone Multi-Agenten-Pipeline mit asymmetrischem Teilstring-Axiom...")
         uvicorn.run(app, host="127.0.0.1", port=8000)
