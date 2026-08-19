@@ -1,7 +1,7 @@
-# 🧬 PROJEKT Q-O // Lingu-Blob 
+# 🧬 AGENT Q-O // Lingu-Blob 
 #  Großäugig -  Sensibel  - Diskret
 
-![Q-O Biosensor Core](cover.png)
+![Q-O Biosensor Core](banner.png)
 
 ---
 
