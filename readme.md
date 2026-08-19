@@ -63,44 +63,66 @@ Das Cyber-Labor ist deine forensische Einsatzzentrale. Es ist als gläsernes 3-Z
 ## 4. 🧠 FUNKTIONSWEISE ANALYSE: SPRACHMODELLE & MATHEMATISCHE FORMEL
 
 ### Die dynamische Homöostase-Formel
-Der **Linguistic Quality Index ($LQ$)** berechnet sich aus dem exponentiellen Spannungsfeld zwischen manipulativen Toxinen und informationellem Nährwert:
+Der **Linguistic Quality Index (\(LQ\))** berechnet sich aus dem exponentiellen Spannungsfeld zwischen manipulativen Toxinen und informationellem Nährwert:
 
-$$LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}$$
+\[LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}\]
 
-* Wenn $\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}$, ist $LQ = e^0 = 1.0$ (Neutraler Gleichgewichtszustand).
-* Wenn $\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}$, wächst $LQ > 1.0$ (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
-* Wenn $\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}$, fällt $LQ \to 0$ (Hohe Toxizität, kognitive Überlastung).
+* Wenn \(\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}\), ist \(LQ = e^0 = 1.0\) (Neutraler Gleichgewichtszustand).
+* Wenn \(\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}\), wächst \(LQ > 1.0\) (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
+* Wenn \(\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}\), fällt \(LQ \to 0\) (Hohe Toxizität, kognitive Überlastung).
 
 ### Das duale Berechnungs-Gesetz (Mikro- und Makro-Fusion)
-Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster lückenlos zu erfassen, fusioniert Q-O auf einer Skala von $0.0$ bis $5.0$ zwei Beobachtungsebenen:
+Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster lückenlos zu erfassen, fusioniert Q-O auf einer Skala von \(0.0\) bis \(5.0\) zwei Beobachtungsebenen:
 
-$$\mathcal{S}_{\text{tox}} = \frac{T_{\text{mikro}} + T_{\text{makro}}}{2}, \quad \mathcal{N}_{\text{nut}} = \frac{N_{\text{mikro}} + N_{\text{makro}}}{2}$$
+\[\mathcal{S}_{\text{tox}} = \frac{T_{\text{mikro}} + T_{\text{makro}}}{2}, \quad \mathcal{N}_{\text{nut}} = \frac{N_{\text{mikro}} + N_{\text{makro}}}{2}\]
 
 ```
                 +-------------------------------------------------------+
                 |                    TEXT-BIOMORPHIE                    |
                 +---------------------------+---------------------------+
                                             |
+                                  [ MD5-HASH-FILTER ]
+                        Prüft auf redundanten Text im 4s-Takt
+                                            |
                     +-----------------------+-----------------------+
                     |                                               |
          [ MIKRO-EBENE (ZITATE) ]                        [ MAKRO-EBENE (STRUKTUR) ]
          Isolierte Sätze & Phrasen                       Ganzheitliches Textfeld
-         - Alarmistische Reizwörter                      - Aggressive Schlagzeilen-Dichte
-         - Clickbait-Phrasen                             - Fehlende Primärquellen
-         - Methodische Belege                            - Logische Argumentationskette
                     |                                               |
                     +-----------------------+-----------------------+
                                             |
-                               [ DUALER LLM-STREAM ]
+                        [ DUAL-AGENTEN-INFERENCE (ASYNCHRON) ]
+                        Paralleler LPU-Stream via Groq (Llama 3.1 8B)
                                             |
          +----------------------------------+----------------------------------+
          |                                                                     |
-  Llama 3.1 8B (Groq JSON)                                         Llama 3.3 70B (Versatile)
-  - 4-Sekunden-Takt                                                - Schreibgeschützter Flush
-  - t_mikro, t_makro, n_mikro, n_makro                             - Kontext-Antidot & Bereinigung
-  - JSON-Schema mit 4 Arrays                                       - LQ-Boost Rekonstruktion
+  [ AGENT 1: DER ANKLÄGER ]                                         [ AGENT 2: DER GUTACHTER ]
+  - Fokus: Reine Schadstoff-Isolation                              - Fokus: Reine Nährstoff-Isolation
+  - Befüllt: t_mikro, t_makro & toxic_snippets                      - Befüllt: n_mikro, n_makro & nutrient_snippets
+         |                                                                     |
+         +----------------------------------+----------------------------------+
+                                            |
+                          [ ASYMMETRISCHES TEILSTRING-VETO ]
+                          Python-Mengenlehre-Schleife (Substring-Matching)
+                          Löscht kontaminierte Phrasen aus der grünen Box
+                                            |
+                               [ MATHE-FUSION (e-FUNKTION) ]
+                               Garantie klinisch reiner Variablen
+                                            |
+                              [ LLAMA 3.3 70B (VERSATILE) ]
+                              Schreibgeschützter Homöostase-Flush (Antidot)
 ```
 
+### Die kybernetische Feedback-Schleife (Das unbestechliche Axiom)
+Um sogenannte **"Syntaktische Chamäleon-Effekte"** (z. B. auf Boulevardseiten, wo reißerische Kriminal-Schlagzeilen nahtlos an harmlose Sport- oder Kulturmeldungen geklebt werden) deterministisch auszuschließen, vertraut Q-O nicht allein auf die stochastische Texttrennung der Sprachmodelle. 
+
+Direkt nach dem parallelen Empfang beider Agenten-JSON-Streams greift eine unbestechliche, relationale Python-Kontrollkaskade im Backend:
+
+1. **Asymmetrische Teilstring-Mengenlehre:** Jedes isolierte Fragment im Nährstoff-Array (`nutrient_snippets`) wird bidirektional gegen sämtliche Schadstoffsätze (`toxic_snippets`) abgeglichen. Existiert auch nur ein minimaler Teilstring-Überlapp (`nut in tox` oder `tox in nut`), wird das kontaminierte Fragment physisch und restlos aus der Nährstoff-Liste getilgt.
+2. **Asymmetrische Einbahnstraße:** Das Schadstoff-Array fungiert als unantastbarer forensischer Zeuge und bleibt von der Bereinigung unberührt.
+3. **Deterministischer Nullabgleich:** Wird das Nährstoff-Array durch das Veto vollständig entleert, setzt das System den Wert $N_{\text{mikro}}$ konsequent auf $0.0$ zurück.
+
+Erst auf Basis dieses bereinigten Datenvektors berechnet die exponentielle $LQ$-Homöostase-Gleichung das endgültige Stoffwechsel-Gleichgewicht.
 ---
 
 ## 5. 🏄‍♂️ HYPOTHETISCHE SURFERFAHRUNG: DREI FORENSISCHE STATIONEN
