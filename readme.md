@@ -126,52 +126,17 @@ Erst auf Basis dieses bereinigten Datenvektors berechnet die exponentielle $LQ$-
 
 ---
 
-## 5. 🏄‍♂️ HYPOTHETISCHE SURFERFAHRUNG: DREI FORENSISCHE STATIONEN
+## 5. 🛡️ LOKALE DATENSOUVERÄNITÄT & DATENSCHUTZ-AXIOM
 
-### Station 1: Der Wikipedia-Tiefgang (Enzyklopädische Homöostase)
-* **Ziel:** `de.wikipedia.org/wiki/Photosynthese`
-* **Textbeschaffenheit:** Neutraler Duktus, dichte Quellenangaben, kausale Erklärungen, keinerlei Adjektiv-Überladung.
-* **Phänomenologie des Widgets:**
-  * **Farbe:** Klares, tiefes Cyanblau (`#06b6d4`) bis Smaragdgrün.
-  * **Kinetik:** Extrem langsames, beruhigendes Atmen ($0.4\text{ Hz}$). 
-  * **Organell:** Der **Kreis** verharrt millimetergenau im mathematischen Zentrum des Glaskerns.
-  * **Messwerte:** $T_{\text{mikro}} = 0.0$, $T_{\text{makro}} = 0.0$, $N_{\text{mikro}} = 4.2$, $N_{\text{makro}} = 4.8 \implies LQ \approx 2.45$.
+Ein zentraler Grundpfeiler des Projekts **Q-O** ist die bedingungslose informationelle Selbstbestimmung des Nutzers. Trotz modernster Inferenz auf Höchstleistungs-Hardware trennt die Architektur strikt zwischen flüchtiger Rechenleistung und physischer Datenspeicherung:
 
-```
-[ WIKIPEDIA ] ───►  (  ●  )  Cyan-Puls (0.4 Hz)  ───►  LQ: 2.45  (Perfekte Homöostase)
-```
-
----
-
-### Station 2: Der Clickbait-Artikel (Kognitiver Stress & Framing)
-* **Ziel:** Viral-Blog: *"Diese 5 geheimen Tech-Tricks werden dein Leben für immer verändern (Nummer 3 ist illegal!)"*
-* **Textbeschaffenheit:** Künstliche Verknappung, FOMO, übertriebene Superlative, geringer Faktengehalt.
-* **Phänomenologie des Widgets:**
-  * **Farbe:** Wärmeres Bernstein/Orange (`#f59e0b`).
-  * **Kinetik:** Unruhige, asymmetrische Oszillation ($1.2\text{ Hz}$), feine zelluläre Zuckungen.
-  * **Organell:** Der innere Kreis kontrahiert zu einem **Oval**, das leicht nach links oben driftet.
-  * **Messwerte:** $T_{\text{mikro}} = 3.2$, $T_{\text{makro}} = 2.8$, $N_{\text{mikro}} = 0.8$, $N_{\text{makro}} = 1.0 \implies LQ \approx 0.36$.
-  * **Im Seziertisch:** Identifiziert Zitate wie *"wird dein Leben für immer verändern"* und strukturelle Makro-Kategorien wie `📊 [MAKRO] Reißerische Verknappung`.
-
-```
-[ CLICKBAIT ] ──►  (  ⬭  )  Bernstein-Drift (1.2 Hz) ──►  LQ: 0.36  (Kognitiver Stress)
-```
-
----
-
-### Station 3: Die Boulevard-Startseite (Makro-Toxizität ohne Zitate)
-* **Ziel:** `b1ld.de` Startseite
-* **Textbeschaffenheit:** Eine Ansammlung aus Teasern, isolierten Reizwörtern ("HAMMER!", "SKANDAL!", "BLUT-DRAMA!"), Angst-Induktion und Großbuchstaben. Häufig keine zusammenhängenden grammatikalischen Sätze im DOM.
-* **Phänomenologie des Widgets:**
-  * **Farbe:** Glühendes Warn-Rot (`#ef4444`) mit violettem Unterton.
-  * **Kinetik:** Schneller, spitzer Puls ($2.1\text{ Hz}$). Die äußere Hülle bleibt weich gerundet, aber der innere Glaskern zeigt extreme innere Spannung.
-  * **Organell:** Das Organell zieht sich zu einem **zackigen Splitter** zusammen.
-  * **Messwerte:** $T_{\text{mikro}} = 1.0$ (kaum zitierbare Sätze), aber $T_{\text{makro}} = 4.9$, $N_{\text{mikro}} = 0.1$, $N_{\text{makro}} = 0.2 \implies LQ \approx 0.08$.
-  * **Der Forensik-Effekt im Seziertisch:** Da keine vollständigen Sätze als Mikro-Zitate existieren, schaltet die Schadstoff-Zentrale automatisch auf **STRUKTUR** und belegt die Toxizität lückenlos über `📊 [MAKRO] Aggressive Schlagzeilen-Dichte` und `📊 [MAKRO] Affektive Hysterie`.
-
-```
-[ BILD.DE ] ───►  (  ▲  )  Roter Reizpuls (2.1 Hz)   ──►  LQ: 0.08  (Reine Makro-Toxizität)
-```
+### Die strikte Trennung von Reaktor und Tresor
+1. **Flüchtiger Cloud-Reaktor (Zero-Retention Inferenz):**
+   Die Groq LPU-Infrastruktur (Llama 3.1 8B / Llama 3.3 70B) dient ausschließlich als anonymer, zustandsloser Durchlauf-Reaktor zur Textzerlegung. Es werden keinerlei Benutzerkonten, Tracking-Cookies, IP-Logs oder historische Surf-Profile in der Cloud angelegt oder persistiert.
+2. **Lokaler physischer Datentresor (`QO_Metabolic_Vault`):**
+   Sämtliche Biopsie-Protokolle, Messreihen, Zeitstempel, Text-Zitate und Sitzungshistorien werden zu 100% lokal in der browserinternen IndexedDB auf der Festplatte des Nutzers versiegelt.
+3. **Keine zentrale Telemetrie & vollständige Sterilisation:**
+   Weder Entwickler noch Dritte haben Zugriff auf das persönliche Lese- und Sezierverhalten. Über die Funktion **Vault Detox** im Cyber-Cockpit kann der lokale Datenspeicher mit einer einzigen Transaktion physisch und unwiderruflich bereinigt werden.
 
 ---
 
