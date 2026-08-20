@@ -4,7 +4,7 @@
 
 # 🪐 Q-O: BIOMORPHIC LINGUISTIC FORENSIC BIOSENSOR (STAGE 3)
 
-Q-O ist ein autonomer, hochsensibler Cyberpunk-Biosensor für die Echtzeit-Sprachumwelt im Browser. Das System analysiert dichte Text-Kollagen digitaler Massenmedien im 4-Sekunden-Takt und transformiert komplexe, soziologische Machtstrukturen über eine unbestechliche mathematische e-Funktion in die physische, biomorphische Gestalt eines permanent mitlaufenden HUD-Zell-Organells.
+Q-O ist ein autonomer, hochsensibler Cyberpunk-Biosensor für die Echtzeit-Sprachumwelt im Browser. Das System analysiert dichte Text-Kollagen digitaler Massenmedien im 4-Sekunden-Takt und transformiert komplexe, soziologische Machtstrukturen über eine mathematische e-Funktion in die physische, biomorphische Gestalt eines permanent mitlaufenden HUD-Zell-Organells.
 
 ---
 
