@@ -1,21 +1,11 @@
-MIT License
+Copyright (c) 2026 Anar. All Rights Reserved.
 
-Copyright (c) 2026 anaranablamarama-art
+Nutzungsbedingungen (Terms of Service):
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. EIGENTUMSVORBEHALT: Alle Inhalte dieses Repositories, einschließlich, aber nicht beschränkt auf den Quellcode (main.py, src/*), die mathematische Formel (Linguistic Quality Index), das visuelle Interface-Design, das README-Banner und die Dokumentation, sind das geistige Eigentum des Urhebers (Anar).
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. NUTZUNGSBESCHRÄNKUNG: Es ist strikt untersagt, diesen Code oder Teile davon zu kopieren, zu modifizieren, zu verbreiten, zu unterlizenzieren oder kommerziell zu verwerten, es sei denn, es liegt eine ausdrückliche, schriftliche Genehmigung des Urhebers vor.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. RECHTE FÜR DRITTE: Das Einsehen des Quellcodes auf GitHub zu Bildungs- und Review-Zwecken ist gestattet. Das Klonen oder Forken des Repositories gewährt keine Rechte zur weiteren Veröffentlichung oder Distribution außerhalb der offiziellen Q-O-Infrastruktur.
+
+4. HAFTUNGSAUSSCHLUSS: Die Software wird "wie besehen" (as is) zur Verfügung gestellt, ohne jegliche ausdrückliche oder implizite Gewährleistung für die Funktionalität oder Richtigkeit der Medienanalyse.
