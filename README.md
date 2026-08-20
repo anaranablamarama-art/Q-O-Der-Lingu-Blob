@@ -78,64 +78,35 @@ Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster 
                             Physische, unzensierte Speicherung auf PC
 ```
 
-### Die kybernetische Feedback-Schleife (Das unbestechliche Axiom)
-1. **Asymmetrische Teilstring-Mengenlehre:** Jedes isolierte Fragment im Nährstoff-Array (`nutrient_snippets`) wird bidirektional gegen sämtliche Schadstoffsätze (`toxic_snippets`) abgeglichen. Existiert auch nur ein minimaler Teilstring-Überlapp (`nut in tox` oder `tox in nut`), wird das kontaminierte Fragment physisch und restlos aus der Nährstoff-Liste getilgt.
-2. **Asymmetrische Einbahnstraße:** Das Schadstoff-Array fungiert als unantastbarer forensischer Zeuge und bleibt von der Bereinigung unberührt.
-3. **Deterministischer Nullabgleich:** Wird das Nährstoff-Array durch das Veto vollständig entleert, setzt das System den Wert \(N_{\text{mikro}}\) konsequent auf \(0.0\) zurück.
+### Die algorithmische Variablen-Reinigung
+1. **Der MD5-Hash-Filter (Der API-Schutzschirm):** Stellt das Backend fest, dass ein eintreffender Textblock absolut identisch und unverändert zum vorherigen Takt ist, wird der Cloud-Aufruf blockiert. Die Werte werden stattdessen latenzfrei aus dem lokalen RAM geliefert, was den Token-Verbrauch beim Lesen um bis zu 90% senkt.
+2. **Das asymmetrische Teilstring-Veto:** Fällt der Nährstoff-Agent auf eine manipulative Tarnung herein, enthält ein Satz jedoch parallel isolierte Schadstoff-Fragmente der roten Liste, greift Python ein. Der Satz wird im Nährstoff-Kanal im Backend physisch gelöscht, um die absolute Reinheit der Variablen vor der e-Berechnung zu garantieren. Wenn das Nährstoff-Array dadurch kollabiert, fallen \(n_{\text{disk}}\) und \(n_{\text{micro}}\) starr auf exakt 0.0 zurück (Die absolute Echokammern-Sperre).
 
 ---
 
 ## 4. 🛡️ LOKALE DATENSOUVERÄNITÄT & DATENSCHUTZ-AXIOM
 
-Ein zentraler Grundpfeiler des Projekts **Q-O** ist die bedingungslose informationelle Selbstbestimmung des Nutzers:
+Q-O operiert nach dem unumstößlichen Prinzip der absoluten informationellen Selbstbestimmung. Es besteht eine strikte, physische Trennung zwischen flüchtiger Cloud-Rechenleistung und deinem privaten Datentresor:
 
-1. **Flüchtiger Cloud-Reaktor (Zero-Retention Inferenz):**
-   Die Groq LPU-Infrastruktur dient ausschließlich als anonymer, zustandsloser Durchlauf-Reaktor zur Textzerlegung. Es werden keinerlei Benutzerkonten, Tracking-Cookies, IP-Logs oder historische Surf-Profile in der Cloud angelegt oder persistiert.
-2. **Lokaler physischer Datentresor (`QO_Metabolic_Vault`):**
-   Sämtliche Biopsie-Protokolle, Messreihen, Zeitstempel, Text-Zitate und Sitzungshistorien werden zu 100% lokal in der browserinternen IndexedDB auf der Festplatte des Nutzers versiegelt.
-3. **Keine zentrale Telemetrie & vollständige Sterilisation:**
-   Weder Entwickler noch Dritte haben Zugriff auf das persönliche Lese- und Sezierverhalten. Über die Funktion **Vault Detox** im Cyber-Cockpit kann der lokale Datenspeicher mit einer einzigen Transaktion physisch und unwiderruflich bereinigt werden.
+* **Der zustandslose Cloud-Reaktor (Groq API):** Die Texte werden im flüchtigen RAM der LPU-Chips im Millisekunden-Takt prozessiert und unmittelbar nach der Analyse in der Cloud restlos gelöscht. Es findet auf den externen Servern keinerlei Archivierung, kein Tracking, kein Profiling und kein historischer Log statt. Die KI bleibt zu jedem Zeitpunkt vollständig blind für deine langfristige Surf-Historie.
+* **Der physische Datentresor auf deinem PC (IndexedDB):** Deine historische Kapsel-Chronologie, alle Scan-Protokolle deines Seziertischs und die LQ-Ergebnisse werden über das asynchrone Transaktions-Veto des Service Workers (`background.js`) unzerstörbar in der lokalen `IndexedDB` deines Browsers auf deiner eigenen physischen Festplatte versiegelt. Diese Datenbank befindet sich physisch im geschützten Verzeichnis deines Windows-Benutzerprofils. Deine Daten gehören zu 100 % dir.
 
 ---
 
 ## 5. 🎯 DIE UX-PHÄNOMENOLOGIE & FILTERSENSITIVITÄT
 
-Das HUD-Organell spiegelt den metabolischen Zustand der Sprachumwelt stufenlos und organisch im Sichtfeld wider:
+Das System richtet sich an eine medienbewusste, junge Tech-Elite mit hoher Screentime. Um visuelle Erschöpfung bei langen Sessions vollständig zu vermeiden, verzichtet das Widget auf ablenkendes Zahlen-Voodoo und kommuniziert rein peripher über seine gestalterische, permanente **Valorant-Cyberpunk-Ästhetik**.
 
-```
-+----------------------------------------------------------------------------------------------------+
-|                                    Q-O FORENSIC COCKPIT                                            |
-+------------------------------------+--------------------------------+------------------------------+
-| ZONE 1: GEWEBEBANK (Vault)         | ZONE 2: PETRISCHALE (Reaktor)  | ZONE 3: SEZIERTISCH (Matrix) |
-|                                    |                                |                              |
-| [ 🧪 PROBE A: Wikipedia ] (LQ 1.4) |   +------------------------+   | +--------------------------+ |
-| [ 🧪 PROBE B: TechCrunch ](LQ 0.8) |   |  Eingefrorener         |   | | 🚨 SCHADSTOFF-ZENTRALE   | |
-| [ 🧪 PROBE C: Bild.de ]   (LQ 0.2) |   |  Sitzungs-Blob         |   | | [STRUKTUR] | [ZITATE]   | |
-|                                    |   |  (Unerschütterliches   |   | | > 📊 [MAKRO] Clickbait   | |
-| [ ⚡ VAULT DETOX (Sterilisieren) ]  |   |   Denkmal der Phase)   |   | +--------------------------+ |
-|                                    |   +------------------------+   | +--------------------------+ |
-|                                    |   LQ-Score: 0.24 | Sym: 38%    | | 💎 NÄHRSTOFF-ZENTRALE    | |
-|                                    |   s_tox: 3.80   | n_nut: 0.30  | | [STRUKTUR] | [ZITATE]   | |
-|                                    |   [ 🧪 FLUSH-ANTIDOT ]         | | > • Keine Zitate isoliert| |
-|                                    |                                | +--------------------------+ |
-+------------------------------------+--------------------------------+------------------------------+
-```
+### Die unendliche Infinitesimal-Kopplung der Morphologie
+Das Netto-Gefälle (\(\Delta = \mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}}\)) steuert das Organell stufenlos über den numerischen Ausgang des LQ-Scores:
 
-### Die morphologischen Reizstadien:
-1. **State Cyan (Habermas-Modus, \(LQ \ge 1.0\)):**
-   Sanft pulsierende, flüssige Amöbe im tiefen 7s-Rotationsfluss (`alien-plasma-flow`) mit reinem Cyan-Core-Glow. Symbolisiert rationale Diskurs-Homöostase und hohe Erkenntnisdichte.
-2. **State Orange (Foucault-Modus, \(0.25 \le LQ < 1.0\)):**
-   Asymmetrische Deformation, Achsenverschiebung und unruhiges Flackern im gegenläufigen Rotationsmodus (`foucault-warp-counter`). Warnt vor manipulativem Framing, Verengung des Diskursraums und kognitiver Agitation.
-3. **State Rot (Valorant-Cyber-HUD & Bubble-Burst, \(LQ < 0.25\)):**
-   Die Zelle bricht die fließende Rotation abrupt ab und verfällt in einen hochfrequenten Zitterschock (`rot-heavy-twitch`, 0.08s-Takt mit Skewing). 
-   Gleichzeitig explodiert das taktische **Valorant Cyber-HUD**:
-   * Messerscharfe, glitschende Eck-Brackets (`::before` / `::after` im 0.3s Glitch-Takt)
-   * Schräggestellter Riot-Rot-Balken (`transform: skewX(-10deg)`) mit weißer 'Oswald'-Schrift
-   * Pulsierender Notfall-Status: **`CRITICAL: BUBBLE BURST`**
-   * Epizentrisches Zielkreis-Fadenkreuz (`.hud-crosshair-center`) im Zentrum der zuckenden Zelle.
+* 🟢 **Axiom I (Gleichgewicht // \(\Delta \le 0\)):** Der LQ-Score bleibt \(\ge 1.0\). Das Organell morphiert als klebriger, quecksilberartiger **„Gläserner Vapor-Ozean“** im satten Neon-Cyan/Vapor-Violett-Verlauf und atmet tief im entspannenden **9-Sekunden-Rhythmus**. Pures taktisches Understatement, das beim Lesen zu 0 % stört.
+* 🟡 **Axiom II (Kompression // \(0 < \Delta \le 2.0\)):** Die gedämpfte e-Funktion greift (\(LQ = e^{-\Delta \cdot 1.2}\)). Die perfekte Symmetrie bricht fließend auf. Die Form mutiert asymmetrisch in ein unregelmäßiges Oval, die Farbe schlägt in kochendes Vapor-Orange um und die Atemfrequenz beschleunigt sich nervös auf einen **4-Sekunden-Takt**.
+* 🔴 **Axiom III (Der totale Kollaps // \(\Delta > 2.0\)):** **Die exponentielle Quadrierung zündet (\(LQ = e^{-\Delta^2}\))!** Der Score stürzt schlagartig unter 0.25. Jedes flüssige Fließen implodiert. Der Blob zieht sich krampfartig zusammen und verfällt in einen **hochfrequenten Zitterschock im 0.06s-Takt** im unzensierten Neon-Alarm-Rot.
 
-### Das haptische Regler-Panel ("MORPHOLOGY SENSITIVITY")
-Über die technoiden HUD-Controls (`.q-o-control-panel`, `.hud-label-tech`, `.slider-wrapper-tech`) kann die Reizschwelle für den Kollaps stufenlos an die individuelle Informations-Toleranz angepasst werden.
+### 🎯 Die HUD-Eruption & Der Sensibilitätsregler
+* **CRITICAL: BUBBLE BURST:** Sobald Axiom III zündet, bricht das scharfe, taktile Valorant-HUD mitsamt den rasiermesserscharfen Eckklammern (*Tactical Brackets*), dem zentralen Fadenkreuz (*Crosshair*) und dem glitschenden roten Alarm-Balken über dem zitternden Blob aus, um den Nutzer im Augenwinkel unmissverständlich vor der Filterblase zu warnen.
+* **Morphology Sensitivity:** Über einen technoiden Schieberegler im Dashboard kann der Nutzer den Abfang-Hebeleffekt von 0.5x (abgestumpft) bis 2.5x (hyper-sensibel) manipulieren. Dies verzerrt den LQ-Score im Frontend künstlich und lässt die Amöbe radikal schneller in den krampfartigen Reizzustand mutieren, um den Schutzschild an die eigene kognitive Belastungsgrenze anzupassen.
 
 ---
 
