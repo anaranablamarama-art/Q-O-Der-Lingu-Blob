@@ -16,7 +16,7 @@ Das System operiert als entkoppelte Dual-Infrastruktur, die maximale Rechenpower
 
 ---
 
-## 2. 🎛️ COGNITIVE DISSONANCE FILTERS & THE MANUFACTURING CONSENT
+## 2. 🎛️ COGNITIVE DISSONANCE FILTERS
 
 Das System scannt mediales Gewebe nicht auf plumpe Keywords, sondern biopsiert das **habituelle Framing** und die strukturelle Gewalt der Sprache nach den Modellen von Noam Chomsky (*Manufacturing Consent*), Pierre Bourdieu (*Kritische Habitus-Theorie*) und Jürgen Habermas.
 
@@ -80,7 +80,7 @@ Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster 
 
 ### Die algorithmische Variablen-Reinigung
 1. **Der MD5-Hash-Filter (Der API-Schutzschirm):** Stellt das Backend fest, dass ein eintreffender Textblock absolut identisch und unverändert zum vorherigen Takt ist, wird der Cloud-Aufruf blockiert. Die Werte werden stattdessen latenzfrei aus dem lokalen RAM geliefert, was den Token-Verbrauch beim Lesen um bis zu 90% senkt.
-2. **Das asymmetrische Teilstring-Veto:** Fällt der Nährstoff-Agent auf eine manipulative Tarnung herein, enthält ein Satz jedoch parallel isolierte Schadstoff-Fragmente der roten Liste, greift Python ein. Der Satz wird im Nährstoff-Kanal im Backend physisch gelöscht, um die absolute Reinheit der Variablen vor der e-Berechnung zu garantieren. Wenn das Nährstoff-Array dadurch kollabiert, fallen \(n_{\text{disk}}\) und \(n_{\text{micro}}\) starr auf exakt 0.0 zurück (Die absolute Echokammern-Sperre).
+2. **Das asymmetrische Teilstring-Veto:** Fällt der Nährstoff-Agent auf Framing herein, enthält ein Satz jedoch parallel isolierte Schadstoff-Fragmente der roten Liste, greift Python ein. Der Satz wird im Nährstoff-Kanal im Backend physisch gelöscht, um die absolute Reinheit der Variablen vor der e-Berechnung zu garantieren. Wenn das Nährstoff-Array dadurch kollabiert, fallen \(n_{\text{disk}}\) und \(n_{\text{micro}}\) starr auf exakt 0.0 zurück (Die absolute Echokammern-Sperre).
 
 ---
 
@@ -95,7 +95,7 @@ Q-O operiert nach dem unumstößlichen Prinzip der absoluten informationellen Se
 
 ## 5. 🎯 DIE UX-PHÄNOMENOLOGIE & FILTERSENSITIVITÄT
 
-Das System richtet sich an eine medienbewusste, junge Tech-Elite mit hoher Screentime. Um visuelle Erschöpfung bei langen Sessions vollständig zu vermeiden, verzichtet das Widget auf ablenkendes Zahlen-Voodoo und kommuniziert rein peripher über seine gestalterische, permanente **Valorant-Cyberpunk-Ästhetik**.
+Das System richtet sich an eine medienbewusste, junge Tech-Elite mit hoher Screentime. Um visuelle Erschöpfung bei langen Sessions vollständig zu vermeiden, verzichtet das Widget auf ablenkendes Zahlen-Voodoo und kommuniziert rein peripher über seine gestalterische, permanente **Cyberpunk-Ästhetik**.
 
 ### Die unendliche Infinitesimal-Kopplung der Morphologie
 Das Netto-Gefälle (\(\Delta = \mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}}\)) steuert das Organell stufenlos über den numerischen Ausgang des LQ-Scores:
