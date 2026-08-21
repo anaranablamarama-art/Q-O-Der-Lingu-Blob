@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="banner.png" alt="Q-O Forensic Agent Release Banner" width="100%">
-</p>
+![Partikuläre nekrotische Infusion](assets/infuse2.gif "Nekrotischer Teerschwarm Kinetik")
 
 # 🪐 PROJEKT „Q-O“: BIOMORPH-LINGUISTISCHES CYBER-HUD
 
