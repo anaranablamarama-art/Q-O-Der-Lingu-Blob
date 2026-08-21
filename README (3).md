@@ -25,8 +25,8 @@ Das Frontend injiziert das HUD direkt in das Ziel-DOM, ist dabei jedoch über ei
 
 ## 🦠 DIE PARTIKULÄRE NEKROTISCHE INFUSION (DER KINETISCHE REAKTOR)
 
-![Partikuläre nekrotische Infusion](assets/widget_prev.gif "Nekrotischer Teerschwarm Kinetik")
-*(Hinweis: Ersetze diesen Platzhalter-Link in deiner lokalen Datei durch den realen Pfad zu deinem GIF, z. B. `assets/infusion.gif`)*
+![Partikuläre nekrotische Infusion](assetswidget_prev.gif "Nekrotischer Teerschwarm Kinetik")
+
 
 ### Was das Verhalten des Teerschwarms so besonders macht:
 
