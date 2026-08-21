@@ -2,46 +2,67 @@
   <img src="banner.png" alt="Q-O Forensic Agent Release Banner" width="100%">
 </p>
 
-# 🪐 Q-O: BIOMORPHIC LINGUISTIC FORENSIC BIOSENSOR (STAGE 3)
+# 🪐 PROJEKT „Q-O“: DEZENTRALES BIOMORPH-LINGUISTISCHES CYBER-HUD
 
-Q-O ist ein autonomer, hochsensibler Cyberpunk-Biosensor für die Echtzeit-Sprachumwelt im Browser. Das System analysiert dichte Text-Kollagen digitaler Massenmedien im 4-Sekunden-Takt und transformiert komplexe, soziologische Machtstrukturen über eine mathematische e-Funktion in die physische, biomorphische Gestalt eines permanent mitlaufenden HUD-Zell-Organells.
-
----
-
-## 1. ⚙️ ARCHITEKTUR-KERN & SYSTEM-DESIGN
-Das System operiert als entkoppelte Dual-Infrastruktur, die maximale Rechenpower aus der Cloud mit absoluter, lokaler Datensouveränität verbindet:
-* **Das Backend (`main.py`):** Ein leichtfüßiges FastAPI-Triebwerk, das asynchron über getrennte Groq-LPU-Pipelines (Llama 3.1 8B) die Datenforensik exekutiert.
-* **Das Frontend (`src/`):** Eine hochperformante Chrome-Browser-Erweiterung, die über GPU-beschleunigte CSS-Custom-Properties das lebendige Plasma-Organell in echten 60 FPS morphen lässt.
-* **Die Distribution:** Eine über PyInstaller isolierte und via Inno Setup kompilierte, schlüsselfertige `Q-O_Forensic_Setup.exe` für den Windows-Task-Manager.
+Das Projekt **Q-O** ist ein dezentrales, reaktives Echtzeit-Analyse-Ökosystem, das direkt im Viewport des Browsers operiert. Es seziert semantische Datenströme, isoliert informationelle Toxine von rationalen Nährstoffen und überführt diese über eine mathematisch-metabolische Homöostase in eine kinetische Interface-Matrix.
 
 ---
 
-## 2. 🎛️ COGNITIVE DISSONANCE FILTERS
+## 🏗️ DIE SYSTEM-ARCHITEKTUR (DER FEHLERFREIE KERN)
 
-Das System scannt mediales Gewebe nicht auf plumpe Keywords, sondern biopsiert das **habituelle Framing** und die strukturelle Gewalt der Sprache nach den Modellen von Noam Chomsky (*Manufacturing Consent*), Pierre Bourdieu (*Kritische Habitus-Theorie*) und Jürgen Habermas.
+Das Gesamtsystem operiert über eine strikte Dreiteilung der Gewalten, um maximale Resilienz, Unzerstörbarkeit und Performance im 60-FPS-Zyklus zu garantieren:
 
-### Die gemessenen Makro-Kategorien im Backend:
-* **Die normative Penetrations-Dichte (\(T_{\text{norm}}\)):** Misst den Grad der künstlichen moralischen Normierung, des Konformitätsdrucks (Flak) und der bewussten Fabrikation gesellschaftlicher Spaltung (*Moral Panic*).
-* **Der verzerrende Sprachhabitus (`habitus_distortion`):** Ermittelt die Intensität der populistisch-emotionalen Tonalität und Erregungsbewirtschaftung (z.B. den Ticker-Trick von Boulevardmedien) auf einer Skala von 1.0 bis 1.5.
-* **Die diskursive Asymmetrie (\(N_{\text{disk}}\)):** Evaluiert den Raum für herrschaftsfreien Diskurs. Fehlen logische Gegenargumente, Dialektik oder verifizierbare Primärquellen vollständig, sinkt dieser Wert unbarmherzig gegen 0.0.
+### 1. Das metabolische Gehirn (`main.py`)
+Das FastAPI-Backend fungiert als asynchroner Multi-Agenten-Reaktor. Über eine parallele `asyncio.gather`-Pipeline werden zwei diametral agierende LLM-Agenten (Ankläger vs. Gutachter) geschaltet.
+*   **Asynchrone Skalierung:** Durch den vollständigen Verzicht auf blockierenden I/O (`httpx.AsyncClient`) arbeitet das Backend ohne native Thread-Pausen.
+*   **Memory-Leak-Schutz:** Ein integrierter `BoundedLRUCache` deckelt den Speicherverbrauch deterministisch auf maximal 100 Sessions bei einer Stunde Time-to-Live (TTL).
+
+### 2. Der Datentresor & Signal-Relais (`background.js`)
+Das Hintergrund-Skript verwaltet den Zustand und überbrückt die flüchtigen Intervalle moderner Browser-Architekturen.
+*   **Manifest V3 Resilienz:** Um dem automatischen Terminierungstod von MV3 Service Workern verlustfrei zu begegnen, spiegelt das Relais alle eingehenden Datenströme atomar und persistent in die lokale `IndexedDB` (`QO_Metabolic_Vault`) und den `chrome.storage.local`.
+
+### 3. Der kinetische Reaktor (`content.js` & `content.css`)
+Das Frontend injiziert das HUD direkt in das Ziel-DOM, ist dabei jedoch über ein geschlossenes Shadow-DOM (`mode: 'closed'`) vollkommen isoliert von CSS-Resets oder globalen Skript-Injektionen der Trägerwebseite.
+*   **Zero DOM-Thrashing:** String-Konkatenationen via `innerHTML` im Animations-Loop wurden zu 100 % eliminiert. Das System recycelt einen statischen Partikel-Pool aus 40 persistenten SVG-Instanzen ausschließlich über atomare, GPU-beschleunigte `setAttribute`-Operationen.
 
 ---
 
-## 3. 🧠 FUNKTIONSWEISE ANALYSE: MATHEMATISCHES GESETZ
+## 🦠 DIE PARTIKULÄRE NEKROTISCHE INFUSION (DER KINETISCHE REAKTOR)
 
-### Die dynamische Homöostase-Formel
-Der **Linguistic Quality Index (\(LQ\))** berechnet sich aus dem exponentiellen Spannungsfeld zwischen manipulativen Toxinen und informationellem Nährwert:
+![Partikuläre nekrotische Infusion](assets/infusion.gif "Nekrotischer Teerschwarm Kinetik")
 
-\[LQ = e^{-(\mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}})}\]
 
-Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster lückenlos zu erfassen, fusioniert das Backend die Ebenen auf einer Skala von 0.0 bis 5.0, wobei der verzerrende Habitus als Multiplikator für die Makro-Ebene wirkt:
+### Was das Verhalten des Teerschwarms so besonders macht:
 
-\[\mathcal{S}_{\text{tox}} = \frac{T_{\text{mikro}} + (T_{\text{makro}} \cdot \text{habitus\_distortion}) + (T_{\text{norm}} \cdot 1.5)}{3}\]
-\[\mathcal{N}_{\text{nut}} = \frac{N_{\text{mikro}} + N_{\text{makro}} + N_{\text{disk}}}{3}\]
+*   **Direkte mathematische Kopplung:** Der Partikelschwarm ist kein loses Grafik-Overlay. Seine Dichte, Rotationsgeschwindigkeit und viskoelastische Trägheit sind über die Exponenten-Kaskade direkt mit dem **Linguistic Quality Score (LQ)** des Backends verschaltet. Sinkt die Textqualität, kollabiert der Organismus synchron vor deinen Augen.
+*   **Der teerschwarze Metabolismus:** Die Partikel verhalten sich wie ein flüssiges, biologisches Toxin. Sie werden entlang der simulierten Membran-Buchten injiziert und "fressen" sich visuell in den cyanfarbenen Kern hinein, wodurch eine plastische mechanische Deformation (`strainDip`) erzwungen wird.
+*   **Garbage-Collection-Immunität:** Im Gegensatz zu herkömmlichen Web-Animationen, die bei hoher Partikeldichte ins Ruckeln geraten, arbeitet der Reaktor mit einem **statischen Objekt-Pooling**. Es werden keine DOM-Knoten im Loop erzeugt oder vernichtet. Die Verformung und Bewegung der 40 Teer-Bubbles erfolgt rein über GPU-beschleunigte Vektortransformationen – absolut flüssig im unerbittlichen 60-FPS-Takt.
 
-* Wenn \(\mathcal{S}_{\text{tox}} = \mathcal{N}_{\text{nut}}\), ist \(LQ = e^0 = 1.0\) (Neutraler Gleichgewichtszustand).
-* Wenn \(\mathcal{N}_{\text{nut}} > \mathcal{S}_{\text{tox}}\), wächst \(LQ > 1.0\) (Hohe Nährstoffdichte, regenerative Informationsaufnahme).
-* Wenn \(\mathcal{S}_{\text{tox}} > \mathcal{N}_{\text{nut}}\), fällt \(LQ \to 0\) (Hohe Toxizität, akuter Bubble-Kollaps).
+## 🎨 DER ERGONOMISCHE GOLDSTANDARD (DAS WORTLOSE CHIFFRE)
+
+Das Interface bricht radikal mit konventionellen UI-Formaten. Es existiert kein Text, keine Statuszeile und kein lebloser Schatten auf dem Bildschirm. Die Form wird rein über eine suggestionsbasierte, geometrische Matrix vermittelt
+
+
+*   **Der Z-Index-Schachzug:** Das Biomorph-Widget thront permanent sichtbar auf Schicht `z-index: 100`, während das HUD-Overlay physisch auf Schicht `z-index: 10` dahinterliegt. Das garantiert ein sofortiges, latenzfreies Drag-and-Drop des Widgets zu jedem Zeitpunkt.
+*   **Asymmetrische Diagonal-Luminiszenz:** Das gedachte 9:16-Smartphone-Format wird ausschließlich durch zwei hauchdünne Lichtwinkel (Oben-Links in Cyan, Unten-Rechts in Lila/Violett) mit 12px Radius angedeutet. Die Linienmitten laufen linear auf 0% Opacity aus.
+
+---
+
+## 🎛️ DIE VIER GLEICHRANGIGEN STEUERMODULE
+
+Das System verwaltet seine Zustände über ein dezentrales Netzwerk autonomer, gleichberechtigter Sensoren, die parallel auf das globale HTML5-Datenattribut `data-hud-state` (`IDLE` / `LATENCY` / `ACTIVE` / `INTERACTING`) reagieren:
+
+*   **Modul I: Der „Kryo-Fokus“ (Tiefenunschärfe)**
+    Im reinen Beobachtungsmodus (`ACTIVE`) liegt ein zarter Hintergrund-Blur von `2px` über der Trägerwebseite. Sobald der Cursor den Funktionsbereich im unteren Drittel (Y >= 420px) betritt (`INTERACTING`), bricht die Tiefenunschärfe selektiv auf `6px` bis `8px` hochzuführen. Die Webseite verschwimmt radikal; die Steuerung gewinnt absolute Plastizität.
+*   **Modul II: Die „Taktile Nut“ (Glas-Gravur)**
+    Die 160px kurze Umlaufbahn des Reglers ist als physikalische Gravur im Glas konstruiert. Zwei parallel verlaufende, mikroskopisch dünne Haarlinien (obere Schattenkante, untere Lichtkante) erzeugen die dreidimensionale visuelle Illusion einer eingeätzten Vertiefung.
+*   **Modul III: Die „Vektor-Elongation“ (Masse & Kinetik)**
+    Der stufenlose 4px-Mondpunkt besitzt eine simulierte physikalische Trägheit. Bei schneller Cursor-Bewegung verformt sich der Kreis im 60-FPS-Loop zu einer horizontal gestreckten Ellipse und zieht einen flüchtigen Lichtschweif nach sich. An den Interaktions-Grenzen prallt der Mond über eine Hookesche Federgleichung elastisch ab.
+*   **Modul IV: Das „Chromatische Echo“ (Resonanz)**
+    Die diagonalen Lichtkanten stehen in direkter Resonanz mit dem inneren Organismus. Sie absorbieren die Farbdynamik des biologischen Kerns in Echtzeit und spiegeln energetische Schwankungen und toxische Verdichtungen des Textgewebes an den äußeren Kanten wider.
+
+
+---
 
 ### 📊 Das prozedurale Datenfluss-Diagramm
 ```
@@ -84,29 +105,32 @@ Um sowohl mikroskopische Textphrasen als auch ganzheitliche strukturelle Muster 
 
 ---
 
-## 4. 🛡️ LOKALE DATENSOUVERÄNITÄT & DATENSCHUTZ-AXIOM
+## 🛡️ DATEN-SOUVERÄNITÄT: LOKAL, TRANSPARENT & EFFIZIENT
 
-Q-O operiert nach dem unumstößlichen Prinzip der absoluten informationellen Selbstbestimmung. Es besteht eine strikte, physische Trennung zwischen flüchtiger Cloud-Rechenleistung und deinem privaten Datentresor:
+Das Projekt Q-O wurde nach dem Prinzip der "Zero-Trust-Local-First"-Architektur entwickelt. Es unterscheidet sich fundamental von kommerziellen Web-Analysetools durch drei unumstößliche Kernkriterien:
 
-* **Der zustandslose Cloud-Reaktor (Groq API):** Die Texte werden im flüchtigen RAM der LPU-Chips im Millisekunden-Takt prozessiert und unmittelbar nach der Analyse in der Cloud restlos gelöscht. Es findet auf den externen Servern keinerlei Archivierung, kein Tracking, kein Profiling und kein historischer Log statt. Die KI bleibt zu jedem Zeitpunkt vollständig blind für deine langfristige Surf-Historie.
-* **Der physische Datentresor auf deinem PC (IndexedDB):** Deine historische Kapsel-Chronologie, alle Scan-Protokolle deines Seziertischs und die LQ-Ergebnisse werden über das asynchrone Transaktions-Veto des Service Workers (`background.js`) unzerstörbar in der lokalen `IndexedDB` deines Browsers auf deiner eigenen physischen Festplatte versiegelt. Diese Datenbank befindet sich physisch im geschützten Verzeichnis deines Windows-Benutzerprofils. Deine Daten gehören zu 100 % dir.
+### 1. Absolute lokale Sicherheit (Kein Datenaustritt)
+*   **Isolierter Netzwerk-Stack:** Das gesamte System operiert lokal auf deiner Maschine. Es gibt keine Verbindung zu externen Tracking-Servern, Cloud-Datenbanken oder Werbenetzwerken. 
+*   **Strikte CORS- & CSP-Vorgaben:** Das Backend kommuniziert über eine gehärtete API ausschließlich mit der internen Chrome-Erweiterungs-ID. Deine gelesenen Webseiten-Texte werden niemals auf fremden Servern zwischengespeichert oder für Werbeprofile missbraucht.
+
+### 2. Radikale Transparenz (Unbestechliches Audit)
+*   **Lokaler Daten-Tresor:** Deine Sitzungshistorie (`biopsy_archive`) liegt verschlüsselt in deiner browserinternen `IndexedDB`. Du hast zu jedem Zeitpunkt die volle physische Kontrolle über diese Daten. Nichts ist versteckt, nichts wird im Hintergrund immatrikuliert.
+*   **Open-Source-Forensik:** Da die multi-agentielle Textanalyse über offene, lokale API-Aufrufe an das FastAPI-Backend gesteuert wird, ist jeder einzelne Prompt und jeder Filtervorgang für dich im Terminal-Protokoll in Echtzeit einsehbar und überprüfbar.
+
+### 3. Algorithmische Effizienz (Zero-Waste-Direktive)
+*   **Der MD5-Hash-Schutzschirm:** Um unnötige API-Zyklen und Rechenleistung zu sparen, berechnet das Content-Script bei jedem Viewport-Scan einen invarianten MD5-Hash. Hat sich der Text auf der Seite nicht verändert (z. B. bei statischem Content), wird der Netzwerk-Stack augenblicklich blockiert und das System bedient sich ohne Latenz aus dem lokalen RAM-Cache (`ANALYSIS_CACHE`).
+*   **Asynchrones Thread-Management:** Durch die radikale Umstellung des HTTP-Kerns auf `httpx.AsyncClient` blockiert das Backend unter Hochlast (z. B. beim schnellen Scrollen durch riesige Textwände) keine nativen System-Threads. Die CPU-Last bleibt minimal, während die Analyse im Millisekundentakt skaliert.
+
+---
 
 ---
 
 ## 5. 🎯 DIE UX-PHÄNOMENOLOGIE & FILTERSENSITIVITÄT
 
-Das System richtet sich an eine medienbewusste, junge Tech-Elite mit hoher Screentime. Um visuelle Erschöpfung bei langen Sessions vollständig zu vermeiden, verzichtet das Widget auf ablenkendes Zahlen-Voodoo und kommuniziert rein peripher über seine gestalterische, permanente **Cyberpunk-Ästhetik**.
+Das System richtet sich an eine medienbewusste, junge Tech-Menschen mit hoher Screentime. Um visuelle Erschöpfung bei langen Sessions vollständig zu vermeiden, verzichtet das Widget auf ablenkendes Zahlen-Voodoo und kommuniziert rein peripher über seine gestalterische, adaptive Morphologie.
 
 ### Die unendliche Infinitesimal-Kopplung der Morphologie
 Das Netto-Gefälle (\(\Delta = \mathcal{S}_{\text{tox}} - \mathcal{N}_{\text{nut}}\)) steuert das Organell stufenlos über den numerischen Ausgang des LQ-Scores:
-
-* 🟢 **Axiom I (Gleichgewicht // \(\Delta \le 0\)):** Der LQ-Score bleibt \(\ge 1.0\). Das Organell morphiert als klebriger, quecksilberartiger **„Gläserner Vapor-Ozean“** im satten Neon-Cyan/Vapor-Violett-Verlauf und atmet tief im entspannenden **9-Sekunden-Rhythmus**. Pures taktisches Understatement, das beim Lesen zu 0 % stört.
-* 🟡 **Axiom II (Kompression // \(0 < \Delta \le 2.0\)):** Die gedämpfte e-Funktion greift (\(LQ = e^{-\Delta \cdot 1.2}\)). Die perfekte Symmetrie bricht fließend auf. Die Form mutiert asymmetrisch in ein unregelmäßiges Oval, die Farbe schlägt in kochendes Vapor-Orange um und die Atemfrequenz beschleunigt sich nervös auf einen **4-Sekunden-Takt**.
-* 🔴 **Axiom III (Der totale Kollaps // \(\Delta > 2.0\)):** **Die exponentielle Quadrierung zündet (\(LQ = e^{-\Delta^2}\))!** Der Score stürzt schlagartig unter 0.25. Jedes flüssige Fließen implodiert. Der Blob zieht sich krampfartig zusammen und verfällt in einen **hochfrequenten Zitterschock im 0.06s-Takt** im unzensierten Neon-Alarm-Rot.
-
-### 🎯 Die HUD-Eruption & Der Sensibilitätsregler
-* **CRITICAL: BUBBLE BURST:** Sobald Axiom III zündet, bricht das scharfe, taktile Valorant-HUD mitsamt den rasiermesserscharfen Eckklammern (*Tactical Brackets*), dem zentralen Fadenkreuz (*Crosshair*) und dem glitschenden roten Alarm-Balken über dem zitternden Blob aus, um den Nutzer im Augenwinkel unmissverständlich vor der Filterblase zu warnen.
-* **Morphology Sensitivity:** Über einen technoiden Schieberegler im Dashboard kann der Nutzer den Abfang-Hebeleffekt von 0.5x (abgestumpft) bis 2.5x (hyper-sensibel) manipulieren. Dies verzerrt den LQ-Score im Frontend künstlich und lässt die Amöbe radikal schneller in den krampfartigen Reizzustand mutieren, um den Schutzschild an die eigene kognitive Belastungsgrenze anzupassen.
 
 ---
 
