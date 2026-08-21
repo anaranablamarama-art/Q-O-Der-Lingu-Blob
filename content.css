@@ -1,397 +1,244 @@
 /* ==========================================================================
-   Q-O LINGU-BLOB BIO-KINETISCHE FLUID-PHYSIK & GEOMETRIE-DNA (CONTENT.CSS)
+   🪐 PROJEKT "Q-O" // CONTENT.CSS - HARDWARE-CORE RAIL SYSTEM
+   ==========================================================================
+   - Feste Verankerung oben rechts (z-index: 2147483647)
+   - Reines peripheres Understatement unterm Scroll-Feed
+   - Dezentrales Valorant Cockpit Panel via Hover-Brücke
+   - Keine CSS-Strudel-Keyframes, keine transform: rotate
+   - Alle Kinetik wird zu 100% rein mathematisch via requestAnimationFrame gesteuert
    ========================================================================== */
 
-/* Der übergeordnete gemeinsame Container (Verhindert das Hover-Zucken) */
-#q-o-symbiont-wrapper {
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: auto;
+:root {
+    --qo-hud-bg: rgba(2, 0, 10, 0.96);
+    --qo-hud-border: rgba(0, 240, 255, 0.32);
+    --qo-cyan-glow: #00f0ff;
+    --qo-violet-glow: #a855f7;
 }
 
-/* Der elastische Zellkörper-Container */
-#q-o-blob-container {
-  width: 80px;
-  height: 80px;
-  cursor: grab;
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-#q-o-blob-container:active {
-  cursor: grabbing;
-}
-
-/* --- DIE DREI BIOLOGISCHEN RESONANZ-ZUSTÄNDE (RUHIG & GEDÄMPFT) --- */
-.q-o-hud-stable {
-  --cell-color: #00f2fe;
-  --cell-glow: rgba(0, 242, 254, 0.35);
-  --cell-bg: rgba(0, 242, 254, 0.10);
-  --cell-border: rgba(0, 242, 254, 0.35);
-  --flash-color: rgba(0, 242, 254, 0.65);
-}
-.q-o-hud-deformed {
-  --cell-color: #ff9900;
-  --cell-glow: rgba(255, 153, 0, 0.35);
-  --cell-bg: rgba(255, 153, 0, 0.12);
-  --cell-border: rgba(255, 153, 0, 0.40);
-  --flash-color: rgba(255, 153, 0, 0.65);
-}
-.q-o-hud-toxic {
-  --cell-color: #f43f5e;
-  --cell-glow: rgba(244, 63, 94, 0.40);
-  --cell-bg: rgba(244, 63, 94, 0.15);
-  --cell-border: rgba(244, 63, 94, 0.45);
-  --flash-color: rgba(244, 63, 94, 0.70);
-}
-/* Kryostase (Metabolismus aus) */
-.q-o-hud-kryo {
-  --cell-color: #475569;
-  --cell-bg: rgba(30, 41, 59, 0.6);
-  --cell-border: rgba(255, 255, 255, 0.1);
-  --cell-glow: rgba(0, 0, 0, 0);
-  --flash-color: rgba(0, 0, 0, 0);
-}
-/* Visuelles Gewebe-Vakuum (Extrahiert) */
-.q-o-hud-extracted {
-  --cell-color: rgba(255, 255, 255, 0.1);
-  --cell-glow: rgba(255, 255, 255, 0);
-  --cell-bg: rgba(255, 255, 255, 0.02);
-  --cell-border: rgba(255, 255, 255, 0.08);
-  transform: scale(0.5) !important;
-  opacity: 0.2;
-  transition: all 1.5s ease-in-out !important;
+/* ==========================================================================
+   🧱 MODUL 0: DAS UNSICHTBARE KRAFTFELD (Feste Verankerung oben rechts)
+   ========================================================================== */
+#q-o-widget-container {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 96px !important;
+    height: 96px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    z-index: 2147483647 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
 }
 
-/* 1. DER HAUPTKÖRPER (DIE MEMBRAN) */
-/* Weich gerundet, lebendiges amöbenartiges Fluid-Gefäß, gläsernes Zytoplasma */
-.large-membrane {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background: var(--cell-bg);
-  border: 1.5px solid var(--cell-border);
-  box-shadow: inset 0 0 12px var(--cell-glow), 0 0 14px var(--cell-glow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
-  will-change: transform, border-radius, box-shadow;
+/* ==========================================================================
+   🧬 MODUL 1: DER VAKUUM-ORGANISMEN-WRAPPER
+   ========================================================================== */
+#biomorphic-blob-wrapper {
+    position: relative !important;
+    width: 92px !important;
+    height: 92px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
 }
 
-/* 2. ZELL-BLITZ: Feuert NUR EINMALIG für 600ms bei Schwellenwert-Wechsel, KEIN permanenter Loop! */
-.large-membrane.q-o-cell-flash {
-  box-shadow: inset 0 0 25px var(--flash-color), 0 0 35px var(--flash-color) !important;
-  transition: box-shadow 0.1s ease-out !important;
+/* ==========================================================================
+   🔮 MODUL 2: DUAL-SVG VEKTOR-CONTAINER MIT 3D-GLASTIEFE
+   ========================================================================== */
+#biomorphic-blob {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    pointer-events: none !important;
+    filter: drop-shadow(0 6px 18px rgba(0, 240, 255, 0.22));
 }
 
-/* 3. GEZÄHMTE FLUID-KINETIK (BERUHIGTE ATEM-ZYKLEN) */
-
-/* Zustand Cyan (LQ >= 1.0): 8 Sekunden, extrem fließend, gläsern und zentriert */
-.q-o-hud-stable .large-membrane {
-  animation: q-o-fluid-cyan 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+/* ==========================================================================
+   🎛️ MODUL 3: VALORANT COCKPIT KOMMANDO-DOCK (HOVER-AKTIVIERUNG)
+   ========================================================================== */
+.q-o-control-panel {
+    position: absolute;
+    top: 90px;
+    right: 0;
+    width: 156px;
+    background: var(--qo-hud-bg);
+    border: 1px solid var(--qo-hud-border);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.94), 0 0 14px rgba(0, 240, 255, 0.16);
+    border-radius: 4px;
+    padding: 7px 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 99999999 !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-/* Zustand Orange (LQ < 1.0): 6 Sekunden, sanft unruhiger & Verschiebung zum Oval (+1.5px, -1px) */
-.q-o-hud-deformed .large-membrane {
-  animation: q-o-fluid-orange 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+/* Lückenlose Hover-Brücke */
+#q-o-widget-container:hover .q-o-control-panel,
+.q-o-control-panel:hover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
-/* Zustand Rot (LQ < 0.5): 7 Sekunden beruhigtes Fluid-Atmen mit extrem gedämpftem 0.2px Mikro-Zittern & Verschiebung zum Splitter (-1.5px, +1.5px) */
-.q-o-hud-toxic .large-membrane {
-  animation: q-o-fluid-red 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite, q-o-tox-shiver 0.3s ease-in-out infinite alternate;
+.hud-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-/* Kryo-Zustand: Bewegungslos */
-.q-o-hud-kryo .large-membrane {
-  animation: none !important;
-  transform: translate(0, 0) scale(1) !important;
-  border-radius: 50% !important;
+.hud-label-tech {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.5px;
+    font-weight: 700;
 }
 
-/* --- DIE DREI PLASTISCHEN MIKRO-ORGANELLEN (8px - 10px DASHBOARD-SEMIOTIK) --- */
-.q-o-organelles-constellation {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hud-status-badge {
+    font-size: 7px;
+    font-weight: 900;
+    padding: 1.5px 4px;
+    border-radius: 2px;
+    color: #020008;
+    background: var(--qo-cyan-glow);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-.q-o-organelle {
-  position: absolute;
-  pointer-events: none;
-  animation: q-o-float 8s ease-in-out infinite alternate;
-  will-change: transform;
+.hud-status-badge.status-blind {
+    background: #475569;
+    color: #f8fafc;
 }
 
-/* 1. Cyan-Organelle (Stabilität): 8px x 8px, perfekt symmetrisch kreisrund mit zartem Glow */
-.q-o-dot-cyan {
-  width: 8px;
-  height: 8px;
-  top: 22px;
-  left: 36px;
-  border-radius: 50%;
-  background-color: #00f2fe;
-  box-shadow: 0 0 6px #00f2fe, 0 0 2px #ffffff;
-  opacity: 0.45;
-  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
+.hud-status-badge.status-normal {
+    background: #00f0ff;
+    color: #020008;
 }
 
-/* 2. Orange-Organelle (Stress/Deformation): 10px x 6px, plastisch gestrecktes Oval */
-.q-o-dot-orange {
-  width: 10px;
-  height: 6px;
-  bottom: 23px;
-  right: 22px;
-  border-radius: 35% 65% 35% 65% / 50% 50% 50% 50%;
-  background-color: #ff9900;
-  box-shadow: 0 0 6px #ff9900;
-  opacity: 0.45;
-  animation-delay: -2.6s;
-  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
+.hud-status-badge.status-forensic {
+    background: #a855f7;
+    color: #ffffff;
 }
 
-/* 3. Rote-Organelle (Toxizität/Spannung): 9px x 9px, unregelmäßig asymmetrisches, spitzes Splitter-Fragment */
-.q-o-dot-red {
-  width: 9px;
-  height: 9px;
-  bottom: 22px;
-  left: 20px;
-  border-radius: 20% 80% 40% 60% / 70% 30% 80% 20%;
-  background-color: #f43f5e;
-  box-shadow: 0 0 6px #f43f5e;
-  opacity: 0.45;
-  animation-delay: -5.3s;
-  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
+.slider-wrapper-tech {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 8px;
+    color: var(--qo-cyan-glow);
+    font-weight: 700;
 }
 
-/* Betone die jeweils aktive Organelle dezent synchron zum metabolischen Zustand */
-.q-o-hud-stable .q-o-dot-cyan {
-  opacity: 0.95;
-  box-shadow: 0 0 10px #00f2fe, 0 0 3px #ffffff;
-}
-.q-o-hud-deformed .q-o-dot-orange {
-  opacity: 0.95;
-  box-shadow: 0 0 10px #ff9900, 0 0 3px #ffe4b5;
-}
-.q-o-hud-toxic .q-o-dot-red {
-  opacity: 0.95;
-  box-shadow: 0 0 10px #f43f5e, 0 0 3px #fecdd3;
-}
-.q-o-hud-kryo .q-o-organelle {
-  opacity: 0.2;
-  box-shadow: none;
-  animation: none !important;
+#morphology-sensitivity {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(0, 240, 255, 0.2);
+    height: 3px;
+    border-radius: 1.5px;
+    outline: none;
+    cursor: pointer;
 }
 
-/* --- BIO-KINETISCHE FLUID-KEYFRAMES (ORGANISCHE 4-PHASEN AMÖBE) --- */
-
-/* Cyan: 8s beruhigendes, fließendes Amöben-Atmen, zentriert (0.985 bis 1.015) */
-@keyframes q-o-fluid-cyan {
-  0% {
-    border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
-    transform: translate(0px, 0px) scale(0.99) rotate(0deg);
-  }
-  25% {
-    border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%;
-    transform: translate(0.4px, -0.4px) scale(1.01) rotate(0.8deg);
-  }
-  50% {
-    border-radius: 30% 70% 70% 30% / 50% 30% 70% 50%;
-    transform: translate(-0.4px, 0.4px) scale(1.00) rotate(-0.5deg);
-  }
-  75% {
-    border-radius: 65% 35% 45% 55% / 55% 45% 55% 45%;
-    transform: translate(0.3px, 0.3px) scale(1.015) rotate(0.6deg);
-  }
-  100% {
-    border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
-    transform: translate(0px, 0px) scale(0.99) rotate(0deg);
-  }
+#morphology-sensitivity::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 8px;
+    height: 8px;
+    background: var(--qo-cyan-glow);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 6px var(--qo-cyan-glow);
+    transition: transform 0.15s ease;
 }
 
-/* Orange: 6s harmonisches Amöben-Morphing, sanfter Zug nach oben rechts (Oval-Fokus: +1.5px, -1px) */
-@keyframes q-o-fluid-orange {
-  0% {
-    border-radius: 46% 54% 35% 65% / 54% 46% 58% 42%;
-    transform: translate(1px, -0.8px) scale(0.985) rotate(-0.8deg);
-  }
-  25% {
-    border-radius: 58% 42% 62% 38% / 38% 62% 42% 58%;
-    transform: translate(1.4px, -1.0px) scale(1.01) rotate(1.0deg);
-  }
-  50% {
-    border-radius: 35% 65% 65% 35% / 60% 35% 65% 40%;
-    transform: translate(1.8px, -1.2px) scale(1.015) rotate(-1.0deg);
-  }
-  75% {
-    border-radius: 62% 38% 40% 60% / 45% 55% 40% 60%;
-    transform: translate(1.3px, -0.9px) scale(0.99) rotate(0.5deg);
-  }
-  100% {
-    border-radius: 46% 54% 35% 65% / 54% 46% 58% 42%;
-    transform: translate(1px, -0.8px) scale(0.985) rotate(-0.8deg);
-  }
+#morphology-sensitivity::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
 }
 
-/* Rot: 7s beruhigtes Fluid-Atmen, sanfter Zug nach unten links (Splitter-Fokus: -1.5px, +1.5px), KEINE Hektik */
-@keyframes q-o-fluid-red {
-  0% {
-    border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
-    transform: translate(-1.2px, 1.2px) scale(0.985) rotate(-1.0deg);
-  }
-  25% {
-    border-radius: 65% 35% 60% 40% / 35% 65% 35% 65%;
-    transform: translate(-1.5px, 1.5px) scale(1.015) rotate(1.2deg);
-  }
-  50% {
-    border-radius: 30% 70% 40% 60% / 65% 35% 60% 40%;
-    transform: translate(-1.8px, 1.8px) scale(0.995) rotate(-1.0deg);
-  }
-  75% {
-    border-radius: 70% 30% 55% 45% / 40% 60% 35% 65%;
-    transform: translate(-1.4px, 1.4px) scale(1.01) rotate(0.8deg);
-  }
-  100% {
-    border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
-    transform: translate(-1.2px, 1.2px) scale(0.985) rotate(-1.0deg);
-  }
+#sensitivity-display-value {
+    min-width: 22px;
+    text-align: right;
 }
 
-/* Extrem gedämpftes Mikro-Zittern bei Rot (Ausschlag max 0.2px, unaufdringlich beim Lesen) */
-@keyframes q-o-tox-shiver {
-  0% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
-  50% {
-    transform: translate(0.2px, -0.2px) rotate(0.2deg);
-  }
-  100% {
-    transform: translate(-0.2px, 0.2px) rotate(-0.2deg);
-  }
+.hud-action-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    margin-top: 2px;
 }
 
-/* Sanftes 8s Schwebemuster der Organellen */
-@keyframes q-o-float {
-  0% {
-    transform: translate(0px, 0px);
-  }
-  33% {
-    transform: translate(0.6px, -0.8px);
-  }
-  66% {
-    transform: translate(-0.7px, 0.5px);
-  }
-  100% {
-    transform: translate(0.5px, 0.8px);
-  }
+.hud-action-row button {
+    flex: 1;
+    background: rgba(0, 240, 255, 0.06);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--qo-cyan-glow);
+    font-size: 7.5px;
+    font-weight: 900;
+    padding: 3px 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    letter-spacing: 0.4px;
+    text-align: center;
 }
 
-/* Innere SVG Nervenbahnen */
-.large-cytoplasm-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  filter: drop-shadow(0 0 3px var(--cell-color));
-}
-.large-neural-path {
-  fill: none;
-  stroke: var(--cell-color);
-  stroke-width: 1.5;
-  opacity: 0.55;
-  transition: stroke 0.8s ease;
-}
-.large-neural-path.secondary {
-  stroke-width: 1;
-  opacity: 0.25;
-  stroke-dasharray: 3 4;
-}
-.large-neural-node {
-  fill: var(--cell-color);
-  opacity: 0.75;
-  transition: fill 0.8s ease;
+.hud-action-row button:hover {
+    background: rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 7px rgba(0, 240, 255, 0.4);
+    color: #ffffff;
 }
 
-/* Zellkern (Nucleus) */
-.large-nucleus-wrapper {
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.large-crescent {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1.5px solid var(--cell-color);
-  border-right-color: transparent;
-  transition: border-color 0.8s ease;
-}
-.large-nucleus-body {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, var(--cell-color) 70%);
-  transition: background 0.8s ease;
+.hud-action-row button:active {
+    transform: scale(0.96);
 }
 
-/* --- DAS STERILE HOVER-HUD --- */
-#q-o-control-hud {
-  position: absolute;
-  bottom: 110px; /* Sitzt felsenfest über dem Blob */
-  background: rgba(12, 19, 34, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 10px;
-  padding-bottom: 20px;
-  margin-bottom: -15px;
-  border-radius: 6px;
-  width: 160px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.05);
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  font-family: ui-monospace, monospace;
+#btn-start {
+    border-color: rgba(0, 240, 255, 0.4) !important;
+    color: #00f0ff !important;
 }
-#q-o-control-hud.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto; /* Klickbar machen, wenn sichtbar */
+
+#btn-stop {
+    border-color: rgba(148, 163, 184, 0.4) !important;
+    color: #94a3b8 !important;
 }
-.hud-title {
-  font-size: 9px;
-  color: #475569;
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
-  text-align: center;
+
+#btn-stop:hover {
+    background: rgba(148, 163, 184, 0.18) !important;
+    color: #ffffff !important;
 }
-.hud-option {
-  font-size: 11px;
-  padding: 6px;
-  color: #cbd5e1;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
+
+#btn-biopsy {
+    border-color: rgba(168, 85, 247, 0.45) !important;
+    color: #c084fc !important;
 }
-.hud-option:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+
+#btn-biopsy:hover {
+    background: rgba(168, 85, 247, 0.2) !important;
+    box-shadow: 0 0 7px rgba(168, 85, 247, 0.45) !important;
+    color: #ffffff !important;
 }
