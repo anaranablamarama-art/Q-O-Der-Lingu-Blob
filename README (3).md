@@ -23,6 +23,17 @@ Das Frontend injiziert das HUD direkt in das Ziel-DOM, ist dabei jedoch über ei
 
 ---
 
+## 🦠 DIE PARTIKULÄRE NEKROTISCHE INFUSION (DER KINETISCHE REAKTOR)
+
+![Partikuläre nekrotische Infusion]( "Nekrotischer Teerschwarm Kinetik")
+*(Hinweis: Ersetze diesen Platzhalter-Link in deiner lokalen Datei durch den realen Pfad zu deinem GIF, z. B. `assets/infusion.gif`)*
+
+### Was das Verhalten des Teerschwarms so besonders macht:
+
+*   **Direkte mathematische Kopplung:** Der Partikelschwarm ist kein loses Grafik-Overlay. Seine Dichte, Rotationsgeschwindigkeit und viskoelastische Trägheit sind über die Exponenten-Kaskade direkt mit dem **Linguistic Quality Score (LQ)** des Backends verschaltet. Sinkt die Textqualität, kollabiert der Organismus synchron vor deinen Augen.
+*   **Der teerschwarze Metabolismus:** Die Partikel verhalten sich wie ein flüssiges, biologisches Toxin. Sie werden entlang der simulierten Membran-Buchten injiziert und "fressen" sich visuell in den cyanfarbenen Kern hinein, wodurch eine plastische mechanische Deformation (`strainDip`) erzwungen wird.
+*   **Garbage-Collection-Immunität:** Im Gegensatz zu herkömmlichen Web-Animationen, die bei hoher Partikeldichte ins Ruckeln geraten, arbeitet der Reaktor mit einem **statischen Objekt-Pooling**. Es werden keine DOM-Knoten im Loop erzeugt oder vernichtet. Die Verformung und Bewegung der 40 Teer-Bubbles erfolgt rein über GPU-beschleunigte Vektortransformationen – absolut flüssig im unerbittlichen 60-FPS-Takt.
+
 ## 🎨 DER ERGONOMISCHE GOLDSTANDARD (DAS WORTLOSE CHIFFRE)
 
 Das Interface bricht radikal mit konventionellen UI-Formaten. Es existiert kein Text, keine Statuszeile und kein lebloser Schatten auf dem Bildschirm. Die Form wird rein über eine suggestionsbasierte, geometrische Matrix vermittelt
