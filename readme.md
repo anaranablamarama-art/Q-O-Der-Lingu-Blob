@@ -2,9 +2,9 @@
   <img src="banner.png" alt="Q-O Forensic Agent Release Banner" width="100%">
 </p>
 
-# 🪐 PROJEKT „Q-O“: DEZENTRALES BIOMORPH-LINGUISTISCHES CYBER-HUD
+# 🪐 PROJEKT „Q-O“: BIOMORPH-LINGUISTISCHES CYBER-HUD
 
-Das Projekt **Q-O** ist ein dezentrales, reaktives Echtzeit-Analyse-Ökosystem, das direkt im Viewport des Browsers operiert. Es seziert semantische Datenströme, isoliert informationelle Toxine von rationalen Nährstoffen und überführt diese über eine mathematisch-metabolische Homöostase in eine kinetische Interface-Matrix.
+Das Projekt **Q-O** ist ein reaktives Echtzeit-Analyse-Ökosystem, das direkt im Viewport des Browsers operiert. Es seziert semantische Datenströme, isoliert informationelle Toxine von rationalen Nährstoffen und überführt diese über eine mathematisch-metabolische Homöostase in eine kinetische Interface-Matrix.
 
 ---
 
