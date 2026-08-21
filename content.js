@@ -1,10 +1,10 @@
 // ==============================================================================
 // 🪐 PROJEKT "Q-O" // CONTENT.JS - HARDWARE-CORE DECENTRALIZED REAKTOR
 // ==============================================================================
-// DIE 3 UNANTASTBAREN SÄULEN:
+// DIE 3 UNANTASTBAREN SÄULEN (GOLDSTANDARD REFIT):
 // 1. SÄULE I: DIE REINGEWASCHENE HELIX-FUSION (60 FPS // 0 ZENTRUM // STRAIN-DERIVATION)
-// 2. SÄULE II: LAUTERES INSEL-SPAWNING AUF DER RAM-KARTE (Score >= 0.5 -> stroke: none, #010005 Teer)
-// 3. SÄULE III: AXIOM XII - DEZENTRALES PROXIMITY-GEFÄLLE (Score < 0.5 -> Dichte-basiertes Amethyst-Skelett; < 0.25 -> 3.0px Kollaps)
+// 2. SÄULE II: STATISCHES SVG-PARTIKEL-POOLING (0 innerHTML im 60-FPS Render-Loop)
+// 3. SÄULE III: AXIOM XII - DEZENTRALES PROXIMITY-GEFÄLLE MIT CLOSED SHADOW DOM
 // ==============================================================================
 
 (function () {
@@ -42,7 +42,21 @@
   let phaseHarmonicB = 0.0;
   let lastTimestamp = performance.now();
 
-  // Dezentraler Teer-Partikel-Pool (Akkumuliert in den Buchten)
+  // Shadow Root & statische DOM-Element-Referenzen
+  let shadowRoot = null;
+  let membranePathEl = null;
+  let tarSwarmGroupEl = null;
+  let tarParticleNodes = [];
+  let capillaryElements = [];
+  let capillaryBridgeEl = null;
+  let refract1El = null;
+  let refract2El = null;
+  let crest1El = null;
+  let crest2El = null;
+  let satCWEl = null;
+  let satCCWEl = null;
+
+  // Dezentraler Teer-Partikel-Pool im RAM
   const MAX_TAR_PARTICLES = 40;
   const tarParticles = [];
 
@@ -61,19 +75,171 @@
   }
 
   // ============================================================================
-  // 2. DOM-INJEKTION DES BIO-SENSORS (<svg viewBox="0 0 100 100">)
+  // 2. DOM-INJEKTION IN CLOSED SHADOW DOM (UNZERSTÖRBARE KAPSELUNG)
   // ============================================================================
   function injectMetabolicWidget() {
     if (document.getElementById('q-o-widget-container')) return;
 
-    const container = document.createElement('div');
-    container.id = 'q-o-widget-container';
+    const hostContainer = document.createElement('div');
+    hostContainer.id = 'q-o-widget-container';
+    hostContainer.style.cssText = 'position:fixed!important;top:20px!important;right:20px!important;width:96px!important;height:96px!important;z-index:2147483647!important;pointer-events:auto!important;';
 
-    container.innerHTML = `
+    // 🔒 CLOSED SHADOW DOM
+    shadowRoot = hostContainer.attachShadow({ mode: 'closed' });
+
+    // Stylesheet direkt im Shadow Root instanziieren
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      :host {
+        all: initial;
+        display: block;
+        width: 96px;
+        height: 96px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        pointer-events: auto;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      #biomorphic-blob-wrapper {
+        position: relative;
+        width: 92px;
+        height: 92px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 10;
+      }
+      #biomorphic-blob {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        display: block;
+        filter: drop-shadow(0 6px 18px rgba(0, 240, 255, 0.22));
+        pointer-events: none;
+      }
+      .q-o-control-panel {
+        position: absolute;
+        top: 90px;
+        right: 0;
+        width: 156px;
+        background: rgba(2, 0, 10, 0.96);
+        border: 1px solid rgba(0, 240, 255, 0.32);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.94), 0 0 14px rgba(0, 240, 255, 0.16);
+        border-radius: 4px;
+        padding: 7px 9px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      :host(:hover) .q-o-control-panel,
+      .q-o-control-panel:hover {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      .hud-slider-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+      .hud-label-tech {
+        font-size: 8px;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.5px;
+        font-weight: 700;
+      }
+      .hud-status-badge {
+        font-size: 7px;
+        font-weight: 900;
+        padding: 1.5px 4px;
+        border-radius: 2px;
+        color: #020008;
+        background: #00f0ff;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .hud-status-badge.status-blind { background: #475569; color: #f8fafc; }
+      .hud-status-badge.status-normal { background: #00f0ff; color: #020008; }
+      .hud-status-badge.status-forensic { background: #a855f7; color: #ffffff; }
+      .slider-wrapper-tech {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 8px;
+        color: #00f0ff;
+        font-weight: 700;
+      }
+      #morphology-sensitivity {
+        flex: 1;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(0, 240, 255, 0.2);
+        height: 3px;
+        border-radius: 1.5px;
+        outline: none;
+        cursor: pointer;
+      }
+      #morphology-sensitivity::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 8px;
+        height: 8px;
+        background: #00f0ff;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 6px #00f0ff;
+      }
+      .hud-action-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .hud-action-row button {
+        flex: 1;
+        background: rgba(0, 240, 255, 0.06);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        color: #00f0ff;
+        font-size: 7.5px;
+        font-weight: 900;
+        padding: 3px 2px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.18s ease;
+        font-family: inherit;
+        letter-spacing: 0.4px;
+        text-align: center;
+      }
+      .hud-action-row button:hover {
+        background: rgba(0, 240, 255, 0.2);
+        box-shadow: 0 0 7px rgba(0, 240, 255, 0.4);
+        color: #ffffff;
+      }
+      #btn-stop {
+        border-color: rgba(148, 163, 184, 0.4);
+        color: #94a3b8;
+      }
+      #btn-biopsy {
+        border-color: rgba(168, 85, 247, 0.45);
+        color: #c084fc;
+      }
+    `;
+    shadowRoot.appendChild(styleEl);
+
+    const innerWrapper = document.createElement('div');
+    innerWrapper.innerHTML = `
       <div id="biomorphic-blob-wrapper" title="Q-O Symbiont // Dezentrale Bio-Matrix">
         <svg id="biomorphic-blob" viewBox="0 0 100 100" width="92" height="92">
           <defs>
-            <!-- 🔮 SÄULE I: 45°-HELIX-GRADIENT (Neon-Cyan links, Void-Zentrum, Vapor-Violett rechts) -->
             <linearGradient id="qo-helix-ocean-grad" x1="15%" y1="85%" x2="85%" y2="15%">
               <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.98" />
               <stop offset="28%" stop-color="#00d4ff" stop-opacity="0.75" />
@@ -82,7 +248,6 @@
               <stop offset="100%" stop-color="#e879f9" stop-opacity="0.98" />
             </linearGradient>
 
-            <!-- ✨ SPEKULARER KUPPEN-GLANZ -->
             <linearGradient id="qo-specular-ocean-rim" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
               <stop offset="35%" stop-color="#00f0ff" stop-opacity="0.7" />
@@ -90,14 +255,12 @@
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0.95" />
             </linearGradient>
 
-            <!-- 🖤 SÄULE II: SOLID-MATTE DIGITALER TEER -->
             <radialGradient id="qo-tar-particle-grad" cx="35%" cy="35%" r="65%">
               <stop offset="0%" stop-color="#18002e" stop-opacity="1" />
               <stop offset="60%" stop-color="#070010" stop-opacity="0.98" />
               <stop offset="100%" stop-color="#010005" stop-opacity="1" />
             </radialGradient>
 
-            <!-- 🌌 INNERE REFRAKTIONS-FILAMENTE -->
             <linearGradient id="qo-filament-refract-grad" x1="0%" y1="100%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.85" />
               <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.3" />
@@ -105,41 +268,29 @@
             </linearGradient>
           </defs>
 
-          <!-- 🌌 LAYER -1: FEINE RADIALE ORIENTIERUNGS-RINGE -->
           <g id="qo-background-celestial-rings" opacity="0.22">
             <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="0.4" stroke-dasharray="2 6" />
             <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(168, 85, 247, 0.22)" stroke-width="0.4" />
             <circle cx="50" cy="50" r="22" fill="none" stroke="rgba(0, 240, 255, 0.15)" stroke-width="0.3" stroke-dasharray="1 3" />
           </g>
 
-          <!-- 🧪 LAYER 0: DIE KAPPILLAR-STRÄNGE (SÄULE III: PROXIMITY-GEFÄLLE) -->
           <g id="qo-ghost-capillaries">
-            <path id="qo-capillary-0" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-1" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-2" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-3" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-4" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-5" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-6" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
-            <path id="qo-capillary-7" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
+            ${Array.from({ length: 8 }, (_, i) => `<path id="qo-capillary-${i}" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />`).join('')}
             <path id="qo-capillary-bridge" fill="none" stroke="none" stroke-width="0" stroke-linecap="round" />
           </g>
 
-          <!-- 🖤 LAYER 0.5: INSEL-TEERSCHWARM (SPAWNT REIN AUF DEN BUCHT-KOORDINATEN) -->
+          <!-- STATISCHES POOL-GEFÄSS FÜR TEER-BLASEN -->
           <g id="qo-tar-bubbles-swarm"></g>
 
-          <!-- 🔮 LAYER 1: DAS OZEAN-GEWEBE / WELLIGE FARBHAUT (45° HELIX, KEIN KERN) -->
           <path id="qo-ocean-membrane" 
                 fill="url(#qo-helix-ocean-grad)" 
                 stroke="url(#qo-specular-ocean-rim)" 
                 stroke-width="1.2" 
                 stroke-linejoin="round" />
 
-          <!-- 🌀 INNERE REFRAKTIONS-STRÖME -->
           <path id="qo-inner-refract-1" fill="none" stroke="url(#qo-filament-refract-grad)" stroke-width="1.0" stroke-linecap="round" opacity="0.7" />
           <path id="qo-inner-refract-2" fill="none" stroke="#00f0ff" stroke-width="0.8" stroke-linecap="round" opacity="0.6" />
 
-          <!-- ✨ SPITZLICHTER & KINETISCHE SATELLITEN-ORBS -->
           <circle id="qo-crest-light-1" cx="26" cy="24" r="2.2" fill="#ffffff" opacity="0.95" />
           <circle id="qo-crest-light-2" cx="74" cy="26" r="2.0" fill="#ffffff" opacity="0.9" />
           <circle id="qo-sat-orb-cw" cx="14" cy="30" r="1.4" fill="#00f0ff" opacity="0.75" />
@@ -147,7 +298,6 @@
         </svg>
       </div>
 
-      <!-- 🎛️ VALORANT COCKPIT KOMMANDO-DOCK -->
       <div class="q-o-control-panel">
         <div class="hud-slider-header">
           <span class="hud-label-tech">METABOLISCHE SENSITIVITÄT</span>
@@ -160,14 +310,47 @@
         </div>
 
         <div class="hud-action-row">
-          <button id="btn-start" title="Reaktiviert den 4-Sekunden-Metabolismus">[ ZÜND ]</button>
-          <button id="btn-stop" title="Friert das System im Kryo-Schlaf ein">[ FREEZE ]</button>
-          <button id="btn-biopsy" title="Siegelt die Biopsie und öffnet das Labor">[ BIOPSY ]</button>
+          <button id="btn-start">[ ZÜND ]</button>
+          <button id="btn-stop">[ FREEZE ]</button>
+          <button id="btn-biopsy">[ BIOPSY ]</button>
         </div>
       </div>
     `;
 
-    document.body.appendChild(container);
+    shadowRoot.appendChild(innerWrapper);
+    document.body.appendChild(hostContainer);
+
+    // DOM-Referenzen cachen
+    membranePathEl = shadowRoot.getElementById('qo-ocean-membrane');
+    tarSwarmGroupEl = shadowRoot.getElementById('qo-tar-bubbles-swarm');
+    capillaryBridgeEl = shadowRoot.getElementById('qo-capillary-bridge');
+    refract1El = shadowRoot.getElementById('qo-inner-refract-1');
+    refract2El = shadowRoot.getElementById('qo-inner-refract-2');
+    crest1El = shadowRoot.getElementById('qo-crest-light-1');
+    crest2El = shadowRoot.getElementById('qo-crest-light-2');
+    satCWEl = shadowRoot.getElementById('qo-sat-orb-cw');
+    satCCWEl = shadowRoot.getElementById('qo-sat-orb-ccw');
+
+    capillaryElements = [];
+    for (let i = 0; i < 8; i++) {
+      capillaryElements.push(shadowRoot.getElementById(`qo-capillary-${i}`));
+    }
+
+    // 🚀 EINMALIGE INITIALISIERUNG DES PARTIKEL-DOM-POOLS (40 Circles)
+    tarParticleNodes = [];
+    for (let i = 0; i < MAX_TAR_PARTICLES; i++) {
+      const circleNode = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circleNode.setAttribute('cx', '50');
+      circleNode.setAttribute('cy', '50');
+      circleNode.setAttribute('r', '0');
+      circleNode.setAttribute('fill', 'url(#qo-tar-particle-grad)');
+      circleNode.setAttribute('stroke', '#010005');
+      circleNode.setAttribute('stroke-width', '0.4');
+      circleNode.setAttribute('opacity', '0');
+      tarSwarmGroupEl.appendChild(circleNode);
+      tarParticleNodes.push(circleNode);
+    }
+
     bindWidgetEvents();
   }
 
@@ -206,54 +389,29 @@
   }
 
   // ============================================================================
-  // 4. LIVE 60-FPS VEKTOR-RENDERSCHLEIFE (DIE 3 HARDWARE-SÄULEN)
+  // 4. LIVE 60-FPS RENDERSCHLEIFE (0 innerHTML // STATISCHES NODE-RECYCLING)
   // ============================================================================
   function renderFluidVortex(timestamp) {
     const dt = Math.min(0.1, (timestamp - lastTimestamp) / 1000);
     lastTimestamp = timestamp;
 
-    if (!isKryoSleep) {
-      // ------------------------------------------------------------------------
-      // A. TRÄGHEITS-DÄMPFUNG & DERIVATION DER 'viscoelasticStrain' VARIABLE
-      // ------------------------------------------------------------------------
+    if (!isKryoSleep && membranePathEl) {
+      // Trägheitsdämpfung & Strain
       currentLqScore += (targetLqScore - currentLqScore) * 0.05;
-
-      if (currentLqScore >= 1.0) {
-        targetStrain = 0.0;
-      } else {
-        targetStrain = Math.min(1.0, Math.max(0.0, (1.0 - currentLqScore) * currentSensitivity));
-      }
+      targetStrain = currentLqScore >= 1.0 ? 0.0 : Math.min(1.0, Math.max(0.0, (1.0 - currentLqScore) * currentSensitivity));
       viscoelasticStrain += (targetStrain - viscoelasticStrain) * 0.05;
 
-      // Skelett-Basis-Zielwert (Axiom XII)
       let targetStroke = 0.0;
-      if (currentLqScore >= 0.5) {
-        targetStroke = 0.0;
-      } else if (currentLqScore >= 0.25) {
-        const awakeningProgress = (0.5 - currentLqScore) / 0.25;
-        targetStroke = awakeningProgress * 2.0; // Stufenlos 0.0 -> 2.0px
-      } else {
-        targetStroke = 3.0; // Metabolischer Kollaps -> 3.0px
-      }
+      if (currentLqScore < 0.25) targetStroke = 3.0;
+      else if (currentLqScore < 0.5) targetStroke = ((0.5 - currentLqScore) / 0.25) * 2.0;
       globalSkeletonStroke += (targetStroke - globalSkeletonStroke) * 0.05;
 
-      // ------------------------------------------------------------------------
-      // B. SÄULE I: ASYNCHRONE PHASENWINKEL (20s CW vs. 26s CCW)
-      // ------------------------------------------------------------------------
       const kineticFactor = currentLqScore < 0.25 ? 0.05 : (1.0 + viscoelasticStrain * 0.35);
-
-      const omegaCW = (Math.PI * 2) / 20.0;
-      phaseHelixCW = (phaseHelixCW + omegaCW * kineticFactor * dt) % (Math.PI * 2);
-
-      const omegaCCW = (Math.PI * 2) / 26.0;
-      phaseShadowCCW = (phaseShadowCCW - omegaCCW * kineticFactor * dt) % (Math.PI * 2);
-
+      phaseHelixCW = (phaseHelixCW + ((Math.PI * 2) / 20.0) * kineticFactor * dt) % (Math.PI * 2);
+      phaseShadowCCW = (phaseShadowCCW - ((Math.PI * 2) / 26.0) * kineticFactor * dt) % (Math.PI * 2);
       phaseHarmonicA = (phaseHarmonicA + 1.1 * kineticFactor * dt) % (Math.PI * 2);
       phaseHarmonicB = (phaseHarmonicB + 0.75 * kineticFactor * dt) % (Math.PI * 2);
 
-      // ------------------------------------------------------------------------
-      // C. METABOLISCHER KOLLAPS: 0.05s ZITTERSCHOCK & SCALE(0.8)
-      // ------------------------------------------------------------------------
       let centerJitterX = 0;
       let centerJitterY = 0;
       let hostScale = 1.0;
@@ -269,256 +427,138 @@
       const cy = 50 + centerJitterY;
       const baseOuterRadius = 37.0 * hostScale;
 
-      // =======================================================================
-      // D. SÄULE I: LAYER 1 DAS OZEAN-GEWEBE (45° HELIX, KEIN ZENTRALER KERN)
-      // =======================================================================
+      // Layer 1: Ozean-Membran
       const numOuterPoints = 24;
       const outerPoints = [];
-
       const amp1 = (4.6 + Math.sin(phaseHarmonicB) * 1.2) * (1.0 - Math.min(0.4, viscoelasticStrain * 0.3));
       const amp2 = (2.6 + Math.cos(phaseHarmonicA) * 0.8) * (1.0 - Math.min(0.4, viscoelasticStrain * 0.3));
 
       for (let i = 0; i < numOuterPoints; i++) {
         const theta = (i / numOuterPoints) * Math.PI * 2;
-
-        const wave =
-          Math.sin(5 * theta + phaseHelixCW) * amp1 +
-          Math.cos(3 * theta - phaseHarmonicB) * amp2;
-
-        const strainDip = viscoelasticStrain > 0.02
-          ? Math.abs(Math.sin(4 * theta + phaseShadowCCW)) * (viscoelasticStrain * 3.2)
-          : 0;
-
+        const wave = Math.sin(5 * theta + phaseHelixCW) * amp1 + Math.cos(3 * theta - phaseHarmonicB) * amp2;
+        const strainDip = viscoelasticStrain > 0.02 ? Math.abs(Math.sin(4 * theta + phaseShadowCCW)) * (viscoelasticStrain * 3.2) : 0;
         const r = Math.max(10, baseOuterRadius + wave - strainDip);
-
-        outerPoints.push({
-          x: cx + Math.cos(theta) * r,
-          y: cy + Math.sin(theta) * r,
-          r: r,
-          theta: theta
-        });
+        outerPoints.push({ x: cx + Math.cos(theta) * r, y: cy + Math.sin(theta) * r });
       }
 
-      const membraneEl = document.getElementById('qo-ocean-membrane');
-      if (membraneEl) {
-        membraneEl.setAttribute('d', pointsToClosedBezierSpline(outerPoints, 0.95));
-      }
+      membranePathEl.setAttribute('d', pointsToClosedBezierSpline(outerPoints, 0.95));
 
-      // =======================================================================
-      // E. SÄULE II: UNSICHTBARE RAM-KOORDINATEN (ghostFractureNodes // 8 BUCHTEN)
-      // =======================================================================
+      // Ghost-Capillary Nodes
       const ghostCapillaryNodes = [];
       const numBays = 8;
       const bayParticleCounts = new Array(numBays).fill(0);
 
       for (let b = 0; b < numBays; b++) {
         const bayTheta = (b / numBays) * Math.PI * 2 + (Math.PI / 8);
-
-        // Dezentral an der äußeren Peripherie entlanggekrümmt (Keine Speichen ins Zentrum)
-        const pEntry = {
-          x: cx + Math.cos(bayTheta + phaseShadowCCW * 0.22) * (baseOuterRadius - 3.5),
-          y: cy + Math.sin(bayTheta + phaseShadowCCW * 0.22) * (baseOuterRadius - 3.5)
-        };
-
-        const pMid = {
-          x: cx + Math.cos(bayTheta + 0.35 + phaseHelixCW * 0.15) * (baseOuterRadius * 0.72),
-          y: cy + Math.sin(bayTheta + 0.35 + phaseHelixCW * 0.15) * (baseOuterRadius * 0.72)
-        };
-
-        const pEnd = {
-          x: cx + Math.cos(bayTheta + 0.65 + phaseShadowCCW * 0.18) * (baseOuterRadius * 0.55),
-          y: cy + Math.sin(bayTheta + 0.65 + phaseShadowCCW * 0.18) * (baseOuterRadius * 0.55)
-        };
-
-        ghostCapillaryNodes.push({ p0: pEntry, p1: pMid, p2: pEnd });
+        ghostCapillaryNodes.push({
+          p0: { x: cx + Math.cos(bayTheta + phaseShadowCCW * 0.22) * (baseOuterRadius - 3.5), y: cy + Math.sin(bayTheta + phaseShadowCCW * 0.22) * (baseOuterRadius - 3.5) },
+          p1: { x: cx + Math.cos(bayTheta + 0.35 + phaseHelixCW * 0.15) * (baseOuterRadius * 0.72), y: cy + Math.sin(bayTheta + 0.35 + phaseHelixCW * 0.15) * (baseOuterRadius * 0.72) },
+          p2: { x: cx + Math.cos(bayTheta + 0.65 + phaseShadowCCW * 0.18) * (baseOuterRadius * 0.55), y: cy + Math.sin(bayTheta + 0.65 + phaseShadowCCW * 0.18) * (baseOuterRadius * 0.55) }
+        });
       }
 
-      // =======================================================================
-      // F. SÄULE II: LAUTERES INSEL-SPAWNING DER TEERBLASEN (STRIKT #010005)
-      // =======================================================================
-      const tarSwarmGroup = document.getElementById('qo-tar-bubbles-swarm');
-      if (tarSwarmGroup) {
-        let activeTarCount = 0;
-        if (viscoelasticStrain > 0.01) {
-          activeTarCount = Math.min(
-            MAX_TAR_PARTICLES,
-            Math.floor(viscoelasticStrain * 38)
-          );
-        }
+      // 🧹 REINE ATTRIBUT-AKTUALISIERUNG IM STATISCHEN POOL (KEIN innerHTML!)
+      const activeTarCount = viscoelasticStrain > 0.01 ? Math.min(MAX_TAR_PARTICLES, Math.floor(viscoelasticStrain * 38)) : 0;
 
-        let swarmSvgHtml = '';
+      for (let i = 0; i < MAX_TAR_PARTICLES; i++) {
+        const p = tarParticles[i];
+        const circleNode = tarParticleNodes[i];
 
-        for (let i = 0; i < MAX_TAR_PARTICLES; i++) {
-          const p = tarParticles[i];
-
-          if (i < activeTarCount && !isKryoSleep) {
-            p.active = true;
-
-            const speedMod = currentLqScore < 0.25 ? 0.03 : p.speed * (0.8 + viscoelasticStrain * 0.4);
-            p.t += speedMod * dt;
-            if (p.t > 1.0) {
-              p.t = 0.0;
-              p.bayIndex = (p.bayIndex + 1) % numBays;
-            }
-
-            bayParticleCounts[p.bayIndex]++;
-
-            const curve = ghostCapillaryNodes[p.bayIndex];
-            const pt = getQuadBezierPoint(curve.p0, curve.p1, curve.p2, p.t);
-
-            p.currentX = pt.x + p.lateralOffset * (1.0 - p.t);
-            p.currentY = pt.y + p.lateralOffset * (1.0 - p.t);
-
-            p.pulsePhase += 2.4 * dt;
-            const growthFactor = 1.0 + viscoelasticStrain * 0.8;
-            const pulse = 0.88 + Math.sin(p.pulsePhase) * 0.22;
-            const curRadius = p.baseRadius * growthFactor * pulse;
-
-            const tarOpacity = Math.min(0.98, 0.4 + p.t * 0.45 + viscoelasticStrain * 0.2);
-
-            // STRIKT #010005 (KEINE LILA VERFÄRBUNG)
-            swarmSvgHtml += `
-              <circle cx="${p.currentX.toFixed(1)}" cy="${p.currentY.toFixed(1)}" r="${curRadius.toFixed(1)}" 
-                      fill="url(#qo-tar-particle-grad)" 
-                      stroke="#010005" 
-                      stroke-width="0.4" 
-                      opacity="${tarOpacity.toFixed(2)}" />
-            `;
-          } else {
-            p.active = false;
+        if (i < activeTarCount && circleNode) {
+          const speedMod = currentLqScore < 0.25 ? 0.03 : p.speed * (0.8 + viscoelasticStrain * 0.4);
+          p.t += speedMod * dt;
+          if (p.t > 1.0) {
+            p.t = 0.0;
+            p.bayIndex = (p.bayIndex + 1) % numBays;
           }
-        }
+          bayParticleCounts[p.bayIndex]++;
 
-        tarSwarmGroup.innerHTML = swarmSvgHtml;
+          const curve = ghostCapillaryNodes[p.bayIndex];
+          const pt = getQuadBezierPoint(curve.p0, curve.p1, curve.p2, p.t);
+          p.currentX = pt.x + p.lateralOffset * (1.0 - p.t);
+          p.currentY = pt.y + p.lateralOffset * (1.0 - p.t);
+          p.pulsePhase += 2.4 * dt;
+          const curRadius = p.baseRadius * (1.0 + viscoelasticStrain * 0.8) * (0.88 + Math.sin(p.pulsePhase) * 0.22);
+          const tarOpacity = Math.min(0.98, 0.4 + p.t * 0.45 + viscoelasticStrain * 0.2);
+
+          circleNode.setAttribute('cx', p.currentX.toFixed(1));
+          circleNode.setAttribute('cy', p.currentY.toFixed(1));
+          circleNode.setAttribute('r', curRadius.toFixed(1));
+          circleNode.setAttribute('opacity', tarOpacity.toFixed(2));
+        } else if (circleNode && circleNode.getAttribute('opacity') !== '0') {
+          circleNode.setAttribute('opacity', '0');
+        }
       }
 
-      // =======================================================================
-      // G. SÄULE III: AXIOM XII - DEZENTRALES PROXIMITY-GEFÄLLE DES SKELETTS
-      // =======================================================================
-      const capillariesGroup = document.getElementById('qo-ghost-capillaries');
-      if (capillariesGroup) {
-        if (currentLqScore >= 0.5 || globalSkeletonStroke <= 0.04) {
-          // LINIEN-SPERRE: Keine Kanten vor / zwischen den Partikeln
-          for (let b = 0; b < numBays; b++) {
-            const lineEl = document.getElementById(`qo-capillary-${b}`);
-            if (lineEl) {
-              lineEl.setAttribute('stroke', 'none');
-              lineEl.setAttribute('stroke-width', '0');
-            }
+      // Skelett & Kapillaren
+      if (currentLqScore >= 0.5 || globalSkeletonStroke <= 0.04) {
+        for (let b = 0; b < numBays; b++) {
+          if (capillaryElements[b]) {
+            capillaryElements[b].setAttribute('stroke', 'none');
+            capillaryElements[b].setAttribute('stroke-width', '0');
           }
-          const bridgeEl = document.getElementById('qo-capillary-bridge');
-          if (bridgeEl) {
-            bridgeEl.setAttribute('stroke', 'none');
-            bridgeEl.setAttribute('stroke-width', '0');
-          }
-        } else {
-          // Erwachen der Kapillaren: Proportional zur lokalen Dichte (Insel-Hotspots)
-          const isKollaps = currentLqScore < 0.25;
-          const solidColor = isKollaps ? '#010005' : '#8b5cf6'; // Solider Cyber-Amethyst
+        }
+        if (capillaryBridgeEl) capillaryBridgeEl.setAttribute('stroke', 'none');
+      } else {
+        const isKollaps = currentLqScore < 0.25;
+        const solidColor = isKollaps ? '#010005' : '#8b5cf6';
+        let bridgeD = '';
 
-          let bridgeD = '';
+        for (let b = 0; b < numBays; b++) {
+          const lineEl = capillaryElements[b];
+          const density = bayParticleCounts[b];
+          const curve = ghostCapillaryNodes[b];
 
-          for (let b = 0; b < numBays; b++) {
-            const lineEl = document.getElementById(`qo-capillary-${b}`);
-            const density = bayParticleCounts[b]; // Lokale Proximity
-            const curve = ghostCapillaryNodes[b];
+          if (lineEl && curve) {
+            if (density > 0 || isKollaps) {
+              const localStroke = isKollaps ? 3.0 : Math.min(2.0, globalSkeletonStroke * (0.6 + Math.min(1.0, density * 0.25)));
+              lineEl.setAttribute('d', `M ${curve.p0.x.toFixed(1)} ${curve.p0.y.toFixed(1)} Q ${curve.p1.x.toFixed(1)} ${curve.p1.y.toFixed(1)} ${curve.p2.x.toFixed(1)} ${curve.p2.x.toFixed(1)}`);
+              lineEl.setAttribute('stroke', solidColor);
+              lineEl.setAttribute('stroke-width', localStroke.toFixed(2));
+              lineEl.setAttribute('opacity', isKollaps ? '1' : '0.85');
 
-            if (lineEl && curve) {
-              // Nur Hotspots mit Teerblasen erhalten sichtbare Kapillaren
-              if (density > 0 || isKollaps) {
-                const localStroke = isKollaps 
-                  ? 3.0 
-                  : Math.min(2.0, globalSkeletonStroke * (0.6 + Math.min(1.0, density * 0.25)));
-
-                lineEl.setAttribute('d', `M ${curve.p0.x.toFixed(1)} ${curve.p0.y.toFixed(1)} Q ${curve.p1.x.toFixed(1)} ${curve.p1.y.toFixed(1)} ${curve.p2.x.toFixed(1)} ${curve.p2.x.toFixed(1)}`);
-                lineEl.setAttribute('stroke', solidColor);
-                lineEl.setAttribute('stroke-width', localStroke.toFixed(2));
-                lineEl.setAttribute('opacity', isKollaps ? '1' : '0.85');
-
-                if (b % 2 === 0) {
-                  const nextCurve = ghostCapillaryNodes[(b + 1) % numBays];
-                  bridgeD += `M ${curve.p1.x.toFixed(1)} ${curve.p1.y.toFixed(1)} L ${nextCurve.p1.x.toFixed(1)} ${nextCurve.p1.y.toFixed(1)} `;
-                }
-              } else {
-                // Partikelarme Zonen bleiben stroke-frei
-                lineEl.setAttribute('stroke', 'none');
-                lineEl.setAttribute('stroke-width', '0');
+              if (b % 2 === 0) {
+                const nextCurve = ghostCapillaryNodes[(b + 1) % numBays];
+                bridgeD += `M ${curve.p1.x.toFixed(1)} ${curve.p1.y.toFixed(1)} L ${nextCurve.p1.x.toFixed(1)} ${nextCurve.p1.y.toFixed(1)} `;
               }
+            } else {
+              lineEl.setAttribute('stroke', 'none');
             }
           }
+        }
 
-          const bridgeEl = document.getElementById('qo-capillary-bridge');
-          if (bridgeEl) {
-            if (bridgeD.length > 0) {
-              bridgeEl.setAttribute('d', bridgeD);
-              bridgeEl.setAttribute('stroke', solidColor);
-              bridgeEl.setAttribute('stroke-width', (globalSkeletonStroke * 0.6).toFixed(2));
-              bridgeEl.setAttribute('opacity', isKollaps ? '1' : '0.7');
-            } else {
-              bridgeEl.setAttribute('stroke', 'none');
-            }
+        if (capillaryBridgeEl) {
+          if (bridgeD.length > 0) {
+            capillaryBridgeEl.setAttribute('d', bridgeD);
+            capillaryBridgeEl.setAttribute('stroke', solidColor);
+            capillaryBridgeEl.setAttribute('stroke-width', (globalSkeletonStroke * 0.6).toFixed(2));
+            capillaryBridgeEl.setAttribute('opacity', isKollaps ? '1' : '0.7');
+          } else {
+            capillaryBridgeEl.setAttribute('stroke', 'none');
           }
         }
       }
 
-      // =======================================================================
-      // H. INNERE REFRAKTIONS-STRÖME & SPITZLICHTER
-      // =======================================================================
-      const refract1 = document.getElementById('qo-inner-refract-1');
-      const refract2 = document.getElementById('qo-inner-refract-2');
-
-      if (refract1) {
+      // Refraktionsfilamente & Orbs
+      if (refract1El) {
         const a1 = phaseHelixCW;
-        const x1 = cx + Math.cos(a1) * (25 * hostScale);
-        const y1 = cy + Math.sin(a1) * (25 * hostScale);
-        const x2 = cx + Math.cos(a1 + 1.1) * (14 * hostScale);
-        const y2 = cy + Math.sin(a1 + 1.1) * (14 * hostScale);
-        const x3 = cx + Math.cos(a1 + 2.0) * 6;
-        const y3 = cy + Math.sin(a1 + 2.0) * 6;
-        refract1.setAttribute('d', `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${x2.toFixed(1)} ${y2.toFixed(1)} ${x3.toFixed(1)} ${y3.toFixed(1)}`);
+        refract1El.setAttribute('d', `M ${(cx + Math.cos(a1) * (25 * hostScale)).toFixed(1)} ${(cy + Math.sin(a1) * (25 * hostScale)).toFixed(1)} Q ${(cx + Math.cos(a1 + 1.1) * (14 * hostScale)).toFixed(1)} ${(cy + Math.sin(a1 + 1.1) * (14 * hostScale)).toFixed(1)} ${(cx + Math.cos(a1 + 2.0) * 6).toFixed(1)} ${(cy + Math.sin(a1 + 2.0) * 6).toFixed(1)}`);
       }
-
-      if (refract2) {
+      if (refract2El) {
         const a2 = phaseHelixCW + Math.PI;
-        const x1 = cx + Math.cos(a2) * (21 * hostScale);
-        const y1 = cy + Math.sin(a2) * (21 * hostScale);
-        const x2 = cx + Math.cos(a2 + 1.0) * (12 * hostScale);
-        const y2 = cy + Math.sin(a2 + 1.0) * (12 * hostScale);
-        const x3 = cx + Math.cos(a2 + 1.9) * 5;
-        const y3 = cy + Math.sin(a2 + 1.9) * 5;
-        refract2.setAttribute('d', `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${x2.toFixed(1)} ${y2.toFixed(1)} ${x3.toFixed(1)} ${y3.toFixed(1)}`);
+        refract2El.setAttribute('d', `M ${(cx + Math.cos(a2) * (21 * hostScale)).toFixed(1)} ${(cy + Math.sin(a2) * (21 * hostScale)).toFixed(1)} Q ${(cx + Math.cos(a2 + 1.0) * (12 * hostScale)).toFixed(1)} ${(cy + Math.sin(a2 + 1.0) * (12 * hostScale)).toFixed(1)} ${(cx + Math.cos(a2 + 1.9) * 5).toFixed(1)} ${(cy + Math.sin(a2 + 1.9) * 5).toFixed(1)}`);
       }
-
-      const crest1 = document.getElementById('qo-crest-light-1');
-      const crest2 = document.getElementById('qo-crest-light-2');
-      if (crest1 && outerPoints.length > 2) {
-        crest1.setAttribute('cx', outerPoints[2].x.toFixed(1));
-        crest1.setAttribute('cy', outerPoints[2].y.toFixed(1));
-      }
-      if (crest2 && outerPoints.length > 14) {
-        crest2.setAttribute('cx', outerPoints[14].x.toFixed(1));
-        crest2.setAttribute('cy', outerPoints[14].y.toFixed(1));
-      }
-
-      const satCW = document.getElementById('qo-sat-orb-cw');
-      const satCCW = document.getElementById('qo-sat-orb-ccw');
-      if (satCW) {
-        const sA = phaseHelixCW * 0.6;
-        satCW.setAttribute('cx', (50 + Math.cos(sA) * 44).toFixed(1));
-        satCW.setAttribute('cy', (50 + Math.sin(sA) * 40).toFixed(1));
-      }
-      if (satCCW) {
-        const sB = phaseShadowCCW * 0.5 + 2.2;
-        satCCW.setAttribute('cx', (50 + Math.cos(sB) * 42).toFixed(1));
-        satCCW.setAttribute('cy', (50 + Math.sin(sB) * 45).toFixed(1));
-      }
+      if (crest1El && outerPoints[2]) { crest1El.setAttribute('cx', outerPoints[2].x.toFixed(1)); crest1El.setAttribute('cy', outerPoints[2].y.toFixed(1)); }
+      if (crest2El && outerPoints[14]) { crest2El.setAttribute('cx', outerPoints[14].x.toFixed(1)); crest2El.setAttribute('cy', outerPoints[14].y.toFixed(1)); }
+      if (satCWEl) { satCWEl.setAttribute('cx', (50 + Math.cos(phaseHelixCW * 0.6) * 44).toFixed(1)); satCWEl.setAttribute('cy', (50 + Math.sin(phaseHelixCW * 0.6) * 40).toFixed(1)); }
+      if (satCCWEl) { satCCWEl.setAttribute('cx', (50 + Math.cos(phaseShadowCCW * 0.5 + 2.2) * 42).toFixed(1)); satCCWEl.setAttribute('cy', (50 + Math.sin(phaseShadowCCW * 0.5 + 2.2) * 45).toFixed(1)); }
     }
 
     animFrameId = requestAnimationFrame(renderFluidVortex);
   }
 
   // ============================================================================
-  // 5. DOM-TEXTEXTRAKTION & HASH-PRÜFUNG (4s METABOLISMUS-PULS)
+  // 5. DOM-TEXTEXTRAKTION & HASH-FILTER
   // ============================================================================
   function extractCleanViewportText() {
     try {
@@ -529,12 +569,8 @@
           acceptNode: function (node) {
             if (!node || !node.parentElement) return NodeFilter.FILTER_REJECT;
             const tag = node.parentElement.tagName.toLowerCase();
-            if (['script', 'style', 'noscript', 'svg', 'canvas', 'template'].includes(tag)) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            if (node.parentElement.closest('#q-o-widget-container')) {
-              return NodeFilter.FILTER_REJECT;
-            }
+            if (['script', 'style', 'noscript', 'svg', 'canvas', 'template'].includes(tag)) return NodeFilter.FILTER_REJECT;
+            if (node.parentElement.closest('#q-o-widget-container')) return NodeFilter.FILTER_REJECT;
             const str = node.textContent.trim();
             return str.length > 12 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
           }
@@ -544,7 +580,6 @@
       const chunks = [];
       let totalLen = 0;
       let node;
-
       while ((node = walker.nextNode()) && totalLen < 4000) {
         const clean = node.textContent.replace(/\s+/g, ' ').trim();
         if (clean.length > 12) {
@@ -552,7 +587,6 @@
           totalLen += clean.length;
         }
       }
-
       return chunks.join(' ');
     } catch (e) {
       return document.body ? document.body.innerText.slice(0, 3000) : '';
@@ -569,115 +603,47 @@
   }
 
   // ============================================================================
-  // 6. ANALYSE-ABFRAGE AN FASTAPI (PORT 8000) & BACKGROUND.JS
+  // 6. METABOLISCHER SCAN
   // ============================================================================
   async function triggerMetabolicScan() {
     if (!isMetabolismActive || isKryoSleep) return;
 
-    const extractedText = extractCleanViewportText();
-    if (!extractedText || extractedText.length < 20) return;
+    const text = extractCleanViewportText();
+    if (!text || text.length < 20) return;
 
-    const textHash = computeQuickHash(extractedText);
-    if (textHash === lastScannedTextHash) return;
-    lastScannedTextHash = textHash;
+    const hash = computeQuickHash(text);
+    if (hash === lastScannedTextHash) return;
+    lastScannedTextHash = hash;
 
     const pageUrl = window.location.href;
 
-    try {
-      if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
-        chrome.runtime.sendMessage(
-          {
-            type: 'ANALYZE_TEXT',
-            text: extractedText,
-            url: pageUrl,
-            sessionId: currentSessionId
-          },
-          (response) => {
-            if (response && response.success && response.data) {
-              applyAnalysisPayload(response.data, pageUrl);
-            } else {
-              fallbackDirectFastApi(extractedText, pageUrl);
-            }
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+      chrome.runtime.sendMessage(
+        { type: 'ANALYZE_TEXT', text: text, url: pageUrl, sessionId: currentSessionId },
+        (res) => {
+          if (res && res.success && res.data) {
+            applyAnalysisPayload(res.data, pageUrl);
           }
-        );
-      } else {
-        fallbackDirectFastApi(extractedText, pageUrl);
-      }
-    } catch (err) {
-      fallbackDirectFastApi(extractedText, pageUrl);
+        }
+      );
     }
-  }
-
-  async function fallbackDirectFastApi(text, url) {
-    try {
-      const res = await fetch('http://localhost:8000/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text, url: url })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        applyAnalysisPayload(data, url);
-      }
-    } catch (e) {}
   }
 
   function applyAnalysisPayload(data, url) {
     if (!data) return;
-
-    const rawLq = typeof data.lq_score === 'number' ? data.lq_score : 1.0;
-    targetLqScore = rawLq;
+    targetLqScore = typeof data.lq_score === 'number' ? data.lq_score : 1.0;
 
     if (Array.isArray(data.toxic_snippets)) {
-      data.toxic_snippets.forEach((s) => {
-        if (s && !currentToxicSnippets.includes(s)) currentToxicSnippets.push(s);
-      });
+      data.toxic_snippets.forEach((s) => s && !currentToxicSnippets.includes(s) && currentToxicSnippets.push(s));
     }
-
     if (Array.isArray(data.nutrient_snippets)) {
-      data.nutrient_snippets.forEach((s) => {
-        if (s && !currentNutrientSnippets.includes(s)) currentNutrientSnippets.push(s);
-      });
+      data.nutrient_snippets.forEach((s) => s && !currentNutrientSnippets.includes(s) && currentNutrientSnippets.push(s));
     }
 
-    if (Array.isArray(data.macro_tox_categories)) {
-      data.macro_tox_categories.forEach((c) => {
-        if (c && !currentMacroToxCategories.includes(c)) currentMacroToxCategories.push(c);
-      });
-    }
-
-    if (Array.isArray(data.macro_nut_categories)) {
-      data.macro_nut_categories.forEach((c) => {
-        if (c && !currentMacroNutCategories.includes(c)) currentMacroNutCategories.push(c);
-      });
-    }
-
-    if (Array.isArray(data.pro_arguments)) {
-      data.pro_arguments.forEach((a) => {
-        if (a && !currentProArguments.includes(a)) currentProArguments.push(a);
-      });
-    }
-
-    if (Array.isArray(data.contra_arguments)) {
-      data.contra_arguments.forEach((a) => {
-        if (a && !currentContraArguments.includes(a)) currentContraArguments.push(a);
-      });
-    }
-
-    currentSessionHistory.push({
-      url: url,
-      lq_score: rawLq,
-      s_tox: typeof data.t_makro === 'number' ? data.t_makro : 0.5,
-      n_nut: typeof data.n_makro === 'number' ? data.n_makro : 1.5,
-      symmetry_score: typeof data.symmetry_score === 'number' ? data.symmetry_score : 100.0,
-      timestamp: Date.now()
-    });
-
-    if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
       chrome.runtime.sendMessage({
         type: 'LQ_SCORE_UPDATED',
-        lq_score: rawLq,
-        adjusted_score: targetLqScore,
+        lq_score: targetLqScore,
         source_url: url,
         session_id: currentSessionId
       }).catch(() => {});
@@ -685,41 +651,25 @@
   }
 
   // ============================================================================
-  // 7. EVENT-BINDINGS FÜR DAS VALORANT COCKPIT PANEL
+  // 7. EVENT-BINDINGS IM SHADOW-DOM
   // ============================================================================
   function bindWidgetEvents() {
-    const slider = document.getElementById('morphology-sensitivity');
-    const badge = document.getElementById('sensitivity-status-badge');
-    const valDisplay = document.getElementById('sensitivity-display-value');
-
-    const btnStart = document.getElementById('btn-start');
-    const btnStop = document.getElementById('btn-stop');
-    const btnBiopsy = document.getElementById('btn-biopsy');
-    const blobWrapper = document.getElementById('biomorphic-blob-wrapper');
-
-    if (blobWrapper) {
-      blobWrapper.addEventListener('click', () => {
-        sealBiopsyAndOpenLab();
-      });
-    }
+    const slider = shadowRoot.getElementById('morphology-sensitivity');
+    const badge = shadowRoot.getElementById('sensitivity-status-badge');
+    const valDisplay = shadowRoot.getElementById('sensitivity-display-value');
+    const btnStart = shadowRoot.getElementById('btn-start');
+    const btnStop = shadowRoot.getElementById('btn-stop');
+    const btnBiopsy = shadowRoot.getElementById('btn-biopsy');
+    const blobWrapper = shadowRoot.getElementById('biomorphic-blob-wrapper');
 
     if (slider) {
       slider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         currentSensitivity = val;
         if (valDisplay) valDisplay.textContent = val.toFixed(1) + 'x';
-
         if (badge) {
-          if (val === 0.0) {
-            badge.textContent = 'BLIND';
-            badge.className = 'hud-status-badge status-blind';
-          } else if (val <= 1.2) {
-            badge.textContent = 'NORMAL';
-            badge.className = 'hud-status-badge status-normal';
-          } else {
-            badge.textContent = 'FORENSISCH';
-            badge.className = 'hud-status-badge status-forensic';
-          }
+          badge.textContent = val === 0.0 ? 'BLIND' : val <= 1.2 ? 'NORMAL' : 'FORENSISCH';
+          badge.className = `hud-status-badge status-${val === 0.0 ? 'blind' : val <= 1.2 ? 'normal' : 'forensic'}`;
         }
       });
     }
@@ -739,72 +689,26 @@
       });
     }
 
-    if (btnBiopsy) {
-      btnBiopsy.addEventListener('click', () => {
-        sealBiopsyAndOpenLab();
-      });
-    }
-  }
-
-  // ============================================================================
-  // 8. BIOPSIE VERSIEGELN & LABOR ÖFFNEN
-  // ============================================================================
-  function sealBiopsyAndOpenLab() {
-    const payload = {
-      session_id: currentSessionId,
-      source_url: window.location.href,
-      lq_score: targetLqScore,
-      toxic_snippets: [...currentToxicSnippets],
-      nutrient_snippets: [...currentNutrientSnippets],
-      macro_tox_categories: [...currentMacroToxCategories],
-      macro_nut_categories: [...currentMacroNutCategories],
-      pro_arguments: [...currentProArguments],
-      contra_arguments: [...currentContraArguments],
-      session_history: [...currentSessionHistory],
-      timestamp: Date.now()
+    const openLabHandler = () => {
+      if (typeof chrome !== 'undefined' && chrome.runtime) {
+        chrome.runtime.sendMessage({
+          type: 'OPEN_LABORATORY',
+          biopsy_id: currentSessionId
+        });
+      }
     };
 
-    const previousId = currentSessionId;
-    currentSessionId = 'session_' + Date.now();
-    currentSessionHistory = [];
-    currentToxicSnippets = [];
-    currentNutrientSnippets = [];
-    currentMacroToxCategories = [];
-    currentMacroNutCategories = [];
-    currentProArguments = [];
-    currentContraArguments = [];
-
-    if (typeof chrome !== 'undefined' && chrome.runtime && typeof chrome.runtime.sendMessage === 'function') {
-      chrome.runtime.sendMessage(
-        {
-          type: 'SAVE_BIOPSY',
-          data: payload
-        },
-        () => {
-          chrome.runtime.sendMessage({
-            type: 'OPEN_LABORATORY',
-            biopsy_id: previousId
-          }).catch(() => {});
-        }
-      );
-    } else {
-      try {
-        const saved = JSON.parse(localStorage.getItem('qo_biopsies') || '[]');
-        saved.unshift(payload);
-        localStorage.setItem('qo_biopsies', JSON.stringify(saved.slice(0, 30)));
-      } catch (e) {}
-    }
+    if (btnBiopsy) btnBiopsy.addEventListener('click', openLabHandler);
+    if (blobWrapper) blobWrapper.addEventListener('click', openLabHandler);
   }
 
   // ============================================================================
-  // 9. METABOLISCHER CYCLE INITIALISIERUNG
+  // 8. INITIALISIERUNG
   // ============================================================================
   function initializeEngine() {
     injectMetabolicWidget();
-
     lastTimestamp = performance.now();
     animFrameId = requestAnimationFrame(renderFluidVortex);
-
     setTimeout(triggerMetabolicScan, 1500);
     scanIntervalId = setInterval(triggerMetabolicScan, 4000);
   }
