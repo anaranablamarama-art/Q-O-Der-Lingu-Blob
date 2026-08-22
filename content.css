@@ -1,73 +1,203 @@
-/* ==========================================================================
-   🪐 PROJEKT "Q-O" // CONTENT.CSS - HARDWARE-CORE RAIL SYSTEM (SHADOW-DOM)
-   ========================================================================== */
+/* ==============================================================================
+   🪐 PROJEKT "Q-O" // CONTENT.CSS - PORTRÄT HUD HOVER VISIBILITY & STATIC MATRIX
+   ==============================================================================
+   - Axiom XXXIV: Gesetz des statischen Ankers & Reaktiv-driftende Licht-Projektion
+   - #q-o-cockpit-panel im Normalzustand: opacity: 0; visibility: hidden;
+   - Bei Hover / Drag: opacity: 1; visibility: visible; transform: translate(-12px, 12px);
+   - 0% Mitatmen des Gehäuses im Wellentakt (Absolut starre HUD-Geometrie)
+   - Keine Kasten-Geometrie, kein harter Rahmen, kein Hintergrund (100% transparent)
+   - Zwei diagonale 1px Vektor-Licht-Linsen (Links-Oben & Rechts-Unten)
+   - Prall austariertes Vektor-Organell im oberen 38.2%-Fach
+   - Kinästhetisches Drag & Drop Handling (cursor: grab / grabbing)
+   - Alle Kinetik wird zu 100% rein mathematisch via requestAnimationFrame gesteuert
+   ============================================================================== */
 
-:host {
-    all: initial;
-    display: block;
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 96px !important;
-    height: 96px !important;
-    z-index: 2147483647 !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace !important;
-    pointer-events: auto !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
+:root {
+  --qo-cyan-glow: #00f0ff;
+  --qo-violet-glow: #a855f7;
+  --qo-corner-color: rgba(168, 85, 247, 0.35);
+  --qo-corner-active: rgba(0, 240, 255, 0.6);
 }
 
+/* ==============================================================================
+   🧱 MODUL 0: DAS UNSICHTBARE KRAFTFELD (Fliegender iPhone-Matrix-Container)
+   ============================================================================== */
+#q-o-widget-container {
+  position: fixed !important;
+  top: 20px;
+  right: 20px;
+  width: 140px !important;
+  height: 220px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  touch-action: none !important;
+}
+
+/* ==============================================================================
+   📐 MODUL 1: STATISCHES IPHONE-COCKPIT-PANEL (140px x 220px, r: 14px)
+   STRIKTE HOVER-KOPPLUNG: Im Ruhezustand 100% unsichtbar!
+   Erst bei Hover über den Container oder aktivem Drag materialisiert sich das Panel.
+   ============================================================================== */
+#q-o-cockpit-panel {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 140px !important;
+  height: 220px !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translate(0, 0) !important;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
+  z-index: 1 !important;
+}
+
+/* Interaktiver Drift: Licht-Projektion nach links-unten versetzt */
+#q-o-widget-container:hover #q-o-cockpit-panel,
+#q-o-widget-container.is-dragging #q-o-cockpit-panel,
+#q-o-cockpit-panel.is-dragging {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate(-12px, 12px) !important;
+  pointer-events: auto !important;
+}
+
+/* ==============================================================================
+   ✨ MODUL 2: DIAGONALE LICHT-LINSEN (Links-Oben & Rechts-Unten)
+   Reines Streulicht über 1px Vektor-Linien, absolut kein Weichzeichner,
+   verblassen stetig über lineare Masken ins transparente Nichts.
+   ============================================================================== */
+.qo-diagonal-corner {
+  position: absolute !important;
+  width: 32px !important;
+  height: 32px !important;
+  pointer-events: none !important;
+  border: 1px solid transparent !important;
+  box-sizing: border-box !important;
+  opacity: 0.35 !important;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ecke Links-Oben: Radius 14px, verblasst nach rechts & unten */
+.qo-corner-tl {
+  top: 0 !important;
+  left: 0 !important;
+  border-top: 1px solid var(--qo-corner-color) !important;
+  border-left: 1px solid var(--qo-corner-color) !important;
+  border-top-left-radius: 14px !important;
+  -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%) !important;
+  mask-image: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%) !important;
+}
+
+/* Ecke Rechts-Unten: Radius 14px, verblasst nach links & oben */
+.qo-corner-br {
+  bottom: 0 !important;
+  right: 0 !important;
+  border-bottom: 1px solid var(--qo-corner-color) !important;
+  border-right: 1px solid var(--qo-corner-color) !important;
+  border-bottom-right-radius: 14px !important;
+  -webkit-mask-image: linear-gradient(315deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%) !important;
+  mask-image: linear-gradient(315deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%) !important;
+}
+
+#q-o-widget-container:hover .qo-diagonal-corner,
+#q-o-widget-container.is-dragging .qo-diagonal-corner,
+#q-o-cockpit-panel.is-dragging .qo-diagonal-corner {
+  opacity: 0.95 !important;
+  border-top-color: var(--qo-corner-active) !important;
+  border-left-color: var(--qo-corner-active) !important;
+  border-bottom-color: var(--qo-corner-active) !important;
+  border-right-color: var(--qo-corner-active) !important;
+}
+
+/* ==============================================================================
+   🧬 MODUL 3: DAS OBERE 38.2% FACH (Goldene Koinzidenz-Verriegelung)
+   Höhe: 38.2% von 220px = 84px
+   ============================================================================== */
 #biomorphic-blob-wrapper {
-    position: relative !important;
-    width: 92px !important;
-    height: 92px !important;
-    background: transparent !important;
-    border: none !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-    z-index: 10 !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 96px !important;
+  height: 84px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  pointer-events: auto !important;
+  cursor: grab !important;
+  z-index: 10 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+#biomorphic-blob-wrapper:active,
+#biomorphic-blob-wrapper.is-dragging,
+#q-o-widget-container.is-dragging #biomorphic-blob-wrapper {
+  cursor: grabbing !important;
+  transform: translateX(-50%) scale(0.96) !important;
+}
+
+/* ==============================================================================
+   🔮 MODUL 4: DUAL-SVG VEKTOR-CONTAINER
+   ============================================================================== */
 #biomorphic-blob {
-    width: 100% !important;
-    height: 100% !important;
-    overflow: visible !important;
-    display: block !important;
-    background: transparent !important;
-    border: none !important;
-    pointer-events: none !important;
-    filter: drop-shadow(0 6px 18px rgba(0, 240, 255, 0.22));
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
+  display: block !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 6px 18px rgba(0, 240, 255, 0.28));
 }
 
-.q-o-control-panel {
-    position: absolute;
-    top: 90px;
-    right: 0;
-    width: 156px;
-    background: rgba(2, 0, 10, 0.96);
-    border: 1px solid rgba(0, 240, 255, 0.32);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.94), 0 0 14px rgba(0, 240, 255, 0.16);
-    border-radius: 4px;
-    padding: 7px 9px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    opacity: 0;
-    transform: translateY(-5px);
-    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-    z-index: 99999999 !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-}
-
-:host(:hover) .q-o-control-panel,
-.q-o-control-panel:hover {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+/* ==============================================================================
+   🌌 MODUL 5: DAS UNTERE 61.8% FACH (Steriles Vektor-Reservoir)
+   Höhe: 61.8% von 220px = 136px
+   ============================================================================== */
+#qo-lower-matrix-compartment {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 140px !important;
+  height: 136px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  pointer-events: none !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-bottom-left-radius: 14px !important;
+  border-bottom-right-radius: 14px !important;
 }
