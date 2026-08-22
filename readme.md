@@ -1,3 +1,5 @@
+https://github.com/user-attachments/assets/b9f562c8-865a-4a57-b116-bdd8957f800d
+
 ![Partikuläre nekrotische Infusion](assets/infuse2.gif "Nekrotischer Teerschwarm Kinetik")
 
 # 🪐 PROJEKT „Q-O“: BIOMORPH-LINGUISTISCHES CYBER-HUD
